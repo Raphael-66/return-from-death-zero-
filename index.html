@@ -373,6 +373,16 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .sync{font-size:11.5px;border:1px solid #e4b867;color:#f3d79a;border-radius:99px;padding:2px 9px}.sync.more{border-style:dashed;color:var(--mute);border-color:var(--line)}
 .relbar{width:100%;display:flex;flex-direction:column;gap:4px}
 .yacts{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}
+.bracket{display:flex;flex-direction:column;gap:6px}
+.brr{display:flex;flex-direction:column;gap:3px;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px}
+.brt{display:flex;justify-content:space-between;gap:8px}.brr .brn{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.brr .vs{color:var(--mute);font-size:12px}
+.brr .brs{font-size:12px;color:var(--mute)}
+.brr.won{border-color:#58c58a}.brr.won .brs{color:#7ee2a0}
+.brr.next{border-color:var(--gold)}.brr.next .brs{color:var(--gold)}
+.brr.lost{border-color:#ff6b81}.brr.lost .brs{color:#ff9bab}
+.card.leg{border-color:#e4b867;box-shadow:0 0 0 1px #e4b867,0 0 14px rgba(228,184,103,.45);background:linear-gradient(160deg,#3a2f17,var(--ink3) 60%)}
+.legi b{color:#ffd28a}
 </style>
 
 
@@ -6831,6 +6841,192 @@ var _pcFx=playCard,_etFx=endTurn;
 playCard=function(i){var s0=bSnap(),c=B&&!B.done&&CARDS[B.hand[i]],ok=c&&c.c<=B.en;_pcFx(i);if(ok){sfx(c.dmg?"ok":"swipe");fxDiff(s0,false)}};
 endTurn=function(){var s0=bSnap();_etFx();fxDiff(s0,true)};
 
+
+/* =====================================================================
+   ATUALIZAÇÃO 11: torneio semanal da Capital, decoração das moradias
+   e cartas lendárias forjadas com essências dos super chefes.
+   ===================================================================== */
+CANON.push(
+ {re:/Julius/,n:"Julius Juukulius",tr:{multi:2,armor:2},tr2:{multi:3,armor:3},p2:"Os seis espíritos de Julius brilham juntos. 'Agora, a sério.'"},
+ {re:/Wilhelm/,n:"Wilhelm van Astrea",tr:{multi:2,enrage:6},tr2:{multi:2,ward:1,enrage:4},p2:"O Demônio da Espada desperta. Cada corte vem antes do anterior terminar."}
+);
+
+/* ---------- 1. Torneio semanal da Capital ---------- */
+GD("trofeu","Troféu do Torneio",4,600);
+var TFOES=["Escudeiro Brann","Mercenária Iska","Cavaleiro Doran","Lutadora de rua Kiki","Lanceiro Varo","Duelista Feno","Arqueiro Lomi","Monge Taro","Guarda Ulrich","Caçadora Ness","Espadachim Rhee","Gigante Bruk"];
+var TFIN=[["Julius Juukulius","agil",3],["Wilhelm van Astrea","bruto",3],["Garfiel Tinsel","bruto",4]];
+var TRW=[{c:80,f:0,n:"Quartas"},{c:200,f:1,n:"Semifinal"},{c:400,f:2,n:"Final"},{c:800,f:5,n:"Campeão"}];
+function TOUR(){var t=PF.tour||(PF.tour={wk:-1,r:0,out:false,br:[],titles:0,streak:0,lastWk:-9});return t}
+function weekOf(){return Math.floor((S.day-1)/7)}
+function tFinal(){var reach=arcReach(),pool=TFIN.filter(function(x){return x[2]<=reach});return pool[weekOf()%pool.length]}
+function tMul(){return 1+0.25*Math.min(TOUR().streak,4)}
+function tFee(){return Math.min(400,100+50*TOUR().titles)}
+function tEnter(){
+  var t=TOUR(),wk=weekOf();if(t.wk===wk||S.coin<tFee())return;
+  S.coin-=tFee();var pool=shuffle(TFOES.slice()),fin=tFinal();
+  t.wk=wk;t.r=0;t.out=false;t.br=[pool[0],pool[1],fin[0]];t.others=[pool[2],pool[3],pool[4],pool[5]];
+  if(t.lastWk<wk-1)t.streak=0;
+  pfSave();save();sfx("buy");dj("luta","Inscreveu-se no torneio da Capital (semana "+(wk+1)+").");tourMenu();
+}
+function tFight(){
+  var t=TOUR();if(t.wk!==weekOf()||t.out||t.r>=3||S.t>=3)return;
+  advanceTime();$("#overlay").hidden=true;
+  var r=t.r,nm=t.br[r],fin=r===2?tFinal():null,lv=refLv()+[0,2,4][r];
+  var cfg=levelize({enemy:nm,arch:fin?fin[1]:rnd(["agil","bruto","padrao","tanque","mago"]),lv:lv,tier:["elite","boss","super"][r],noadapt:true,tour:r+1,allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:3+r*2,xp:15+r*10});
+  startBattle(cfg);
+}
+function tPrize(stage){
+  var t=TOUR(),p=TRW[stage],m=tMul(),c=Math.round(p.c*m),f=p.f,txt=["¤ +"+c];S.coin+=c;if(f){S.frags+=f;txt.push("◆ +"+f)}
+  if(stage===3){t.titles++;t.streak=(t.lastWk===t.wk-1?t.streak:0)+1;t.lastWk=t.wk;gotGood("trofeu",1);txt.push("Troféu do Torneio");var it=eqFind(luck()*1.6);if(it)txt.push(it.n+" ("+RAR[it.r-1]+")");unlock("tour1");if(t.titles>=3)unlock("tour3");L().rep=Math.min(100,L().rep+5);txt.push("Reputação +5")}
+  pfSave();save();return txt.join(" · ");
+}
+ACH.tour1=["Campeão da Capital","Vença o torneio semanal da Capital."];
+ACH.tour3=["Lenda da arena","Vença o torneio da Capital 3 vezes."];
+function tourMenu(){
+  var t=TOUR(),wk=weekOf(),cur=t.wk===wk,night=S.t>=3,fin=tFinal();
+  var h='<p class="sec" style="margin:0">Capital Real · Arena</p><h2 style="margin:0">Torneio semanal</h2><p class="fine" style="margin:0">Uma chave por semana, três lutas: quartas, semifinal e final. Cada luta gasta 1 período. Perder elimina, mas você leva o prêmio da fase alcançada. Títulos seguidos aumentam os prêmios (agora ×'+tMul().toFixed(2)+'). Títulos: <b>'+t.titles+'</b>.</p>';
+  if(!cur){
+    h+='<div class="item"><div><b>Chave da semana '+(wk+1)+'</b><span>Finalista favorito: '+esc(fin[0])+' (super chefe). Prêmio do campeão: ¤ '+Math.round(800*tMul())+', ◆ 5, troféu e equipamento.</span></div><button class="btn small" id="tIn"'+(S.coin<tFee()?" disabled":"")+'>Inscrever · ¤ '+tFee()+'</button></div>';
+  }else{
+    h+='<div class="bracket">';
+    var rn=["Quartas","Semifinal","Final"];
+    for(var i=0;i<3;i++){var st=i<t.r?"won":(i===t.r&&!t.out?"next":(i===t.r&&t.out?"lost":"wait"));
+      h+='<div class="brr '+st+'"><div class="brt"><span class="brn">'+rn[i]+(i===2?" · super chefe":"")+'</span><span class="brs">'+(st==="won"?"Vitória":st==="lost"?"Derrota":st==="next"?"Próxima luta":"Aguardando")+'</span></div><div><b>Subaru</b> <span class="vs">vs</span> <b>'+esc(t.br[i])+'</b></div></div>'}
+    h+='</div><p class="fine" style="margin:0">Também na chave: '+esc((t.others||[]).join(", "))+'.</p>';
+    if(t.r>=3)h+='<p class="sec" style="margin:0;color:var(--gold)">Você é o campeão desta semana! Volte na próxima para defender o título.</p>';
+    else if(t.out)h+='<p class="sec" style="margin:0">Eliminado. Nova chave na semana que vem.</p>';
+    else h+='<button class="btn primary" id="tGo"'+(night?" disabled":"")+'>Lutar: '+esc(rn[t.r])+' contra '+esc(t.br[t.r])+' · 1 período</button>';
+  }
+  h+='<button class="btn small" id="tX">Voltar</button>';
+  var o=ovl(h);$("#tX").onclick=function(){o.hidden=true;renderHub()};
+  if($("#tIn"))$("#tIn").onclick=tEnter;if($("#tGo"))$("#tGo").onclick=tFight;
+}
+PAX.push(function(lf){if(lf.loc!=="capital")return "";var t=TOUR(),cur=t.wk===weekOf();
+  return '<button class="act" data-ac="tour"><b>Torneio da Capital</b><span>'+(cur?(t.r>=3?"Campeão da semana!":t.out?"Eliminado esta semana":"Em andamento · "+["quartas","semifinal","final"][t.r]):"Inscrições abertas · ¤ "+tFee())+'</span></button>'});
+PAH.push(function(a){if(a==="tour"){tourMenu();return true}return false});
+var _ebTour=endBattle;
+endBattle=function(win){
+  var cfg=(B&&B.cfg)||null,was=B&&B.done;
+  _ebTour(win);
+  if(was||!cfg||!cfg.tour||!B||!B.done)return;
+  var t=TOUR(),r=cfg.tour-1,txt;
+  if(win){t.r=r+1;txt=t.r>=3?"Campeão! "+tPrize(3):"Você avança para a "+["semifinal","final"][r]+"."}
+  else{t.out=true;txt="Eliminado na "+TRW[r].n.toLowerCase()+". Prêmio: "+tPrize(r)}
+  pfSave();
+  var ov=$("#overlay"),p0=ov&&ov.querySelector(".in p"),nb=$("#bNext");
+  if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0;color:var(--gold)">Torneio: '+esc(txt)+'</p>');
+  if(nb){var f0=nb.onclick;nb.onclick=function(){f0&&f0.call(nb);setTimeout(tourMenu,0)}}
+};
+
+/* ---------- 2. Decoração das moradias ---------- */
+var FURN=[
+ {id:"cama",n:"Cama macia",p:120,d:"Sono +3 de sanidade.",fx:{san:3}},
+ {id:"lareira",n:"Lareira",p:200,d:"Sono +2. Com o par morando junto, relação +1 por noite.",fx:{san:2,rp:1}},
+ {id:"estante",n:"Estante de livros",p:220,d:"No dia seguinte, XP +10%.",fx:{xp:10}},
+ {id:"ervas",n:"Jardim de ervas",p:180,d:"Sono +2 e 25% de chance de colher uma Poção de cura.",fx:{san:2,herb:1}},
+ {id:"horta",n:"Horta",p:260,d:"Rende ¤ 25 por noite.",fx:{coin:25}},
+ {id:"mesa",n:"Mesa de jantar",p:160,d:"Com o par morando junto, relação +2 por noite.",fx:{rp:2}},
+ {id:"altar",n:"Altar de Lugunica",p:300,d:"No dia seguinte, Sorte +6%.",fx:{luck:6}},
+ {id:"treino",n:"Sala de treino",p:400,d:"No dia seguinte, vida em batalha +5.",fx:{hp:5}},
+ {id:"oficina",n:"Oficina",p:350,d:"No dia seguinte, recompensas em moedas +8%.",fx:{coin_p:8}},
+ {id:"criancas",n:"Quarto das crianças",p:300,d:"Laço com cada filho +2 por noite.",fx:{kid:2}}
+];
+var FBY2={};FURN.forEach(function(f){FBY2[f.id]=f});
+function FN(){var lf=L();lf.furn=lf.furn||{};return lf.furn}
+function fSlots(loc){var h=resAt(loc);if(!h)return 0;if(loc==="casa")return 2;return h.rent?3:(h.b>=10?6:5)}
+function homeFx(loc){var o={};(FN()[loc]||[]).forEach(function(id){var f=FBY2[id];if(f)for(var k in f.fx)o[k]=(o[k]||0)+f.fx[k]});return o}
+function decoMenu(){
+  var loc=L().loc,h0=resAt(loc);if(!h0)return;
+  var list=FN()[loc]||(FN()[loc]=[]),max=fSlots(loc);
+  var h='<p class="sec" style="margin:0">Decorar · '+esc(h0.n)+'</p><h2 style="margin:0">Sua casa, do seu jeito</h2><p class="fine" style="margin:0">Os móveis valem quando você dorme aqui. Espaços: <b>'+list.length+'/'+max+'</b>. Vender devolve metade do preço. <b class="coin">¤ '+S.coin+'</b></p>';
+  if(list.length){h+='<p class="sec">Nesta casa</p>';list.forEach(function(id,i){var f=FBY2[id];h+='<div class="item got"><div><b>'+esc(f.n)+'</b><span>'+esc(f.d)+'</span></div><button class="btn small" data-f="s:'+i+'">Vender · ¤ '+Math.round(f.p/2)+'</button></div>'})}
+  h+='<p class="sec">Comprar</p>';
+  FURN.forEach(function(f){if(list.indexOf(f.id)>=0)return;h+='<div class="item"><div><b>'+esc(f.n)+'</b><span>'+esc(f.d)+'</span></div><button class="btn small" data-f="b:'+f.id+'"'+((S.coin<f.p||list.length>=max)?" disabled":"")+'>¤ '+f.p+'</button></div>'});
+  h+='<button class="btn small" id="dX">Voltar</button>';
+  var o=ovl(h);$("#dX").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){
+    var v=b.getAttribute("data-f").split(":");
+    if(v[0]==="b"){var f=FBY2[v[1]];if(!f||S.coin<f.p||list.length>=max)return;S.coin-=f.p;list.push(f.id);sfx("buy");toast(f.n+" na casa!");dj("vida","Colocou "+f.n+" em "+h0.n+".");if(Object.keys(FN()).reduce(function(a,k){return a+FN()[k].length},0)>=8)unlock("deco8")}
+    else{var it=list.splice(+v[1],1)[0];S.coin+=Math.round(FBY2[it].p/2);sfx("buy")}
+    pfSave();save();try{updHead()}catch(_){}decoMenu();
+  }});
+}
+ACH.deco8=["Lar, doce lar","Tenha 8 móveis espalhados pelas suas casas."];
+PAX.push(function(lf){if(!resAt(lf.loc))return "";var n=(FN()[lf.loc]||[]).length;return '<button class="act" data-ac="deco"><b>Decorar a casa</b><span>Móveis: '+n+'/'+fSlots(lf.loc)+'. Bônus ao dormir aqui</span></button>'});
+PAH.push(function(a){if(a==="deco"){decoMenu();return true}return false});
+/* efeitos ao dormir */
+function HB(){return PF.hb||(PF.hb={day:-1})}
+var _slFurn=sleepDay;
+sleepDay=function(){
+  var loc0=L().loc,trip=!!TRIP();
+  _slFurn();
+  if(S.mode!=="free"||trip)return;
+  var loc=L().loc,fx=homeFx(loc);if(!resAt(loc)||!Object.keys(fx).length){PF.hb={day:-1};return}
+  var t=[];
+  if(fx.san){S.san=clamp(S.san+fx.san,0,100);t.push("sanidade +"+fx.san)}
+  if(fx.coin){S.coin+=fx.coin;t.push("¤ +"+fx.coin)}
+  if(fx.herb&&Math.random()<0.25){S.inv=S.inv||{};S.inv.pocao=(S.inv.pocao||0)+1;t.push("Poção de cura")}
+  var par=PF.rel&&PF.rel.partner;if(fx.rp&&par&&REL_C[par]&&rsOf(par).live){relAdd(par,fx.rp);t.push(REL_C[par].n+" +"+fx.rp)}
+  if(fx.kid&&KIDS().length){KIDS().forEach(function(k){k.b=Math.min(100,(k.b||0)+fx.kid)});t.push("laço dos filhos +"+fx.kid)}
+  PF.hb={day:S.day,xp:fx.xp||0,luck:fx.luck||0,hp:fx.hp||0,coin:fx.coin_p||0};
+  ["xp","luck","hp","coin_p"].forEach(function(k){if(fx[k])t.push({xp:"XP +",luck:"Sorte +",hp:"vida em batalha +",coin_p:"moedas +"}[k]+fx[k]+(k==="hp"?"":"%")+" hoje")});
+  pfSave();save();if(t.length)setTimeout(function(){toast("Casa: "+t.join(" · "))},400);
+};
+var _eqHome=eq;
+eq=function(k){var v=_eqHome(k);var hb=PF.hb;if(hb&&S&&S.mode==="free"&&hb.day===S.day){var m={xp:"xp",luck:"luck",hp:"hp",coin:"coin"}[k];if(m&&hb[m])v+=hb[m]}return v};
+
+/* ---------- 3. Cartas lendárias forjadas com essências ---------- */
+var LEG=[
+ {k:"Elsa Granhiert",id:"lg_elsa",n:"Lâminas de Elsa",c:2,dmg:7,multi:3,pay:2,t:"Três cortes curvos, rápidos demais para o medo alcançar."},
+ {k:"A Baleia Branca",id:"lg_baleia",n:"Névoa da Baleia",c:2,blk:14,weak:1,draw:1,t:"A névoa que apagava nomes agora esconde você."},
+ {k:"Petelgeuse Romanée-Conti",id:"lg_petel",n:"Mãos Invisíveis",c:3,dmg:6,multi:4,t:"Que preguiça... de errar o alvo."},
+ {k:"Garfiel Tinsel",id:"lg_garf",n:"Tigre Gigante",c:3,dmg:20,blk:12,t:"Garras e couraça na mesma investida."},
+ {k:"Roswaal L. Mathers",id:"lg_ros",n:"Quatro Elementos",c:3,dmg:8,multi:3,draw:1,t:"Fogo, água, vento e terra, girando juntos."},
+ {k:"Regulus Corneas",id:"lg_reg",n:"Coração do Leão",c:2,blk:26,t:"Por um instante, nada consegue tocar você."},
+ {k:"Sirius Romanée-Conti",id:"lg_sir",n:"Chamas do Amor",c:2,dot:7,heal:8,t:"O fogo que ela dividia agora aquece só você."},
+ {k:"Reid Astrea",id:"lg_reid",n:"Hashi de Reid",c:1,dmg:9,multi:2,t:"Até dois pauzinhos viram espada nas mãos certas."},
+ {k:"Sphinx",id:"lg_sph",n:"Praga Pálida",c:2,dot:9,dmg:6,t:"Uma doença lenta que não perdoa."},
+ {k:"Julius Juukulius",id:"lg_jul",n:"Arco-íris dos Espíritos",c:2,dmg:6,multi:2,blk:8,draw:1,t:"Seis cores, cada uma com uma função."},
+ {k:"Wilhelm van Astrea",id:"lg_wil",n:"Demônio da Espada",c:3,dmg:32,pay:4,t:"O corte que encerrou uma guerra."}
+];
+var LEGBY={};LEG.forEach(function(l){LEGBY[l.k]=l;CARDS[l.id]={n:l.n,c:l.c,dmg:l.dmg,multi:l.multi,pay:l.pay,blk:l.blk,weak:l.weak,draw:l.draw,dot:l.dot,heal:l.heal,o:"subaru",leg:1};Object.keys(CARDS[l.id]).forEach(function(x){if(CARDS[l.id][x]===undefined)delete CARDS[l.id][x]})});
+var LEG_ESS=3,LEG_COIN=1500,LEG_FR=5;
+function ESS(){return PF.ess||(PF.ess={})}
+var _ebEss=endBattle;
+endBattle=function(win){
+  var cfg=(B&&B.cfg)||null,was=B&&B.done;
+  _ebEss(win);
+  if(was||!cfg||!win||!B||!B.done||cfg.tier!=="super"||!cfg.canon||!LEGBY[cfg.canon])return;
+  var e=ESS(),first=!e["_w_"+cfg.canon],n=first?2:(Math.random()<0.6?1:0);e["_w_"+cfg.canon]=1;
+  if(!n)return;e[cfg.canon]=(e[cfg.canon]||0)+n;pfSave();
+  var ov=$("#overlay"),p0=ov&&ov.querySelector(".in p");
+  if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0;color:#ffd28a">Essência de '+esc(cfg.canon)+' ×'+n+' (forje cartas lendárias na Loja)</p>');
+};
+function hasLeg(id){return (S.extras||[]).indexOf(id)>=0}
+function legHTML(){
+  var e=ESS(),h='<div id="legf"><p class="sec" style="margin:12px 0 4px;color:#ffd28a">Forja lendária</p><p class="fine" style="margin:0 0 6px">Vença super chefes para ganhar essências (2 na primeira vitória, depois 60% de chance de 1). Com '+LEG_ESS+' essências, ¤ '+LEG_COIN+' e ◆ '+LEG_FR+', forje uma carta lendária que entra no seu baralho nos dois modos.</p>';
+  LEG.forEach(function(l){var have=e[l.k]||0,own=hasLeg(l.id),ok=!own&&have>=LEG_ESS&&S.coin>=LEG_COIN&&S.frags>=LEG_FR;
+    h+='<div class="item'+(own?" got":"")+' legi"><div><b>'+esc(l.n)+(own?" ✓":"")+'</b><span>'+esc(cardText(l.id))+' · custo '+l.c+'. '+esc(l.t)+' Essências de '+esc(l.k)+': '+have+'/'+LEG_ESS+'.</span></div>'+(own?'<span>Forjada</span>':'<button class="btn small" data-lg="'+l.id+'"'+(ok?"":" disabled")+'>Forjar</button>')+'</div>'});
+  return h+'</div>';
+}
+function legForge(id){
+  var l=LEG.filter(function(x){return x.id===id})[0],e=ESS();if(!l||hasLeg(id))return;
+  if((e[l.k]||0)<LEG_ESS||S.coin<LEG_COIN||S.frags<LEG_FR)return;
+  e[l.k]-=LEG_ESS;S.coin-=LEG_COIN;S.frags-=LEG_FR;S.extras.push(id);
+  pfSave();save();try{pfPush()}catch(_){}sfx("catch");vib([40,40,120]);toast("Carta lendária forjada: "+l.n+"!");dj("luta","Forjou a carta lendária "+l.n+".");unlock("leg1");
+  if(LEG.every(function(x){return hasLeg(x.id)}))unlock("legall");
+}
+ACH.leg1=["Forja das lendas","Forje uma carta lendária."];
+ACH.legall=["Arsenal impossível","Forje todas as cartas lendárias."];
+var _psLeg=paneStore;
+paneStore=function(p,keep){
+  _psLeg(p,keep);
+  p.insertAdjacentHTML("beforeend",legHTML());
+  var f=p.querySelector("#legf");if(f)f.addEventListener("click",function(ev){var b=ev.target.closest?ev.target.closest("[data-lg]"):null;if(!b||b.disabled)return;ev.stopPropagation();legForge(b.getAttribute("data-lg"));paneStore(p)});
+};
+/* cartas lendárias com brilho dourado na mão */
+var _rbLeg=renderBattle;
+renderBattle=function(){_rbLeg();var cs=document.querySelectorAll("#battle .card");for(var i=0;i<cs.length;i++){var id=B&&B.hand[+cs[i].getAttribute("data-i")];if(id&&CARDS[id]&&CARDS[id].leg)cs[i].classList.add("leg")}};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
