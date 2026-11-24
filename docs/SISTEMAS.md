@@ -16,6 +16,8 @@
 - O arco do Retornos (`META.maxArc`, função `storyArc`) limita nível, atributos, laços e etapas do romance no Modo Livre.
 
 ## Modo Retornos
+- Marcos canônicos (`CFLAGS`) são copiados para `PF.canon` e liberam etapas do romance no Modo Livre (`CREQ`).
+- Ritmo: 3–5 cartas comuns entre momentos da história; medidores com efeito elástico (ganhos ×0,6 acima de 65 e ×0,35 acima de 80; perdas ×0,75 abaixo de 35 e ×0,5 abaixo de 20).
 - 8 arcos (`ARCS`), cartas `K(...)`, medidores, mortes (`DTH`, `rgDie`), memórias, metas (`AGOAL`), prova final (`trialCfg`), emboscadas (`encounterCard`).
 - Batalhas da história: `BAT.elsa` (segurar 6 rodadas), `lobos`, `baleia`, `culto` (Petelgeuse), `garfiel`, `regulus`, `torre` (Reid), `imperio`, `mortos` (Sphinx).
 

@@ -397,6 +397,7 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .powtag{margin:0;font-size:12.5px}.powtag.pgood{color:#7ee2a0}.powtag.pok{color:#ffd28a}.powtag.pbad{color:#ff9bab}
 .powbar{position:relative;height:8px;border-radius:99px;background:#0a0d1a;border:1px solid var(--line);overflow:hidden;margin:6px 0 0}
 .powbar>div{height:100%}.powbar>div.pgood{background:#58c58a}.powbar>div.pok{background:#e4b867}.powbar>div.pbad{background:#ff6b81}
+.canon{width:100%;border-left:2px solid var(--gold);padding-left:10px;display:flex;flex-direction:column;gap:2px}
 </style>
 
 
@@ -7397,6 +7398,139 @@ renderHub=function(){
    '<p class="sec" style="margin:8px 0 2px">Limites do Arco '+a+'</p><p class="fine" style="margin:0">Nível até '+lvCap()+' (agora '+PF.lvl+') · atributos até '+atCap()+' · laços até '+STG[stCap()][0]+'. Romance: namoro no Arco 3, noivado no 5, casamento no 6, filhos no 7.</p></div>';
   btn.insertAdjacentHTML("beforebegin",h);
 };
+
+/* =====================================================================
+   ATUALIZAÇÃO 15: marcos canônicos no romance, reinício completo,
+   Retornos mais longo e equilibrado.
+   ===================================================================== */
+
+/* ---------- 1. Novos momentos canônicos no Retornos ---------- */
+K("a4_ram","Ram","À noite, Ram observa a janela de Roswaal. 'Eu sigo o mestre. Sempre segui. Não espere que eu mude.'",["Dizer que ela merece escolher a própria vida",2,0,5,0,{a:{ram:2},f:"ram_livre"}],["Respeitar a lealdade dela",3,0,2,0,{a:{ram:1},f:"ram_leal"}],{mood:"romance",once:1});
+K("a4_kiss","Emilia","Emilia sai da tumba com os olhos vermelhos e o rosto firme. 'Subaru... por que você faz tudo isso por mim?'",["Dizer que a ama, e beijá-la",6,0,10,0,{a:{emilia:3},f:"emi_beijo"}],["Dizer que faria isso por qualquer um",0,0,-2,3,{f:"emi_amigos"}],{mood:"romance",once:1});
+K("a7_rem","Rem","No meio do Império, uma garota de cabelo azul abre os olhos pela primeira vez em muito tempo. Ela não lembra de nada, e desconfia de você.",["Ter paciência e recomeçar do zero de novo",4,0,6,0,{a:{rem:2},f:"rem_desperta"}],["Contar tudo o que viveram juntos",-4,0,3,0,{a:{rem:1},f:"rem_desperta"}],{mood:"romance",once:1});
+(function(){
+  function ins(arc,after,id){var b=ARCS[arc].beats;if(b.indexOf(id)>=0)return;var i=b.indexOf(after);b.splice(i<0?b.length:i+1,0,id)}
+  ins(4,"a4_roswaal","a4_ram");ins(4,"a4_ram","a4_kiss");ins(7,"a7_arr","a7_rem");
+  var cr=RC["a3_crusch"];if(cr&&cr.L){cr.L.x=cr.L.x||{};cr.L.x.f="alianca"}
+})();
+
+/* marcos canônicos ficam guardados também no perfil, para o Modo Livre ler */
+var CFLAGS=["confiou","promessa","rem_zero","rem_perdida","rem_desperta","alianca","contrato","emi_beijo","emi_amigos","ram_livre","ram_leal","aliados","juramento"];
+function CAN(){return PF.canon||(PF.canon={})}
+function hasCan(f){return !!CAN()[f]}
+function syncCanon(){if(!RG||!RG.flags)return;var c=CAN(),ch=false;RG.flags.forEach(function(f){if(CFLAGS.indexOf(f)>=0&&!c[f]){c[f]=1;ch=true}});if(ch)pfSave()}
+var _rpCan=rgPick;rgPick=function(d){_rpCan(d);syncCanon()};
+var _roCan=rgOpen;rgOpen=function(s){_roCan(s);syncCanon()};
+
+/* exigências canônicas por personagem (o que o jogador precisa ter vivido no Retornos) */
+var CREQ={
+ emilia:{decl:[["promessa","Prometer ficar ao lado de Emilia na Seleção Real (Arco 3)"]],namoro:[["emi_beijo","Declarar-se e beijar Emilia no Santuário (Arco 4)"]],no:"emi_amigos",noT:"No Santuário, você disse que faria aquilo por qualquer um. Emilia guardou isso no coração como amizade."},
+ rem:{decl:[["rem_zero","Aceitar recomeçar do zero com Rem (Arco 3)"]],namoro:[["rem_desperta","Estar ao lado de Rem quando ela despertar (Arco 7)"]]},
+ ram:{namoro:[["ram_livre","Dizer a Ram que ela merece escolher a própria vida (Arco 4)"]],no:"ram_leal",noT:"Você respeitou a lealdade de Ram a Roswaal. Ela continua fiel a ele."},
+ beatrice:{decl:[["contrato","Prometer ficar com Beatrice no Santuário (Arco 4)"]]},
+ crusch:{decl:[["alianca","Aceitar a caçada à Baleia com Crusch (Arco 3)"]]},
+ anastasia:{decl:[["#5","Chegar a Pristella (Arco 5)"]]},
+ priscilla:{decl:[["#7","Chegar ao Império de Vollachia (Arco 7)"]]}
+};
+function reqOk(r){return r[0].charAt(0)==="#"?storyArc()>=+r[0].slice(1):hasCan(r[0])}
+function canonMissing(id,step){var q=CREQ[id];if(!q)return [];var out=[];if(q.no&&hasCan(q.no)&&step!=="decl"&&!(q.namoro||[]).every(reqOk))out.push(q.noT);(q[step]||[]).forEach(function(r){if(!reqOk(r))out.push(r[1])});return out}
+function remAsleep(){return hasCan("rem_perdida")&&!hasCan("rem_desperta")}
+var _declCan=declare;
+declare=function(id){var m=canonMissing(id,"decl");if(m.length){toast("Momento canônico necessário: "+m[0]);return}_declCan(id)};
+var _rqNCan=reqNamoro;reqNamoro=function(id){var n=_rqNCan(id);canonMissing(id,"namoro").forEach(function(t){n.unshift("Momento canônico: "+t)});if(id==="rem"&&remAsleep())n.unshift("Rem está adormecida desde o fim do Arco 3");return n};
+var _rqECan=reqNoivado;reqNoivado=function(id){var n=_rqECan(id);canonMissing(id,"namoro").forEach(function(t){n.unshift("Momento canônico: "+t)});return n};
+/* Rem adormecida: o laço não cresce até ela despertar na história */
+var _raRem=relAdd;
+relAdd=function(id,n){if(id==="rem"&&n>0&&remAsleep()&&S&&S.mode==="free"){capToast("remzz","Rem dorme profundamente desde o Arco 3. O laço volta a crescer quando ela despertar (Arco 7).");return}_raRem(id,n)};
+var _poRem=placeOf;placeOf=function(id,d,t){if(id==="rem"&&remAsleep()&&S&&S.mode==="free")return "casa";return _poRem(id,d,t)};
+/* ficha da pessoa: mostra os momentos canônicos */
+var _pmCan=personMenu;
+personMenu=function(id){
+  _pmCan(id);
+  if(!REL_C[id])return;
+  var o=$("#overlay"),head=o.querySelector(".relbar")||o.querySelector(".relhead");if(!head)return;
+  var par=PF.rel.partner===id,steps=par?["namoro"]:["decl","namoro"],lines=[];
+  steps.forEach(function(s){(CREQ[id]&&CREQ[id][s]||[]).forEach(function(r){lines.push((reqOk(r)?"✓ ":"○ ")+r[1])})});
+  var q=CREQ[id];if(q&&q.no&&hasCan(q.no))lines.push("✕ "+q.noT);
+  if(id==="rem"&&remAsleep())lines.unshift("☾ Rem está adormecida. Você pode visitá-la na mansão, mas ela não responde.");
+  if(!lines.length)return;
+  head.insertAdjacentHTML("afterend",'<div class="canon"><p class="sec" style="margin:0">Momentos da história</p>'+lines.map(function(l){return '<p class="fine" style="margin:0">'+esc(l)+'</p>'}).join("")+'</div>');
+};
+
+/* ---------- 2. Recomeçar o Retornos apaga também o Modo Livre ---------- */
+(function(){
+  var b=$("#bRGn");if(!b)return;var nb=b.cloneNode(true);b.parentNode.replaceChild(nb,b);
+  nb.textContent="Recomeçar tudo (Retornos e Modo Livre)";var arm=false;
+  nb.onclick=function(){
+    if(!arm){arm=true;nb.textContent="Confirmar: apagar Retornos, Modo Livre e perfil";setTimeout(function(){arm=false;nb.textContent="Recomeçar tudo (Retornos e Modo Livre)"},3500);return}
+    try{["rpm_slot_rg","rpm_free","rpm_pf"].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
+    META.maxArc=0;gset("rpm_meta",META);
+    location.reload();
+  };
+})();
+
+/* ---------- 3. Retornos mais longo e com medidores equilibrados ---------- */
+/* mais cartas comuns entre os momentos da história */
+var _rpGap=rgPick;
+rgPick=function(d){var wasBeat=RG&&RG.curBeat,bi=RG&&RG.bi;_rpGap(d);if(RG&&wasBeat&&RG.bi!==bi&&!RG.infinite){RG.gap=RG.relics.indexOf("livro")>=0?rndi(2,3):rndi(3,5);save()}};
+/* medidores começam mais perto do centro */
+var _smBal=startMeters;
+startMeters=function(){return _smBal().map(function(v){return Math.min(58,Math.max(42,v))})};
+/* efeito elástico: perto dos extremos, ganhos e perdas pesam menos */
+function softD(i,v){var m=RG.m[i];if(v>0&&m>65)return Math.max(1,Math.round(v*(m>80?0.35:0.6)));if(v<0&&m<35)return Math.min(-1,Math.round(v*(m<20?0.5:0.75)));return v}
+var _rpSoft=rgPick;
+rgPick=function(d){
+  var c=RG&&RG.cur,k=c&&c[d];
+  if(k&&k.d&&!(c.o&&c.o.narr)){var orig=k.d.slice();k.d=k.d.map(function(v,i){return v?softD(i,v):0});try{_rpSoft(d)}finally{k.d=orig}return}
+  _rpSoft(d);
+};
+/* mais situações do dia a dia, sem peso na história, que sobem e descem os medidores */
+Object.assign(PAT,{humble:[2,0,1,-8],alone:[5,3,-8,0],worry:[-7,0,2,1],risk:[-2,-7,0,5],indulge:[5,6,-3,-4],share:[-2,0,6,-3],show:[-3,-2,0,7],nap:[6,5,-2,-3],train:[-3,-6,0,4],gossip:[2,0,-4,5]});
+GT.push(
+ ["subaru",1,8,"{tm}, um mercador oferece uma aposta de cartas {pl}. Parece fácil demais.","Apostar alto","risk","Recusar com educação","humble"],
+ ["subaru",1,8,"Alguém {pl} reconhece você e pede um autógrafo, meio de brincadeira.","Fazer pose de herói","show","Rir e recusar","humble"],
+ ["subaru",1,8,"{wx}. Você podia passar o resto da tarde sozinho, pensando.","Ficar sozinho","alone","Procurar companhia","share"],
+ ["subaru",1,8,"Seu estômago ronca alto {pl}. {food} parece irresistível.","Comer até não aguentar","indulge","Comer pouco e seguir","train"],
+ ["subaru",1,8,"Você ouve fofocas sobre você {pl}. Metade é mentira, a outra metade é pior.","Desmentir em voz alta","gossip","Deixar pra lá","humble"],
+ ["subaru",1,8,"Um velho pede ajuda para carregar lenha {pl}.","Carregar tudo","help","Indicar alguém mais forte","nap"],
+ ["subaru",1,8,"Você encontra um lugar perfeito para um cochilo {pl}.","Cochilar um pouco","nap","Treinar flexões","train"],
+ ["subaru",1,8,"A memória de uma morte volta do nada {pl}. O coração dispara.","Contar a alguém como se sente","share","Engolir e seguir","worry"],
+ ["subaru",1,8,"Crianças brincam de 'cavaleiro e monstro' {pl} e chamam você para ser o monstro.","Brincar de monstro","laugh","Dizer que está sem tempo","work"],
+ ["subaru",1,8,"Um bardo canta uma música sobre um herói desastrado. Parece muito com você.","Subir no palco junto","show","Sair de fininho","hide"],
+ ["subaru",1,8,"Você tropeça numa pedra solta {pl} e quase cai na frente de todo mundo.","Fazer uma piada","laugh","Fingir que foi de propósito","boast"],
+ ["subaru",1,8,"Um guarda desconfiado pede seus documentos {pl}.","Explicar com calma","talk","Sair correndo","risk"],
+ ["emilia",1,8,"Emilia tenta fazer uma trança no próprio cabelo {pl} e se enrola toda.","Ajudar com a trança","share","Elogiar o esforço","laugh"],
+ ["emilia",1,8,"Emilia pergunta, séria: 'Você acha que eu estou me esforçando o bastante?'","Dizer que sim, de coração","confide","Dizer que ela pode descansar","nap"],
+ ["rem",2,8,"Rem oferece {food} e fica esperando sua reação, com as mãos juntas.","Elogiar muito","gift","Comer em silêncio","alone"],
+ ["ram",2,8,"Ram aponta uma mancha no seu casaco: 'Que vergonha andar assim, Barusu.'","Limpar na hora","humble","Dizer que é estilo","boast"],
+ ["beatrice",2,8,"Beatrice adormeceu em cima de um livro aberto {pl}.","Cobrir ela com um casaco","gift","Ler o livro escondido","study"],
+ ["otto",3,8,"Otto pede que você segure o dragão de carga dele 'só um minutinho'. Já faz uma hora.","Esperar sem reclamar","help","Soltar o dragão e ir embora","risk"],
+ ["garfiel",4,8,"Garfiel desafia você a subir numa árvore mais rápido que ele.","Aceitar a corrida","train","Torcer de longe","nap"],
+ ["julius",3,8,"Julius comenta que suas botas estão gastas. 'Um cavaleiro cuida do que veste.'","Agradecer o conselho","humble","Devolver uma provocação","gossip"],
+ ["crusch",3,8,"Crusch treina sozinha {pl}. Ela não percebe você chegar.","Treinar junto em silêncio","train","Deixar ela em paz","alone"],
+ ["anastasia",5,8,"Anastasia oferece um 'pequeno investimento' com lucro garantido.","Investir tudo","risk","Pedir os números antes","study"],
+ ["petra",3,8,"Petra fez um desenho seu e quer saber se ficou parecido.","Elogiar o desenho","laugh","Corrigir o cabelo","humble"],
+ ["frederica",3,8,"Frederica pede ajuda para arrumar uma estante pesada.","Ajudar a carregar","help","Dar ideias de longe","talk"]
+);
+/* cartas comuns corrigem medidores perigosos com mais frequência */
+var _gcBal=genCard;
+genCard=function(){
+  if(!RG)return _gcBal();
+  var ext=[];for(var i=0;i<4;i++){if(RG.m[i]>=72)ext.push([i,-1]);else if(RG.m[i]<=28)ext.push([i,1])}
+  if(!ext.length)return _gcBal();
+  var best=null,bs=-1e9;
+  for(var t=0;t<6;t++){var c=_gcBal(),sc=0;ext.forEach(function(e){var i=e[0],dir=e[1];sc+=Math.max(dir*(c.L.d[i]||0),dir*(c.R.d[i]||0))});if(sc>bs){bs=sc;best=c}}
+  return best;
+};
+/* saves antigos: quem já passou desses arcos antes dos momentos novos existirem recebe os marcos implícitos */
+(function(){
+  var r=gget(skey("rg"),null);if(!r||!r.rg)return;var fl=r.rg.flags||[],arc=r.rg.arc||1,c=CAN(),add=function(f){if(fl.indexOf(f)<0)fl.push(f);c[f]=1};
+  fl.forEach(function(f){if(CFLAGS.indexOf(f)>=0)c[f]=1});
+  if(arc>4){if(fl.indexOf("emi_amigos")<0&&fl.indexOf("promessa")>=0)add("emi_beijo");if(fl.indexOf("ram_leal")<0)add("ram_livre")}
+  if(arc>7)add("rem_desperta");
+  if(arc>3&&fl.indexOf("alianca")<0)add("alianca");
+  r.rg.flags=fl;gset(skey("rg"),r);pfSave();
+})();
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

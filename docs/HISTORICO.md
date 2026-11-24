@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## 2026-11-24 — Atualização 15: marcos canônicos, reinício completo e Retornos mais longo
+- Romance depende de momentos canônicos vividos no Retornos (`CREQ`, `PF.canon`): Emilia (promessa no Arco 3 + beijo no Santuário no Arco 4), Rem (recomeçar do zero no Arco 3; adormecida do fim do Arco 3 até despertar no Arco 7), Ram (dizer que ela pode escolher a própria vida, Arco 4), Beatrice (contrato, Arco 4), Crusch (aliança na caçada, Arco 3), Anastasia (Arco 5), Priscilla (Arco 7).
+- Cartas novas: `a4_ram`, `a4_kiss`, `a7_rem`. Saves antigos que já passaram desses arcos recebem os marcos implícitos.
+- "Recomeçar tudo" apaga Retornos, Modo Livre e perfil (mantém conquistas e galeria).
+- Retornos: 3 a 5 cartas comuns entre momentos da história, medidores começam entre 42 e 58, efeito elástico perto dos extremos, 24 situações novas do dia a dia e cartas que corrigem medidores perigosos.
+
 ## 2026-11-24 — Atualização 14: Modo Livre ligado à história
 - Inimigos usam um **poder de referência por nível** (`refPow`), não copiam mais o baralho do jogador: evoluir no Modo Livre torna os chefes da história mais fáceis.
 - Chefes da história com nível fixo por arco (2 + 3×arco + 2); o Retornos não ajusta mais o nível ao jogador.
