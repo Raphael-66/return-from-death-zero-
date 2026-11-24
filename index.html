@@ -155,7 +155,7 @@ select.sel{background:var(--ink2);border:1px solid var(--line);border-radius:8px
 .bar{height:10px;border-radius:99px;background:#0a0d1a;overflow:hidden;border:1px solid var(--line)}
 .bar>div{height:100%;background:var(--blood);transition:width .3s}
 .bar.help>div{background:var(--ice)}
-.bar.me>div{background:#58c58a}
+.bar.hpme>div{background:#58c58a}
 .row{display:flex;justify-content:space-between;gap:10px;font-size:14px;color:var(--mute)}
 .intent{color:var(--gold);font-weight:700}
 #log{min-height:40px;font-size:14px;color:var(--mute);padding:0 4px;flex:1}
@@ -210,7 +210,7 @@ select.sel{background:var(--ink2);border:1px solid var(--line);border-radius:8px
 .runes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .rune{aspect-ratio:1.4;border-radius:14px;border:2px solid var(--line);font-size:38px;display:grid;place-items:center;background:var(--ink2);transition:all .12s}
 .rune.lit{background:var(--c);color:#0a0d1a;border-color:var(--c);box-shadow:0 0 30px -2px var(--c)}
-#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink3);border:1px solid var(--ice);border-radius:99px;
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink3);border:1px solid var(--ice);border-radius:16px;
   padding:7px 16px;font-size:14px;z-index:30;max-width:92vw;text-align:center;pointer-events:none}
 /* modo retornos: layout no estilo Reigns (medidores redondos, pergunta no alto, carta vertical, nome abaixo) */
 #rg{padding-bottom:max(10px,env(safe-area-inset-bottom,0px));gap:6px;overflow:hidden}
@@ -333,6 +333,25 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .wsel{background:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;min-height:34px;font-size:13px}
 .wsel.on{border-color:var(--gold);color:var(--gold)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.mapwrap{overflow:auto;max-height:min(64vh,470px);border-radius:12px;border:1px solid var(--line);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wmap.wbig{width:640px;max-width:none;height:auto}
+.wrg{fill:var(--mute);font-size:11px;letter-spacing:.18em;text-anchor:middle;opacity:.55;pointer-events:none}
+.wrg.big{font-size:13px;opacity:.4}
+.wborder{stroke:#9fc6e8;stroke-width:2;stroke-dasharray:2 6;opacity:.5}
+.whome{fill:var(--gold);font-size:12px;text-anchor:middle}
+.wvil .wc{fill:#1f2a22;stroke:#6fae7a}
+.wvil .wic{font-size:14px}.wvil .wlb{font-size:10.5px}
+.wvil.cur .wc{stroke:var(--gold)}
+.tierb{margin:0 0 2px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.foe.boss h2{color:#ffd28a}
+.foe.super{background:linear-gradient(180deg,rgba(120,20,40,.28),transparent 75%);border-radius:14px}
+.foe.super h2{color:#ff9bab}
+.foe.super .tierb{color:#ff9bab}
+.foe.elite .tierb{color:#9fd3ff}
+.trb{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 0;cursor:pointer}
+.trc{font-size:11.5px;border:1px solid #ff9bab;color:#ffc2cc;border-radius:99px;padding:2px 9px}
+.trd{margin:6px 0 0!important;max-width:none!important;font-size:12.5px}
+.arm{color:#9fd3ff}
 </style>
 
 
@@ -345,11 +364,13 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
       <button class="btn primary" id="bRG" style="padding:16px;min-height:72px"></button>
       <button class="btn small" id="bRGn" hidden>Recomeçar Modo Retornos</button>
     </div>
-    <p class="sec" style="margin:8px 0 0">Outros modos</p>
-    <div class="stack" id="slots"></div>
     <div class="stack">
       <button class="btn" id="bFree"></button>
-      <button class="btn ai" id="bAI">Mesa do Mestre (IA do jogo)</button>
+    </div>
+    <p class="sec" id="oldSec" style="margin:8px 0 0" hidden>Saves do modo história antigo</p>
+    <div class="stack" id="slots"></div>
+    <button class="btn ai" id="bAI" hidden>Mesa do Mestre (IA do jogo)</button>
+    <div class="stack">
       <button class="btn small" id="bDiff"></button>
       <button class="btn small" id="bExtra">Conquistas, galeria e oficina</button>
     </div>
@@ -861,7 +882,7 @@ function renderBattle(){
   if(cfg.hold){var left=Math.max(0,cfg.hold-B.turn+1);
     h+='<div class="bar help"><div style="width:'+((B.turn-1)/cfg.hold*100)+'%"></div></div><div class="row"><span>A ajuda chega em '+left+' rodada'+(left===1?"":"s")+'</span></div>'}
   h+='</div><div id="log">'+B.log+'</div>';
-  h+='<div class="me"><div class="bar me"><div style="width:'+Math.max(0,B.php/mh*100)+'%"></div></div>'+
+  h+='<div class="me"><div class="bar hpme"><div style="width:'+Math.max(0,B.php/mh*100)+'%"></div></div>'+
    '<div class="stats"><span class="pill">Vida '+Math.max(0,B.php)+'</span><span class="pill bl">Escudo '+B.pblk+'</span><span class="pill en">Energia '+B.en+'</span><span class="pill sn">Sanidade '+S.san+'</span><span class="pill">Rodada '+B.turn+'</span></div>'+
    '<div id="hand">';
   B.hand.forEach(function(id,i){
@@ -1444,7 +1465,7 @@ function sleepDay(){
   if(S.day>=8)unlock("livre7");
   if(S.san>90&&S.mode==="free")unlock("calmo");
   save();
-  hubNote({text:txt,fx:"Sanidade +"+bonus+" · Dia "+S.day},function(){
+  hubNote({text:txt,fx:"Sanidade +"+bonus+" · Dia "+S.day+(S.mode==="free"?" · Acordou em: "+PLBY[L().loc].n:"")},function(){
     if(S.day%3===0)runEvent(rnd(allEvents().filter(function(e){return !e.arc||e.arc<=arcReach()})));else renderHub();
   });
 }
@@ -2165,7 +2186,7 @@ $("#bRGn").onclick=function(){
 };
 function rgTitleInfo(){
   var r=gget(skey("rg"),null),b=$("#bRG"),n=$("#bRGn");
-  b.innerHTML="<b style='font-family:var(--display);font-weight:400;font-size:17px'>Modo Retornos</b> <span style='font-size:12px;color:var(--gold)'>novo</span><br><span style='font-size:13px;color:var(--mute)'>"+(r&&r.rg?("Arco "+Math.min(r.rg.arc,8)+" · Retorno "+r.rg.ret+" · continuar"):"Cartas de deslizar: arcos 1 a 8")+"</span>";
+  b.innerHTML="<b style='font-family:var(--display);font-weight:400;font-size:17px'>Modo Retornos</b> <span style='font-size:12px;color:var(--gold)'>principal</span><br><span style='font-size:13px;color:var(--mute)'>"+(r&&r.rg?("Arco "+Math.min(r.rg.arc,8)+" · Retorno "+r.rg.ret+" · continuar"):"Cartas de deslizar: arcos 1 a 8")+"</span>";
   n.hidden=!r;
 }
 /* ===== Arsenal (cartas e habilidades por arco), Pesca e Ajustes ===== */
@@ -3511,10 +3532,10 @@ function huntMenu(){
   var o=$("#overlay");o.className="";o.hidden=false;
   var h='<div class="in"><h2>Caçar mabeasts</h2><p class="fine" style="margin:0">Seu nível de referência: <b>'+ref+'</b> (nível, atributos e arco). Escolha o perigo. Quanto mais forte o alvo, maior a recompensa.</p>';
   tiers.forEach(function(t,i){
-    var lv=Math.max(2,ref+t[1]),pk=mkMon(arc,lv,t[3]?rnd(t[3]):null),cf=levelize(Object.assign({},pk,{lvd:false,noadapt:true}));
+    var lv=Math.max(2,ref+t[1]),pk=mkMon(arc,lv,t[3]?rnd(t[3]):null),cf=levelize(Object.assign({},pk,{lvd:false,noadapt:true,allies:["?emilia","?rem","?ram","?beatrice"],tier:pk.arch==="chefe"?"boss":t[2]>=3?"elite":"mob"}));
     var rw=2+Math.round(lv/5)+t[2];
     t[4]=pk;
-    h+='<button class="btn" data-t="'+i+'" style="text-align:left"><b>'+t[0]+'</b> · Nv '+lv+'<br><span style="font-size:13px;color:var(--mute)">'+pk.enemy+' ('+cf.archn+') · vida ~'+cf.hp+' · golpes ~'+Math.round(cf.intents.reduce(function(a,b){return a+b},0)/cf.intents.length)+' · ◆ '+rw+'</span></button>';
+    h+='<button class="btn" data-t="'+i+'" style="text-align:left"><b>'+t[0]+'</b> · Nv '+lv+'<br><span style="font-size:13px;color:var(--mute)">'+esc(pk.enemy)+' ('+cf.archn+(cf.tier!=="mob"&&cf.tiern!==cf.archn?", "+cf.tiern:"")+') · vida ~'+cf.hp+' · golpes ~'+Math.round(cf.intents.reduce(function(a,b){return a+b},0)/cf.intents.length)+' · ◆ '+rw+'</span></button>';
     tiers[i]=t;
   });
   h+='<button class="btn small" id="hX">Voltar</button></div>';
@@ -4297,11 +4318,13 @@ function mapHub(){
     if(loc!=="*"&&loc!==lf.loc)b.hidden=true;
   });
   hub.querySelectorAll("[data-p]").forEach(function(b){if(lf.loc!=="casa")b.hidden=true});
-  ["hFish","hFight"].forEach(function(id){var e=$("#"+id);if(e&&lf.loc!=="floresta")e.hidden=true});
+  var hf=$("#hFish");if(hf&&lf.loc!=="floresta")hf.hidden=true;
+  var hg=$("#hFight");if(hg&&(lf.loc==="casa"||PLBY[lf.loc].dg))hg.hidden=true;
+  if(hg&&!hg.hidden){var env=ENVOF[lf.loc]||"floresta";hg.querySelector("span").textContent="Os bichos daqui: "+envPool(env).slice(0,3).map(function(x){return x[0]}).join(", ")+"… Escolha o perigo"}
   ["hScene","hAI","hTea"].forEach(function(id){var e=$("#"+id);if(e&&lf.loc!=="casa")e.hidden=true});
-  var mk=$("#hMk");if(mk){var cd=mk.closest(".hubcard");if(cd&&["vila","capital","pristella","vollachia","caravana"].indexOf(lf.loc)<0)cd.hidden=true}
+  var mk=$("#hMk");if(mk){var cd=mk.closest(".hubcard");if(cd&&["vila","capital","pristella","vollachia","caravana","liphas","guaral","ribeirinha","pedraferro"].indexOf(lf.loc)<0)cd.hidden=true}
   hub.querySelectorAll(".hubcard").forEach(function(c){var ac=c.querySelector(".acts");if(!ac||c.id==="hMapCard")return;var any=false;ac.querySelectorAll("button").forEach(function(b){if(!b.hidden)any=true});if(!any)c.hidden=true});
-  var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Lugares distantes gastam um período e exigem um quarto para dormir.</p>'+placeActions(lf);
+  var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Lugares distantes gastam um período. Para dormir neles, tenha uma moradia ou reserve a estalagem.</p>'+placeActions(lf);
   var pp=peopleHere();
   if(pp.length){
     h+='<div class="sec" style="margin:6px 0 4px">Pessoas aqui agora</div><div style="display:flex;flex-direction:column;gap:6px">';
@@ -4319,7 +4342,7 @@ function mapHub(){
   };
   /* Vida */
   var lc=document.createElement("div");lc.className="hubcard";
-  lc.innerHTML='<div class="hubrow"><span><b>Vida</b> · '+esc(HOMES[lf.home][0])+' · '+esc(JOBS[lf.job].n)+'</span><button class="chip" id="hLife">Abrir</button></div><div class="hubrow" style="margin-top:4px"><span class="fine" style="margin:0">Reputação: '+repLabel()+' ('+Math.round(lf.rep)+')'+(lf.debt>0?' · <b style="color:#ff9bab">Dívida ¤ '+lf.debt+'</b>':'')+'</span></div>';
+  lc.innerHTML='<div class="hubrow"><span><b>Vida</b> · '+esc(homeName())+' · '+esc(JOBS[lf.job].n)+'</span><button class="chip" id="hLife">Abrir</button></div><div class="hubrow" style="margin-top:4px"><span class="fine" style="margin:0">Reputação: '+repLabel()+' ('+Math.round(lf.rep)+')'+(lf.debt>0?' · <b style="color:#ff9bab">Dívida ¤ '+lf.debt+'</b>':'')+'</span></div>';
   card.parentNode.insertBefore(lc,card.nextSibling);
   $("#hLife").onclick=function(){openMenu("Vida")};
 }
@@ -4328,7 +4351,7 @@ renderHub=function(){
   _rh57();
   if(!S||S.mode!=="free")return;
   mapHub();
-  var lf=L();
+  var lf=L();centerMap();
   if(lf.pend&&S.t===0&&$("#overlay").hidden){lf.pend=false;pfSave();lifeEvent()}
 };
 
@@ -4347,9 +4370,9 @@ disc=function(p){return Math.max(1,Math.round(_disc57(p)*(1-L().rep/900)))};
 var WORKACT=/Trabalhar no vilarejo|forja do ferreiro|Ajudar Otto|Guiar mercadores/;
 function paneLife(p){
   var lf=L(),h='<h2>Vida</h2><p style="margin:4px 0 8px;color:var(--mute)">O que Subaru constrói fora dos arcos: casa, trabalho e nome. <b class="coin">¤ '+S.coin+'</b></p>';
-  var nh=HOMES[lf.home+1];
-  h+='<div class="item"><div><b>Moradia: '+esc(HOMES[lf.home][0])+'</b><span>'+esc(HOMES[lf.home][3])+'</span></div>'+(nh?'<button class="btn small" data-l="home"'+((S.coin<nh[1]||(lf.home>=1&&lf.job<1)||S.mode!=="free")?" disabled":"")+'>'+esc(nh[0])+' · ¤ '+nh[1]+'</button>':'<span>Máx.</span>')+'</div>';
-  if(lf.home>=1&&lf.job<1)h+='<p class="fine" style="margin:4px 0 0">Para comprar uma casa você precisa de um emprego melhor que carregador.</p>';
+  var rs=RS(),owned=Object.keys(rs).filter(function(k){return rs[k]&&resAt(k)});
+  h+='<div class="item"><div><b>Moradias</b><span>Você acorda onde dorme. '+(owned.length?"Suas: "+owned.map(function(k){var x=resAt(k);return x.n+" ("+(PLBY[k].s||PLBY[k].n)+(x.rent?", aluguel ¤ "+x.rent+"/semana":"")+")"}).join("; ")+".":"Por enquanto, só o quarto emprestado na mansão.")+' Para alugar ou comprar, vá até a cidade no mapa e toque em "Moradias".</span></div>'+(RES[lf.loc]&&lf.loc!=="casa"&&S.mode==="free"?'<button class="btn small" data-l="res">Moradias aqui</button>':'')+'</div>';
+  if(lf.job<1)h+='<p class="fine" style="margin:4px 0 0">Para comprar uma casa você precisa de um emprego melhor que carregador. Quartos de aluguel não exigem.</p>';
   var j=JOBS[lf.job],nj=JOBS[lf.job+1],pct=nj?Math.min(100,Math.round((lf.jx-j.need)/(nj.need-j.need)*100)):100;
   h+='<div class="item" style="margin-top:8px"><div><b>Profissão: '+esc(j.n)+'</b><span>Salário semanal ¤ '+j.sal+'. '+(nj?'Próximo: '+esc(nj.n)+(nj.arc>arcReach()?' (Arco '+nj.arc+')':'')+' · '+lf.jx+'/'+nj.need+' de experiência':'Você chegou ao topo.')+'</span><div class="bar" style="margin-top:6px"><div style="width:'+pct+'%;background:var(--gold)"></div></div></div></div>';
   h+='<div class="item" style="margin-top:8px"><div><b>Reputação: '+repLabel()+' ('+Math.round(lf.rep)+'/100)</b><span>Quanto mais querido você é, mais baratas ficam as lojas (até −11%) e mais eventos bons aparecem.</span></div></div>';
@@ -4362,7 +4385,7 @@ function paneLife(p){
   p.onclick=function(e){
     var b=e.target.closest?e.target.closest("button[data-l]"):null;if(!b||b.disabled)return;
     var a=b.getAttribute("data-l");
-    if(a==="home"){var n=HOMES[lf.home+1];if(S.coin<n[1])return;S.coin-=n[1];lf.home++;pfSave();save();sfx("buy");toast("Nova moradia: "+n[0]);dj("vida","Subaru se mudou para: "+n[0]+".");unlock("lar")}
+    if(a==="res"){resMenu(lf.loc);return}
     else if(a==="pay"){var v=Math.min(lf.debt,S.coin);S.coin-=v;lf.debt-=v;pfSave();save();sfx("buy");toast("Dívida paga: ¤ "+v);dj("vida","Pagou ¤ "+v+" de dívidas.")}
     try{updHead()}catch(_){}
     paneLife(p);
@@ -4372,7 +4395,7 @@ ACH.lar=["Casa própria","Mude para uma moradia melhor no Modo Livre."];
 function weekly(day){
   var lf=L(),j=JOBS[lf.job],txt=[];
   var sal=Math.round(j.sal*(1+lf.rep/200));S.coin+=sal;txt.push("salário ¤ +"+sal);
-  if(lf.home===1){if(S.coin>=40){S.coin-=40;txt.push("aluguel ¤ −40")}else{lf.debt+=40;txt.push("aluguel não pago (dívida +40)")}}
+  var rs=RS();Object.keys(rs).forEach(function(k){var x=resAt(k);if(!x||!x.rent)return;if(S.coin>=x.rent){S.coin-=x.rent;txt.push("aluguel em "+(PLBY[k].s||PLBY[k].n)+" ¤ −"+x.rent)}else{lf.debt+=x.rent;txt.push("aluguel não pago em "+(PLBY[k].s||PLBY[k].n)+" (dívida +"+x.rent+")")}});
   if(lf.debt>0){var iv=Math.ceil(lf.debt*0.1);lf.debt+=iv;txt.push("juros ¤ +"+iv+" na dívida")}
   PF.week={t:"dia "+day+": "+txt.join(", ")};pfSave();dj("vida","Acerto da semana (dia "+day+"): "+txt.join(", ")+".");
   toast("Semana: "+txt.join(" · "));
@@ -4386,15 +4409,15 @@ sleepDay=function(){
   var lf=L();
   var far=!!PLBY[lf.loc].far,sb;
   var par=PF.rel&&PF.rel.partner;
+  var sp=sleepPlace();far=!!sp.far;
   if(far){var inn=lf.inn&&lf.inn.loc===lf.loc&&lf.inn.day===S.day?lf.inn:null;sb=inn?inn.b:-8;lf.inn=null;dj("vida",inn?"Dormiu na estalagem de "+PLBY[lf.loc].n+".":"Dormiu ao relento em "+PLBY[lf.loc].n+".")}
-  else{sb=HOMES[lf.home][2]-(lf.debt>0?3:0);
-  if(par&&rsOf(par).s==="casado")sb+=4+(lf.home>=3?2:0);
-  if(par&&rsOf(par).live&&rsOf(par).s!=="corte"){sb+=3;relAdd(par,2)}}
-  if(!far)sb-=(lf.debt>0&&far?0:0);
+  else{sb=sp.b-(lf.debt>0?3:0);lf.loc=sp.loc;lf.inn=null;
+  if(sp.walk)toast("Você voltou para dormir em: "+sp.n);
+  if(par&&rsOf(par).s==="casado")sb+=4+(sp.b>=12?2:0);
+  if(par&&rsOf(par).live&&rsOf(par).s!=="corte"&&sp.loc!=="casa"){sb+=3;relAdd(par,2)}}
   if(sb)S.san=clamp(S.san+sb,0,100);
   var logs=PF.dayLog||[];
   dj("vida","Dia "+S.day+" ("+wxOf().n+"): "+(logs.length?logs.join(", "):"descansou sem fazer muito")+".");PF.dayLog=[];
-  if(!PLBY[lf.loc].far)lf.loc="casa";
   var nd=S.day+1;if(nd%7===0)weekly(nd);
   checkPromo();
   /* vida a dois: efeito diário */
@@ -4424,7 +4447,7 @@ function applyLF(fx){
   pfSave();save();return t.join(" · ");
 }
 var LEV=[
- {id:"gote",w:function(){return L().home>=1},tag:"Casa",t:"Goteira no quarto",x:"No meio da madrugada, uma goteira começa a pingar bem em cima da sua cama.",ch:[
+ {id:"gote",w:function(){return hasOwnPlace()},tag:"Casa",t:"Goteira no quarto",x:"No meio da madrugada, uma goteira começa a pingar bem em cima da sua cama.",ch:[
   {l:"Consertar agora (¤ 60)",need:60,ok:["Você paga um carpinteiro e dorme em paz. Bom investimento.",{c:-60,san:4,rep:1}]},
   {l:"Colocar um balde e ignorar",ok:["Plic, plic, plic. A noite é longa e o balde, insuficiente.",{san:-6}]}]},
  {id:"vizinho",tag:"Vizinhança",t:"Vizinho em apuros",x:"O velho da casa ao lado perdeu a carroça na lama e pede ajuda com a voz meio quebrada.",ch:[
@@ -4589,7 +4612,7 @@ function reqNoivado(id){
   if(st<5)n.push("Relação Inseparáveis (105 pontos)");
   if(chDone(id)<3)n.push("Viver os 3 momentos especiais");
   if(r.dates<8)n.push("8 encontros ("+r.dates+"/8)");
-  if(L().home<1)n.push("Ter um lugar próprio (moradia melhor que o quarto emprestado)");
+  if(!hasOwnPlace())n.push("Ter um lugar próprio (alugado ou comprado, em qualquer cidade)");
   if(S.coin<500)n.push("¤ 500 para o anel");
   if(r.cd&&S.day<r.cd)n.push("Esperar até o dia "+r.cd);
   return n;
@@ -5167,7 +5190,7 @@ function loveExtra(id,r,night){
     h+='<button class="btn" data-m="x:letter"'+(r.letterDay===S.day?" disabled":"")+'>Escrever uma carta de amor'+(r.letterDay===S.day?" · já hoje":"")+'</button>';
     h+='<button class="btn" data-m="x:surp"'+((S.coin<60||night||r.surpDay===S.day)?" disabled":"")+'>Fazer uma surpresa · ¤ 60</button>';
     h+='<button class="btn" data-m="x:plan"'+((night||r.planDay>=S.day-2)?" disabled":"")+'>Conversar sobre o futuro</button>';
-    if(!r.live)h+='<button class="btn" data-m="x:live"'+((L().home<2)?" disabled":"")+'>Morar juntos'+(L().home<2?" (requer uma casa própria)":"")+'</button>';
+    if(!r.live)h+='<button class="btn" data-m="x:live"'+((!ownsHouse())?" disabled":"")+'>Morar juntos'+(!ownsHouse()?" (requer uma casa própria)":"")+'</button>';
     if(s==="casado"&&!r.hm)h+='<button class="btn primary" data-m="x:hm"'+((S.coin<600||night)?" disabled":"")+'>Lua de mel · ¤ 600</button>';
     if(s==="namoro"||s==="noivado")h+='<button class="btn small" data-m="x:break">Terminar o relacionamento</button>';
   }
@@ -5195,7 +5218,7 @@ function loveAct(id,k){
       dj("amor","Conversa sobre o futuro com "+N+".");done(t,eff);
     };
   }
-  else if(k==="live"){if(L().home<2)return;r.live=true;relAdd(id,8);gainXP(40,true);dj("amor","Subaru e "+N+" foram morar juntos.");done("Vocês levam as coisas, uma caixa por vez. À noite, a casa cheira a comida, flores e um pouco de bagunça. Parece, finalmente, um lar.","Moram juntos · sono +3 e Relação +2 por noite")}
+  else if(k==="live"){if(!ownsHouse())return;r.live=true;relAdd(id,8);gainXP(40,true);dj("amor","Subaru e "+N+" foram morar juntos.");done("Vocês levam as coisas, uma caixa por vez. À noite, a casa cheira a comida, flores e um pouco de bagunça. Parece, finalmente, um lar.","Moram juntos · sono +3 e Relação +2 por noite")}
   else if(k==="hm"){if(S.coin<600||S.t>=3||r.hm)return;S.coin-=600;advanceTime();r.hm=true;relAdd(id,15);S.san=clamp(S.san+25,0,100);giveBuff("lua");gainXP(80,true);dj("amor","Lua de mel com "+N+".");done("Uma viagem sem pressa, sem mortes, sem urgências. Vocês voltam bronzeados, com histórias demais para contar.","¤ −600 · Relação +15 · Sanidade +25 · Buff: Lua de mel")}
   else if(k==="break"){
     o=ovl('<h2 style="margin:0">Terminar com '+esc(N)+'?</h2><p style="margin:0;font-size:17px;line-height:1.55">Essa decisão vai machucar vocês dois. A relação perde muitos pontos.</p><button class="btn" data-k="1">Terminar</button><button class="btn primary" data-k="0">Voltar atrás</button>');
@@ -5305,11 +5328,11 @@ function bagTxt(b){var a=[];for(var k in b)if(b[k]>0)a.push(GOODS[k].n+" ×"+b[k
 function dgIntro(id){
   var d=DBY[id],pl=PLBY[id],rec=DREC()[id]||0,r=DR();
   if(S.t>=3&&!r){toast("Já é noite. Descanse e volte amanhã.");return}
-  var h='<p class="sec" style="margin:0">'+(d.inf?"Torre sem fim":"Masmorra · "+d.fl+" andares")+'</p><h2 style="margin:0">'+esc(pl.n)+'</h2><p style="margin:0;font-size:16px;line-height:1.5">'+esc(pl.d)+'</p><p class="fine" style="margin:0">Cada andar custa 2 de sanidade. O saque fica numa mochila: se você sair, leva tudo; se cair, perde metade. '+(d.inf?"A cada 5 andares há um guardião, e os níveis nunca param de subir. ":"No último andar há um guardião. ")+'Recorde: andar '+rec+'.</p>';
+  var h='<p class="sec" style="margin:0">'+(d.inf?"Torre sem fim":"Masmorra · "+d.fl+" andares")+'</p><h2 style="margin:0">'+esc(pl.n)+'</h2><p style="margin:0;font-size:16px;line-height:1.5">'+esc(pl.d)+'</p><p class="fine" style="margin:0">Cada andar custa 2 de sanidade. O saque fica numa mochila: se você sair, leva tudo; se cair, perde metade. '+(d.inf?"A cada 5 andares há um guardião, e os níveis nunca param de subir. ":"A cada 5 andares há um guardião e, no último, o chefe da masmorra. Os inimigos mudam a cada visita. ")+'Recorde: andar '+rec+'.</p>';
   if(r&&r.id===id)h+='<button class="btn primary" data-k="res">Continuar a expedição (andar '+r.fl+')</button>';
   else{
     h+='<button class="btn primary" data-k="s1"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar 1 · 1 período</button>';
-    if(d.inf&&rec>=5){var cp=Math.floor((rec-1)/5)*5+1;if(cp>1)h+='<button class="btn" data-k="s'+cp+'"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar '+cp+' (ponto de salvamento) · 1 período</button>'}
+    if(rec>=5){var cp=Math.min(Math.floor(rec/5)*5+1,d.inf?99999:d.fl);if(cp>1)h+='<button class="btn" data-k="s'+cp+'"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar '+cp+' (ponto de salvamento) · 1 período</button>'}
   }
   h+='<button class="btn small" data-k="x">Voltar</button>';
   var o=ovl(h);
@@ -5789,6 +5812,482 @@ WSEC.push({id:"net",n:"Relações",render:function(b){
   b.innerHTML=h;
   b.onclick=function(e){var g=e.target.closest?e.target.closest("[data-n]"):null;if(!g)return;NSEL=g.getAttribute("data-n")===NSEL?null:g.getAttribute("data-n");WSEC.filter(function(x){return x.id==="net"})[0].render(b)};
 }});
+/* =====================================================================
+   ATUALIZAÇÃO 8: batalhas rebalanceadas, super chefes canônicos,
+   masmorras maiores com mobs por ambiente, moradias em várias cidades,
+   novas vilas e mapa em escala.
+   ===================================================================== */
+
+/* ---------- 1. Chefes canônicos e traços de combate ---------- */
+/* Traços: multi = golpes por rodada, armor = armadura renovada a cada rodada,
+   ward = cada golpe seu perde esse tanto de dano, enrage = rodada em que começa a fúria,
+   regen = vida recuperada por rodada. tr2 substitui os traços na fase 2. */
+var CANON=[
+ {re:/Elsa/,n:"Elsa Granhiert",tr:{multi:2,enrage:5},tr2:{multi:2,enrage:4},p2:"Elsa sorri e acelera. As lâminas ficam mais rápidas que os olhos."},
+ {re:/Baleia Branca/,n:"A Baleia Branca",tr:{regen:2},tr2:{regen:3,armor:3},p2:"A névoa se fecha. A Baleia se divide em sombras e endurece a pele."},
+ {re:/Petelgeuse|Culto das Bruxas/,n:"Petelgeuse Romanée-Conti",tr:{multi:2,enrage:7},tr2:{multi:3,enrage:5},p2:"'Que preguiça!' Mãos invisíveis surgem de todos os lados."},
+ {re:/Garfiel/,n:"Garfiel Tinsel",tr:{enrage:7},tr2:{armor:4,enrage:6},p2:"Garfiel se transforma num tigre gigante. A pele vira couraça."},
+ {re:/Regulus/,n:"Regulus Corneas",tr:{ward:3,armor:2},tr2:{ward:0,enrage:6},p2:"O coração de Regulus fica exposto. Ele finalmente sente dor, e fica furioso."},
+ {re:/Reid|Guardiões da Torre/,n:"Reid Astrea",tr:{multi:2,ward:2},tr2:{multi:3,ward:2},p2:"Reid ri alto, troca o hashi pela espada de verdade e para de brincar."},
+ {re:/Sphinx|praga dos mortos/,n:"Sphinx",tr:{regen:2},tr2:{regen:4,multi:2},p2:"Sphinx ergue mais mortos. A praga se fecha ao seu redor."},
+ {re:/Roswaal/,n:"Roswaal L. Mathers",tr:{multi:2,armor:3},tr2:{multi:2,armor:5,enrage:6},p2:"Roswaal para de sorrir. As quatro cores da magia giram juntas."},
+ {re:/Sirius/,n:"Sirius Romanée-Conti",tr:{enrage:5},tr2:{multi:2,enrage:4},p2:"Sirius divide a própria dor com quem está perto. O fogo cresce."}
+];
+function canonOf(name){name=name||"";for(var i=0;i<CANON.length;i++)if(CANON[i].re.test(name))return CANON[i];return null}
+
+/* nomes canônicos nas batalhas principais do Modo Retornos */
+(function(){
+  var ren={culto:"Petelgeuse e o Culto das Bruxas",torre:"Reid Astrea, guardião da Torre",mortos:"Sphinx e a praga dos mortos"};
+  Object.keys(ren).forEach(function(k){
+    var old=BAT[k].enemy;BAT[k].enemy=ren[k];
+    if(BATLV[old]!==undefined){BATLV[ren[k]]=BATLV[old]}
+    if(BATARCH[old]!==undefined){BATARCH[ren[k]]=BATARCH[old]}
+  });
+  BAT.elsa.hold=6;BAT.lobos.tier="boss";BAT.imperio.tier="boss";
+  BAT.lobos.tr={multi:3};BAT.imperio.tr={multi:2,armor:3};
+  BATARCH["A Baleia Branca"]="tanque";BATARCH["Reid Astrea, guardião da Torre"]="agil";
+})();
+
+var TIERP={
+ mob:{T:2.7,a:.13,b:.4,n:"Comum"},
+ elite:{T:3.7,a:.16,b:.5,n:"Elite"},
+ boss:{T:4.6,a:.15,b:.55,n:"Chefe"},
+ super:{T:5.4,a:.15,b:.5,n:"Super chefe"}
+};
+function tierOf(cfg){
+  if(cfg.tier)return cfg.tier;
+  if(canonOf(cfg.enemy))return "super";
+  if(cfg.trial||cfg.arch==="chefe"||(cfg.dg&&cfg.dg.boss))return "boss";
+  return "mob";
+}
+/* baralho que Subaru levaria para esta luta (mesma regra do início da batalha) */
+function previewDeck(cfg){
+  var allies=[];
+  (cfg.allies||[]).forEach(function(a){if(a.charAt(0)==="?"){var k=a.slice(1);if((S.aff[k]||0)>=2)allies.push(k)}else allies.push(a)});
+  var deck=DECKS.subaru.slice().concat((S.extras||[]).filter(function(i){return (S.xoff||[]).indexOf(i)<0&&CARDS[i]}));
+  try{deck=deck.concat(relDuo())}catch(_){}
+  allies.forEach(function(a){deck=deck.concat(DECKS[a]||[]);if((S.aff[a]||0)>=6&&DECKS_PLUS[a])deck=deck.concat(DECKS_PLUS[a])});
+  return deck;
+}
+/* dano e defesa médios por rodada (simulação rápida jogando só para atacar, ou só para defender) */
+function estPT(deck,mode){
+  if(!deck.length)return 8;
+  var en0=enMax(),hs=handSize(),tot=0,R=40;
+  function val(id){var c=CARDS[id];if(!c)return 0;var b=bonus(c.o);
+    if(mode==="blk")return (c.blk?c.blk+b:0)+(c.heal?(c.heal+b)*0.7:0)+(c.weak?4:0);
+    return (c.dmg?(c.dmg+b)*(c.multi||1):0)+(c.dot?c.dot*2:0)}
+  for(var r=0;r<R;r++){
+    var pile=shuffle(deck.slice()),hand=pile.splice(0,hs),en=en0,sum=0,guard=0;
+    while(guard++<12){
+      var best=-1,bv=-1;
+      for(var i=0;i<hand.length;i++){var c=CARDS[hand[i]];if(!c||c.c>en)continue;
+        var v=(c.en||c.draw)&&c.c<=1?999:val(hand[i])/Math.max(.6,c.c);if(v>bv&&(v>0)){bv=v;best=i}}
+      if(best<0)break;
+      var id=hand.splice(best,1)[0],cc=CARDS[id];en-=cc.c;if(cc.en)en+=cc.en;
+      sum+=val(id);if(cc.draw)for(var d=0;d<cc.draw&&pile.length;d++)hand.push(pile.pop());
+    }
+    tot+=sum;
+  }
+  return tot/R;
+}
+function estDPT(deck){return estPT(deck,"dmg")}
+function relief(tier,lv){
+  var d=refLv()-lv;
+  return (tier==="mob"||tier==="elite")?clamp(1-0.05*d,0.55,1.35):clamp(1-0.025*d,0.85,1.3);
+}
+function avgOf(a){return a.reduce(function(x,y){return x+y},0)/a.length}
+function tuneFoe(o){
+  var tier=tierOf(o),P=TIERP[tier],cn=canonOf(o.enemy),mh=maxHp(),rel=relief(tier,o.lv||refLv()),mul=o.mul||1;
+  var deck=previewDeck(o),dpt=Math.max(7,estPT(deck,"dmg")),bpt=estPT(deck,"blk");
+  o.tier=tier;o.tiern=P.n;
+  /* quanto mais longe na história, mais cruel o mundo fica */
+  mul*=1+0.015*(Math.min(8,curArc())-1);
+  if(curArc()<=2&&tier!=="super")mul*=0.9;
+  o.hp=Math.max(12,Math.round(dpt*P.T*rel*mul));
+  var avg=avgOf(o.intents),tgt=(mh*P.a+bpt*P.b)*rel*mul,f=tgt/avg;
+  o.intents=o.intents.map(function(v){return Math.max(2,Math.round(v*f))});
+  if(tier==="boss"||tier==="super"){
+    var m2=tier==="super"?1.3:1.2;o.i2=o.intents.map(function(v){return Math.round(v*m2)});
+  }
+  if(cn){o.tr=Object.assign({},cn.tr,o.tr||{});o.tr2=Object.assign({},cn.tr2||{});o.p2=cn.p2;o.canon=cn.n;if(!o.drain&&/Petelgeuse|Baleia|Sirius|Sphinx/.test(o.enemy))o.drain=3}
+  /* a força dos traços acompanha o nível */
+  var sc=clamp(dpt/20,0.85,2.5);
+  ["tr","tr2"].forEach(function(k){var t=o[k];if(!t)return;["armor","regen","ward"].forEach(function(x){if(t[x])t[x]=Math.max(1,Math.round(t[x]*(x==="ward"?Math.min(sc,1.4):sc)))})});
+  return o;
+}
+var _lvBase8=levelize;
+levelize=function(cfg){var o=_lvBase8(cfg);try{o=tuneFoe(o)}catch(e){}return o};
+
+/* Retorno pela Morte aprende: cada derrota para o mesmo chefe deixa a próxima tentativa mais fácil */
+function bossMemo(){if(!RG)return {};RG.bt=RG.bt||{};return RG.bt}
+var _sbV8=startBattle;
+startBattle=function(cfg){
+  cfg=JSON.parse(JSON.stringify(cfg));
+  if(!cfg.lvd&&(cfg.win==="_rgw"||cfg.win==="_hub"))cfg=levelize(cfg);
+  var note="";
+  if(S&&S.mode==="rg"&&RG&&cfg.win==="_rgw"&&(cfg.tier==="boss"||cfg.tier==="super")){
+    var n=bossMemo()[cfg.enemy]||0;
+    if(n>0){var fh=Math.max(.6,1-.08*n),fa=Math.max(.8,1-.04*n);cfg.hp=Math.round(cfg.hp*fh);
+      cfg.intents=cfg.intents.map(function(v){return Math.max(1,Math.round(v*fa))});if(cfg.i2)cfg.i2=cfg.i2.map(function(v){return Math.max(1,Math.round(v*fa))});
+      note=" Você já morreu para este inimigo "+n+(n===1?" vez":" vezes")+" e lembra dos padrões: vida −"+Math.round((1-fh)*100)+"%, golpes −"+Math.round((1-fa)*100)+"%."}
+  }
+  if(S&&S.mode==="rg"&&RG&&cfg.win==="_rgw")RG.battleCfg=cfg;
+  _sbV8(cfg);
+  if(B){B.eblk=(B.cfg.tr&&B.cfg.tr.armor)||0;B.p2=false;
+    if(B.cfg.tier==="super")B.log="Super chefe: "+(B.cfg.canon||B.cfg.enemy)+". Toque nos traços para ver o que ele faz."+(B.cfg.hold?" Resista "+B.cfg.hold+" rodadas até a ajuda chegar.":"")+note;
+    else if(note)B.log+=note;
+    renderBattle()}
+};
+var _rglRun=N["_rgl"].run;
+N["_rgl"].run=function(){var c=RG&&RG.battleCfg;if(c&&(c.tier==="boss"||c.tier==="super")){var m=bossMemo();m[c.enemy]=(m[c.enemy]||0)+1}_rglRun()};
+var _rgwRun=N["_rgw"].run;
+N["_rgw"].run=function(){var c=RG&&RG.battleCfg;if(c&&c.enemy&&RG.bt)delete RG.bt[c.enemy];_rgwRun()};
+
+function foeTr(){var c=B.cfg,t=Object.assign({},c.tr||{});if(phase2()&&c.tr2)Object.assign(t,c.tr2);return t}
+nextIntent=function(){
+  var a=phase2()?B.cfg.i2:B.cfg.intents,v=a[(B.turn-1)%a.length],T=foeTr();
+  if(T.enrage&&B.turn>T.enrage)v=v*(1+0.1*(B.turn-T.enrage));
+  v=SET.diff==="dificil"?v*1.3:v;
+  v=B.weak?Math.ceil(v/2):v;
+  return Math.max(1,Math.round(v*(1-resRed())));
+};
+function trBadges(cfg){
+  var T=foeTr(),b=[];
+  if(T.multi>1)b.push(["Golpes múltiplos","Ataca "+T.multi+" vezes por rodada. Cada golpe enfrenta o seu escudo."]);
+  if(T.armor)b.push(["Armadura "+T.armor,"Renova a armadura a cada rodada. Ela absorve seus golpes antes da vida."]);
+  if(T.ward)b.push(["Proteção "+T.ward,"Cada golpe seu perde "+T.ward+" de dano. Golpes grandes e queimaduras funcionam melhor."]);
+  if(T.enrage)b.push(["Fúria","A partir da rodada "+(T.enrage+1)+", os golpes ficam 10% mais fortes a cada rodada."]);
+  if(T.regen)b.push(["Regeneração "+T.regen,"Recupera "+T.regen+" de vida por rodada."]);
+  if(cfg.drain)b.push(["Abala a mente","−"+cfg.drain+" de sanidade por golpe que passa."]);
+  if(!b.length)return "";
+  return '<div class="trb">'+b.map(function(x){return '<span class="trc" title="'+esc(x[1])+'">'+esc(x[0])+'</span>'}).join("")+'</div>'+
+    (B.showTr?'<p class="fine trd">'+b.map(function(x){return '<b>'+esc(x[0])+':</b> '+esc(x[1])}).join("<br>")+'</p>':'');
+}
+renderBattle=function(){
+  var cfg=B.cfg,mh=maxHp(),T=foeTr(),it=nextIntent(),hits=T.multi||1,per=Math.ceil(it/hits);
+  var cls=cfg.tier==="super"?" super":cfg.tier==="boss"?" boss":cfg.tier==="elite"?" elite":"";
+  var h='<div class="foe'+cls+'"><div class="fart">'+artFor("luta")+'</div>'+(cfg.tier&&cfg.tier!=="mob"?'<p class="tierb">'+esc(cfg.tiern||"")+(cfg.canon&&cfg.canon!==cfg.enemy?" · "+esc(cfg.canon):"")+'</p>':'')+'<h2>'+esc(cfg.enemy)+(phase2()?" · Fase 2":"")+'</h2>'+
+   '<div class="bar"><div style="width:'+Math.max(0,B.ehp/cfg.hp*100)+'%"></div></div>'+
+   '<div class="row"><span>Vida: '+Math.max(0,B.ehp)+' / '+cfg.hp+(B.eblk?' · <b class="arm">Armadura '+B.eblk+'</b>':'')+'</span><span class="intent">Próximo ataque: '+(hits>1?hits+"×"+per:it)+(B.weak?" (enfraquecido)":"")+'</span></div>'+foeTag(cfg)+trBadges(cfg);
+  if(cfg.hold){var left=Math.max(0,cfg.hold-B.turn+1);
+    h+='<div class="bar help"><div style="width:'+((B.turn-1)/cfg.hold*100)+'%"></div></div><div class="row"><span>A ajuda chega em '+left+' rodada'+(left===1?"":"s")+'</span></div>'}
+  h+='</div><div id="log">'+B.log+'</div>';
+  h+='<div class="me"><div class="bar hpme"><div style="width:'+Math.max(0,B.php/mh*100)+'%"></div></div>'+
+   '<div class="stats"><span class="pill">Vida '+Math.max(0,B.php)+' / '+mh+'</span><span class="pill bl">Escudo '+B.pblk+'</span><span class="pill en">Energia '+B.en+'</span><span class="pill sn">Sanidade '+S.san+'</span><span class="pill">Rodada '+B.turn+'</span></div>'+
+   '<div id="hand">';
+  B.hand.forEach(function(id,i){
+    var c=CARDS[id];if(!c)return;
+    h+='<button class="card" data-i="'+i+'" style="--c:'+(OWNER_COLOR[c.o]||'#c9b98a')+'"'+(c.c>B.en||B.done?" disabled":"")+'><span class="cost">'+c.c+'</span><span class="cn">'+esc(c.n)+'</span><span class="cd">'+cardText(id)+'</span><span class="co">'+(c.o==="subaru"?"Subaru":esc(NAMES[c.o]||ONAME[c.o]||c.o))+'</span></button>';
+  });
+  h+='</div><button class="btn primary" id="bEnd"'+(B.done?" disabled":"")+'>Encerrar rodada</button></div>';
+  $("#battle").innerHTML=h;
+  var cards=$("#battle").querySelectorAll(".card");
+  for(var i=0;i<cards.length;i++){cards[i].onclick=(function(b){return function(){playCard(+b.getAttribute("data-i"))}})(cards[i])}
+  $("#bEnd").onclick=endTurn;
+  var tb=$("#battle").querySelector(".trb");if(tb)tb.onclick=function(){B.showTr=!B.showTr;renderBattle()};
+};
+function hitFoe(per,hits){
+  var T=foeTr(),tot=0,abs=0;
+  for(var k=0;k<hits;k++){var x=Math.max(1,per-(T.ward||0));if(B.eblk>0){var a=Math.min(B.eblk,x);B.eblk-=a;x-=a;abs+=a}tot+=x;B.ehp-=x}
+  return {t:tot,a:abs};
+}
+function checkP2(){if(!B.p2&&phase2()){B.p2=true;var T=foeTr();if(T.armor)B.eblk=Math.max(B.eblk,T.armor);return " ✦ Fase 2! "+(B.cfg.p2||B.cfg.enemy+" muda de postura.")}return ""}
+playCard=function(i){
+  if(!B||B.done)return;
+  var id=B.hand[i],c=CARDS[id];if(!c||c.c>B.en)return;
+  B.en-=c.c;B.hand.splice(i,1);B.disc.push(id);
+  var b=bonus(c.o),msg=c.n+". ",T=foeTr();
+  if(c.dmg){var r=hitFoe(c.dmg+b,c.multi||1);msg+="Causou "+r.t+" de dano."+(r.a?" A armadura segurou "+r.a+".":"")+(T.ward?" (Proteção −"+T.ward+" por golpe)":"")+" "}
+  if(c.pay){B.php-=c.pay;msg+="Pagou "+c.pay+" de vida. ";if(B.php<=0){B.log=msg;endBattle(false);return}}
+  if(c.dot){B.dot=(B.dot||0)+c.dot;msg+="Inimigo em chamas ("+B.dot+" por rodada, ignora armadura). "}
+  if(c.blk){B.pblk+=c.blk+b;msg+="Ganhou "+(c.blk+b)+" de escudo. "}
+  if(c.heal){B.php=Math.min(maxHp(),B.php+c.heal+b);msg+="Recuperou vida. "}
+  if(c.en){B.en+=c.en;msg+="Ganhou energia. "}
+  if(c.draw){draw(c.draw);msg+="Comprou carta. "}
+  if(c.weak){B.weak=true;msg+="O próximo ataque do inimigo ficou mais fraco. "}
+  if(c.san){S.san=clamp(S.san+c.san,0,100);msg+="Sanidade +"+c.san+". "}
+  if(B.ehp<=0){B.log=msg;endBattle(true);return}
+  msg+=checkP2();
+  B.log=msg;
+  renderBattle();
+};
+endTurn=function(){
+  if(!B||B.done)return;
+  B.disc=B.disc.concat(B.hand);B.hand=[];
+  var pre="";
+  if(B.dot){B.ehp-=B.dot;pre="A queimadura causou "+B.dot+". ";if(B.ehp<=0){B.log=pre;endBattle(true);return}pre+=checkP2()}
+  var T=foeTr(),hits=T.multi||1,dmg=nextIntent(),per=Math.ceil(dmg/hits),absorbed=0,taken=0,landed=0;
+  for(var k=0;k<hits;k++){var a=Math.min(per,B.pblk);B.pblk-=a;absorbed+=a;taken+=per-a;if(per-a>0)landed++}
+  B.php-=taken;B.pblk=0;B.weak=false;
+  var extra="";
+  var dr=Math.max(0,(B.cfg.drain||0)-tr("a3")-eq("drain"));if(landed>0&&dr){var ds=dr*Math.min(landed,2);S.san=clamp(S.san-ds,0,100);extra+=" Sua mente estremece (−"+ds+" de sanidade)."}
+  if(T.regen&&B.ehp<B.cfg.hp){var rg=Math.min(T.regen,B.cfg.hp-B.ehp);B.ehp+=rg;extra+=" Recuperou "+rg+" de vida."}
+  if(T.armor){B.eblk=T.armor;extra+=" Ergueu "+T.armor+" de armadura."}
+  B.log=pre+B.cfg.enemy+" atacou "+(hits>1?hits+" vezes ("+hits+"×"+per+")":"com "+dmg)+". "+(absorbed?"O escudo segurou "+absorbed+". ":"")+(taken?"Você perdeu "+taken+" de vida.":"Nenhum dano passou!")+extra;
+  if(B.php<=0||S.san<=0){endBattle(false);return}
+  B.turn++;
+  if(B.cfg.hold&&B.turn>B.cfg.hold){endBattle(true);return}
+  if(T.enrage&&B.turn===T.enrage+1)B.log+=" Fúria: os golpes vão ficar cada vez mais fortes.";
+  B.en=enMax();draw(handSize());renderBattle();
+};
+
+/* ---------- 2. Inimigos por ambiente, com variações aleatórias ---------- */
+var ENV={
+ floresta:[["Lobo de Irlam","agil"],["Coelho-lobo","fraco"],["Javali-mabeast","bruto"],["Golem da floresta","tanque"],["Espírito do bosque","mago"],["Urso de musgo","bruto"],["Mabeast de chifre","padrao"]],
+ estrada:[["Bandido de estrada","padrao"],["Mabeast solitário","padrao"],["Lobo faminto","agil"],["Mercenário sem trabalho","bruto"],["Ladrão de caravana","agil"],["Cultista menor","mago"]],
+ caverna:[["Morcego de raiz","agil"],["Verme de pedra","tanque"],["Rato-mabeast","fraco"],["Aranha de cristal","agil"],["Fungo sussurrante","mago"],["Toupeira couraçada","tanque"],["Raiz viva","bruto"]],
+ mina:[["Golem de minério","tanque"],["Mineiro possuído","bruto"],["Rato de túnel","fraco"],["Salamandra de carvão","mago"],["Capanga do veio","padrao"],["Escaravelho de ferro","tanque"],["Morcego de fuligem","agil"]],
+ cripta:[["Esqueleto de guarda","padrao"],["Espectro sussurrante","mago"],["Cavaleiro sem nome","bruto"],["Rato de ossário","fraco"],["Vigia de cera","tanque"],["Lamento errante","mago"],["Coveiro maldito","agil"]],
+ camaras:[["Eco de bruxa","mago"],["Lembrança armada","agil"],["Filhote do Grande Coelho","fraco"],["Guardião de pedra","tanque"],["Sombra da prova","mago"],["Cria do Santuário","agil"],["Quimera da barreira","bruto"]],
+ aqueduto:[["Enguia do canal","agil"],["Caranguejo de pedra","tanque"],["Cultista afogado","mago"],["Sereia de lodo","mago"],["Rato d'água","fraco"],["Contrabandista","padrao"],["Tartaruga de pedra","tanque"]],
+ biblioteca:[["Livro mordedor","agil"],["Golem de tinta","tanque"],["Leitor sem rosto","mago"],["Escorpião de areia","bruto"],["Traça gigante","fraco"],["Guardião de estante","tanque"],["Sombra de autor","mago"]],
+ deserto:[["Escorpião de areia","bruto"],["Serpente das dunas","agil"],["Mabeast do deserto","tanque"],["Miragem hostil","mago"],["Saqueador das dunas","padrao"]],
+ fortaleza:[["Soldado congelado","padrao"],["Lobo de neve","agil"],["Gigante de gelo","bruto"],["Mago do inverno","mago"],["Sentinela de gelo","tanque"],["Corvo de geada","agil"],["Morto inquieto","tanque"]],
+ imperio:[["Soldado de Vollachia","padrao"],["Batedor imperial","agil"],["Shudraq de guerra","bruto"],["Feiticeiro da corte","mago"],["Morto inquieto","tanque"]],
+ agua:[["Enguia do canal","agil"],["Caranguejo de pedra","tanque"],["Pirata de rio","padrao"],["Sereia de lodo","mago"],["Rato d'água","fraco"]]
+};
+var ENVOF={casa:"floresta",vila:"floresta",floresta:"floresta",capital:"estrada",caravana:"estrada",vale:"estrada",liphas:"estrada",pedraferro:"mina",
+ santuario:"camaras",pristella:"agua",ribeirinha:"agua",torre:"deserto",vollachia:"imperio",guaral:"imperio",
+ caverna:"caverna",mina:"mina",cripta:"cripta",camaras:"camaras",aqueduto:"aqueduto",biblioteca:"biblioteca",fortaleza:"fortaleza"};
+var AFFIX=[
+ {n:"Enfurecido",f:function(o){o.tr=Object.assign({},o.tr,{enrage:2})}},
+ {n:"Blindado",f:function(o){o.tr=Object.assign({},o.tr,{armor:2+Math.round(o.lv/5)})}},
+ {n:"Veloz",f:function(o){o.tr=Object.assign({},o.tr,{multi:2})}},
+ {n:"Sombrio",f:function(o){o.drain=Math.max(o.drain||0,2)}},
+ {n:"Regenerante",f:function(o){o.tr=Object.assign({},o.tr,{regen:2+Math.round(o.lv/6)})}}
+];
+function envPool(env){
+  if(env==="todos"){var all=[];Object.keys(ENV).forEach(function(k){all=all.concat(ENV[k])});return all}
+  return ENV[env]||ENV.floresta;
+}
+/* cria um inimigo do ambiente; arch opcional força o arquétipo */
+function envMon(env,lv,arch,affixChance){
+  var pool=envPool(env),pick=arch?pool.filter(function(x){return x[1]===arch}):pool;if(!pick.length)pick=pool;
+  var m=rnd(pick),o={enemy:m[0],arch:arch||m[1],lv:lv};
+  if(Math.random()<(affixChance||0)){var a=rnd(AFFIX);o.affix=a.n;o.enemy=m[0]+" "+a.n.toLowerCase()}
+  return o;
+}
+function applyAffix(cfg){if(!cfg.affix)return cfg;var a=AFFIX.filter(function(x){return x.n===cfg.affix})[0];if(a)a.f(cfg);return cfg}
+/* caçadas e emboscadas usam os bichos do lugar onde você está */
+mkMon=function(arc,lv,arch){
+  var env=(S&&S.mode==="free")?(ENVOF[L().loc]||"floresta"):((RG&&[0,"floresta","floresta","estrada","camaras","agua","deserto","imperio","imperio"][Math.min(RG.arc,8)])||"floresta");
+  var o=envMon(env,lv,arch==="chefe"?null:arch,arch==="chefe"?0:0.22);
+  if(arch==="chefe"){o.enemy="Alfa: "+o.enemy;o.arch="chefe"}
+  return o;
+};
+var _lvAff=levelize;
+levelize=function(cfg){
+  var o=_lvAff(cfg);
+  if(o.affix&&!o.affixed){applyAffix(o);o.affixed=true}
+  return o;
+};
+startHunt=function(pk,bonus){
+  var lv=pk.lv,tier=bonus>=5?"elite":bonus>=3?"elite":"mob";
+  var cfg=levelize({enemy:pk.enemy,arch:pk.arch,lv:lv,affix:pk.affix,tier:pk.arch==="chefe"?"boss":tier,noadapt:true,allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:2+Math.round(lv/5)+(bonus||0)+(tier==="elite"?1:0),xp:8+lv+(bonus||0)*3,tea:pk.arch==="mago"?0.4:0.2});
+  $("#overlay").hidden=true;startBattle(cfg);
+};
+startHubFight=function(){var ref=refLv();startHunt(mkMon(arcReach(),ref),1)};
+N["_hubl"].san=-6;
+N["_hubl"].run=function(){toast("Você foi derrotado e recuou ferido (−6 de sanidade)");renderHub()};
+
+/* ---------- 3. Masmorras maiores ---------- */
+(function(){
+  var FL={caverna:8,mina:10,cripta:12,camaras:12,aqueduto:14,biblioteca:14,fortaleza:16};
+  DUN.forEach(function(d){if(FL[d.id])d.fl=FL[d.id]});
+})();
+var DMID={caverna:"Rainha das aranhas de cristal",mina:"Golem do veio profundo",cripta:"Cavaleiro do último rei",camaras:"Grande Coelho faminto",
+ aqueduto:"Leviatã do canal",biblioteca:"Escorpião-rei das areias",fortaleza:"Lorde de geada",torreeco:"Eco guardião"};
+dgLv=function(d,fl){return Math.max(2,Math.round(refLv()+d.off+(d.inf?2+fl*1.1:(fl-1)*0.8)))};
+dgBoss=function(d,fl){return fl%5===0||(!d.inf&&fl===d.fl)};
+dgFloor=function(){
+  var r=DR();if(!r)return;var d=DBY[r.id],fl=r.fl,boss=dgBoss(d,fl),final=!d.inf&&fl===d.fl;
+  S.san=clamp(S.san-2,0,100);
+  if(S.san<=0){dgEnd("Sua mente cedeu na escuridão e você foi arrastado para fora.",true);return}
+  var x=Math.random();
+  if(!boss&&fl>1&&x<0.15){
+    var t=rollTier(luck()*(1+fl/12)*1.4,false),id=d.key+t;addBag(r,id,1+(t===1?1:0));
+    dgNote("Câmara escondida","Atrás de uma parede falsa, há um baú esquecido há décadas.",GOODS[id].n+" ("+RAR[t-1]+") entrou na mochila.");return;
+  }
+  if(!boss&&fl>2&&x>=0.15&&x<0.24){
+    var hl=6+Math.floor(fl/3);S.san=clamp(S.san+hl,0,100);
+    dgNote("Acampamento seguro","Uma sala seca, com restos de uma fogueira antiga. Você descansa um pouco antes de seguir.","Sanidade +"+hl);return;
+  }
+  if(!boss&&fl>1&&x>0.91){
+    var dmg=3+Math.floor(fl/3);S.san=clamp(S.san-dmg,0,100);
+    dgNote("Armadilha","O chão cede, e algo estala nas paredes. Você escapa, mas não sem arranhões.","Sanidade −"+dmg);return;
+  }
+  var lv=dgLv(d,fl),env=d.inf?"todos":(ENVOF[d.id]||"caverna"),elite=!boss&&Math.random()<0.12+fl*0.01,pk;
+  if(boss){pk=envMon(env,lv,null,0);pk.arch=final?"chefe":rnd(["bruto","tanque","mago","chefe"]);
+    pk.enemy=d.inf?"Eco guardião do andar "+fl:final?d.boss:(DMID[d.id]||"Guardião do andar "+fl)}
+  else pk=envMon(env,lv,null,elite?1:0.2);
+  var cfg=levelize({enemy:(elite?"Elite: ":"")+pk.enemy,arch:pk.arch,lv:pk.lv,affix:pk.affix,tier:boss?"boss":elite?"elite":"mob",mul:1+0.02*fl,noadapt:true,allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:2+Math.round(lv/5)+(boss?3:elite?2:1),xp:8+lv+(boss?10:elite?5:2),tea:0.2,dg:{id:d.id,fl:fl,boss:boss}});
+  if(final&&!d.inf){cfg.tr=Object.assign({},cfg.tr,{armor:3+Math.round(d.arc*1.2)});cfg.tr2={enrage:3}}
+  $("#overlay").hidden=true;startBattle(cfg);
+};
+
+/* ---------- 4. Novas vilas, moradias e mapa em escala ---------- */
+[
+ {id:"pedraferro",n:"Aldeia de Pedraferro",s:"Pedraferro",ic:"◭",arc:2,far:true,vil:1,d:"Aldeia de mineiros perto da mina abandonada. Gente dura, comida farta e muito barulho de martelo."},
+ {id:"liphas",n:"Vila de Liphas",s:"Liphas",ic:"✣",arc:3,far:true,vil:1,d:"Vila de beira de estrada no caminho entre a capital e as terras de Mathers, à sombra da grande árvore Flugel."},
+ {id:"ribeirinha",n:"Vila Ribeirinha",s:"Ribeirinha",ic:"∿",arc:5,far:true,vil:1,d:"Vila de pescadores no caminho para Pristella, com barcos coloridos e redes secando ao sol."},
+ {id:"guaral",n:"Guaral",s:"Guaral",ic:"✠",arc:7,far:true,vil:1,d:"Cidade-fortaleza na fronteira de Vollachia. Muralhas altas, mercado tenso e soldados por toda parte."}
+].forEach(function(p){PLACES.push(p);PLBY[p.id]=p});
+LP.pedraferro=tierSet("pd",["Pedra de amolar","Lingote de cobre","Veio de prata","Pepita de mitril"],1.05);
+LP.liphas=tierSet("pi",["Folha da Flugel","Ferradura velha","Mapa de estrada","Semente da Flugel"],1.15);
+LP.ribeirinha=tierSet("pr",["Rede remendada","Escama de rio","Âncora de bronze","Pérola de água doce"],1.15);
+LP.guaral=tierSet("pg",["Ponta de lança","Moeda imperial","Estandarte rasgado","Selo do general"],1.25);
+SCHED.otto.push("liphas");SCHED.felt.push("pedraferro");
+POS={capital:[300,250],cripta:[235,205],torreeco:[360,185],caravana:[455,215],torre:[570,120],biblioteca:[600,190],
+ liphas:[385,320],pedraferro:[330,405],mina:[270,450],casa:[480,390],vila:[540,440],floresta:[445,465],caverna:[395,525],
+ santuario:[578,530],camaras:[612,582],vale:[215,385],ribeirinha:[150,320],pristella:[85,265],aqueduto:[60,335],
+ guaral:[300,632],vollachia:[350,705],fortaleza:[195,695]};
+ROADS=[["capital","cripta"],["capital","torreeco"],["capital","liphas"],["liphas","casa"],["casa","vila"],["vila","floresta"],["floresta","casa"],["floresta","caverna"],
+ ["vila","santuario"],["santuario","camaras"],["capital","caravana"],["caravana","torre"],["torre","biblioteca"],["liphas","pedraferro"],["pedraferro","mina"],
+ ["capital","vale"],["vale","ribeirinha"],["ribeirinha","pristella"],["pristella","aqueduto"],["vale","guaral"],["guaral","vollachia"],["vollachia","fortaleza"]];
+var MAPW=640,MAPH=760;
+mapSVG=function(lf){
+  var reach=arcReach(),t=Math.min(S.t,2),rec=PF.dgrec||{},top="";
+  MAPTOP.forEach(function(f){top+=f(lf)||""});
+  var s=top+'<div class="mapwrap"><svg viewBox="0 0 '+MAPW+' '+MAPH+'" width="'+MAPW+'" height="'+MAPH+'" class="wmap wbig" role="group" aria-label="Mapa de Lugunica e arredores"><rect x="0" y="0" width="'+MAPW+'" height="'+MAPH+'" rx="12" class="wbg"/>';
+  /* regiões */
+  s+='<rect x="0" y="0" width="'+MAPW+'" height="58" fill="#cfe6ff" opacity=".05"/><text x="320" y="34" class="wrg">GUSTEKO · ao norte</text>';
+  s+='<rect x="0" y="58" width="34" height="500" fill="#d9b36b" opacity=".06"/><text x="22" y="470" class="wrg" transform="rotate(-90 22 470)">KARARAGI · a oeste</text>';
+  s+='<path d="M500 60 Q560 50 640 70 L640 270 Q590 260 545 240 Q500 210 505 150 Z" fill="#c89b4a" opacity=".12"/><text x="590" y="250" class="wrg">DUNAS DE AUGRIA</text>';
+  s+='<ellipse cx="510" cy="485" rx="140" ry="125" fill="#5fae6a" opacity=".07"/><text x="505" y="345" class="wrg">TERRAS DE MATHERS</text>';
+  s+='<text x="150" y="140" class="wrg big">REINO DE LUGUNICA</text>';
+  s+='<path d="M0 602 Q120 582 240 605 T480 599 T640 609 L640 760 L0 760 Z" fill="#9fc6e8" opacity=".08"/><path d="M0 602 Q120 582 240 605 T480 599 T640 609" class="wborder" fill="none"/><text x="490" y="680" class="wrg big">IMPÉRIO DE VOLLACHIA</text>';
+  s+='<path d="M300 250 Q250 300 215 330 Q180 345 150 320 T85 265" class="wriver" fill="none"/><ellipse cx="470" cy="500" rx="26" ry="11" fill="#2f6aa8" opacity=".35"/><path d="M85 265 Q50 300 60 335" class="wriver" fill="none"/>';
+  ROADS.forEach(function(r){var a=POS[r[0]],b=POS[r[1]];if(!a||!b||!PLBY[r[0]]||!PLBY[r[1]])return;var lock=PLBY[r[0]].arc>reach||PLBY[r[1]].arc>reach;s+='<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" class="wroad'+(lock?" lock":"")+'"/>'});
+  var here={};Object.keys(SCHED).forEach(function(id){var pl=placeOf(id,S.day,t);if(pl){(here[pl]=here[pl]||[]).push(id)}});
+  PLACES.forEach(function(p){
+    var xy=POS[p.id];if(!xy)return;
+    var lock=p.arc>reach,cur=p.id===lf.loc,ppl=here[p.id]||[],R=p.dg?(p.inf?18:16):p.vil?17:22;if(cur)R+=4;
+    var home=resAt(p.id);
+    s+='<g class="wnode'+(p.dg?" wdg":"")+(p.vil?" wvil":"")+(lock?" lock":"")+(cur?" cur":"")+'" data-pl="'+p.id+'" tabindex="0" role="button" aria-label="'+esc(p.n)+(lock?" (bloqueado)":"")+'">';
+    s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="'+R+'" class="wc"/><text x="'+xy[0]+'" y="'+(xy[1]+5)+'" class="wic">'+p.ic+'</text>';
+    s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+13)+'" class="wlb">'+esc(p.s||p.n.replace("Floresta e lago","Floresta").replace("Vila de Irlam","Irlam").replace("Torre de Vigia","Torre de Vigia").replace("Capital Real","Capital"))+'</text>';
+    if(home&&!lock&&p.id!=="casa")s+='<text x="'+(xy[0]-R+1)+'" y="'+(xy[1]-R+5)+'" class="whome">⌂</text>';
+    if(p.dg&&!lock&&rec[p.id])s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+24)+'" class="wrec">'+(p.inf?"Rec. andar ":"Andar ")+rec[p.id]+'</text>';
+    if(lock)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">Arco '+p.arc+'</text>';
+    else if(p.far&&!cur&&!p.dg)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">1p</text>';
+    ppl.slice(0,4).forEach(function(id,i){var col=REL_C[id]?REL_C[id].c:"#8f9abb";s+='<circle cx="'+(xy[0]-15+i*10)+'" cy="'+(xy[1]-R-8)+'" r="4.5" fill="'+col+'" class="wp"/>'});
+    s+='</g>';
+  });
+  return s+'</svg></div><p class="fine" style="margin:4px 0 0">Arraste para ver o mapa inteiro. ⌂ marca lugares onde você tem moradia.</p>';
+};
+function centerMap(){
+  try{var w=document.querySelector("#hub .mapwrap");if(!w)return;var xy=POS[L().loc]||POS.casa;
+    w.scrollLeft=Math.max(0,xy[0]-w.clientWidth/2);w.scrollTop=Math.max(0,xy[1]-w.clientHeight/2)}catch(_){}
+}
+
+/* moradias: [nome, preço, bônus de sono, aluguel semanal (0 = comprada), descrição] */
+var RES={
+ casa:[["Quarto emprestado na mansão",0,0,0,"Roswaal permite. Simples, mas é um teto."]],
+ vila:[["Quarto alugado em Irlam",300,4,40,"Aluguel de ¤ 40 por semana."],["Casinha em Irlam",1200,8,0,"Sua, sem aluguel. Espaço para uma vida a dois."],["Casa com jardim",3500,12,0,"A casa dos sonhos, com bônus para o casal."]],
+ pedraferro:[["Casa de mineiro",750,6,0,"Paredes grossas e um fogão que nunca apaga."]],
+ capital:[["Quarto na pensão do mercado",650,5,60,"Barulhento, mas perto de tudo. Aluguel de ¤ 60 por semana."],["Apartamento no distrito nobre",4800,13,0,"Vista para o palácio e vizinhos que fingem não te ver."]],
+ caravana:[["Carroça-dormitório",450,5,0,"Uma carroça só sua, estacionada entre as barracas."]],
+ vale:[["Chalé do vale",1000,8,0,"Pequeno, quente e com cheiro de lenha."]],
+ liphas:[["Casa de beira de estrada",900,7,0,"Na sombra da Flugel, com quintal para as montarias."]],
+ santuario:[["Cabana da clareira",1300,8,0,"Feita de troncos, cercada de silêncio."]],
+ pristella:[["Quarto sobre o canal",800,6,50,"Acorda com o barulho dos barcos. Aluguel de ¤ 50 por semana."],["Casa flutuante",3200,11,0,"Uma casa que balança de leve, como um berço."]],
+ ribeirinha:[["Casa de pescador",1100,8,0,"Redes na varanda e peixe fresco todo dia."]],
+ torre:[["Cela de estudo",1600,7,0,"Uma sala de pedra com livros que ninguém mais lê."]],
+ guaral:[["Sobrado de fronteira",2600,10,0,"Muros grossos e uma janela para o Império."]],
+ vollachia:[["Casa de pedra imperial",3600,11,0,"Sólida, fria por fora e quente por dentro."]]
+};
+function RS(){var lf=L();lf.res=lf.res||{};if(lf.home>0&&!lf.res.vila)lf.res.vila=lf.home;if(lf.res.vila&&lf.home!==lf.res.vila)lf.home=lf.res.vila;return lf.res}
+function resAt(id){if(id==="casa")return {loc:"casa",t:1,n:RES.casa[0][0],b:RES.casa[0][2],rent:0};var r=RS()[id];if(!r||!RES[id]||!RES[id][r-1])return null;var x=RES[id][r-1];return {loc:id,t:r,n:x[0],b:x[2],rent:x[3]}}
+function ownsHouse(){var r=RS();for(var k in r){if(r[k]&&RES[k]&&RES[k][r[k]-1]&&!RES[k][r[k]-1][3])return true}return false}
+function hasOwnPlace(){var r=RS();for(var k in r)if(r[k])return true;return false}
+function nearHome(){var best=resAt("casa"),v=resAt("vila");if(v&&v.b>=best.b)best=v;return best}
+function homeName(){var lf=L(),here=resAt(lf.loc);if(here)return here.n;var best=null,r=RS();for(var k in r){var x=resAt(k);if(x&&(!best||x.b>best.b))best=x}return best?best.n:RES.casa[0][0]}
+function buyRes(loc,t){
+  var x=RES[loc]&&RES[loc][t-1];if(!x)return;var lf=L();
+  if(S.mode!=="free"){toast("Moradias só no Modo Livre.");return}
+  if(PLBY[loc].arc>arcReach()){toast("Chegue ao Arco "+PLBY[loc].arc+" para morar lá.");return}
+  if(!x[3]&&lf.job<1){toast("Para comprar uma casa você precisa de um emprego melhor que carregador.");return}
+  if(S.coin<x[1])return;
+  S.coin-=x[1];RS()[loc]=t;if(loc==="vila")lf.home=t;
+  if(Object.keys(RS()).filter(function(k){return RS()[k]}).length>=3)unlock("casas3");
+  pfSave();save();sfx("buy");toast((x[3]?"Alugado: ":"Comprado: ")+x[0]);dj("vida","Subaru "+(x[3]?"alugou":"comprou")+" "+x[0]+" em "+PLBY[loc].n+".");unlock("lar");
+}
+function resMenu(loc){
+  var list=RES[loc],cur=RS()[loc]||0,pl=PLBY[loc],lf=L();
+  var h='<p class="sec" style="margin:0">Moradias · '+esc(pl.n)+'</p><h2 style="margin:0">Onde dormir em '+esc(pl.s||pl.n)+'</h2><p class="fine" style="margin:0">Quem tem moradia aqui dorme aqui e acorda aqui, com o bônus de sono da casa. Sem moradia, nos lugares distantes você precisa de estalagem ou dorme ao relento. <b class="coin">¤ '+S.coin+'</b></p>';
+  list.forEach(function(x,i){var t=i+1,own=cur>=t,next=t===cur+1;
+    var dis=own||!next||S.coin<x[1]||(!x[3]&&lf.job<1);
+    h+='<div class="item'+(own?" got":"")+'"><div><b>'+esc(x[0])+(own?" ✓":"")+'</b><span>'+esc(x[4])+' Sono +'+x[2]+' de sanidade.</span></div>'+(own?'<span>Sua</span>':'<button class="btn small" data-r="'+t+'"'+(dis?" disabled":"")+'>'+(x[3]?"Alugar":"Comprar")+' · ¤ '+x[1]+'</button>')+'</div>';
+  });
+  if(lf.job<1)h+='<p class="fine" style="margin:0">Casas compradas exigem um emprego melhor que carregador. Quartos de aluguel, não.</p>';
+  h+='<button class="btn small" id="rX">Voltar</button>';
+  var o=ovl(h);
+  $("#rX").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-r]").forEach(function(b){b.onclick=function(){buyRes(loc,+b.getAttribute("data-r"));try{updHead()}catch(_){}resMenu(loc)}});
+}
+PAX.push(function(lf){
+  if(!RES[lf.loc]||lf.loc==="casa")return "";
+  var h=resAt(lf.loc);
+  return '<button class="act" data-ac="res"><b>'+(h?"Sua moradia: "+esc(h.n):"Moradias em "+esc(PLBY[lf.loc].s||PLBY[lf.loc].n))+'</b><span>'+(h?"Você dorme e acorda aqui. Veja melhorias":"Alugue ou compre um lugar para dormir e acordar aqui")+'</span></button>';
+});
+PAH.push(function(a){if(a==="res"){resMenu(L().loc);return true}return false});
+ACH.casas3=["Raízes pelo reino","Tenha moradia em 3 lugares diferentes."];
+
+/* dormir: acorda onde dormiu */
+function sleepPlace(){
+  var lf=L(),here=resAt(lf.loc),far=!!(PLBY[lf.loc]&&PLBY[lf.loc].far);
+  if(here)return {loc:lf.loc,b:here.b,n:here.n,home:true};
+  if(!far){var nh=nearHome();return {loc:nh.loc,b:nh.b,n:nh.n,home:true,walk:nh.loc!==lf.loc}}
+  return {loc:lf.loc,far:true};
+}
+
+/* ---------- 5. Arena de ecos: revanche com super chefes no Modo Livre ---------- */
+var ECHO=[
+ {id:"elsa",n:"Elsa Granhiert",arc:1,arch:"agil",lv:4},{id:"baleia",n:"A Baleia Branca",arc:3,arch:"tanque",lv:6},{id:"petel",n:"Petelgeuse Romanée-Conti",arc:3,arch:"mago",lv:6},
+ {id:"garf",n:"Garfiel Tinsel",arc:4,arch:"bruto",lv:7},{id:"ros",n:"Roswaal L. Mathers",arc:4,arch:"mago",lv:8},{id:"reg",n:"Regulus Corneas",arc:5,arch:"chefe",lv:9},
+ {id:"sir",n:"Sirius Romanée-Conti",arc:5,arch:"mago",lv:9},{id:"reid",n:"Reid Astrea",arc:6,arch:"agil",lv:10},{id:"sph",n:"Sphinx",arc:8,arch:"tanque",lv:12}
+];
+function echoSt(){var e=PF.echo||(PF.echo={day:{},win:{}});if(!e.day)e.day={};if(!e.win)e.win={};return e}
+function echoMenu(){
+  var e=echoSt(),reach=arcReach(),ref=refLv(),night=S.t>=3;
+  var h='<p class="sec" style="margin:0">Capital Real · Salão dos Ecos</p><h2 style="margin:0">Ecos lendários</h2><p class="fine" style="margin:0">Um velho mago guarda ecos das lutas que Subaru lembra. Cada eco é um super chefe com traços próprios, uma vez por dia. Vencer dá ◆ e equipamentos melhores. Seu nível de referência: <b>'+ref+'</b>.</p>';
+  ECHO.forEach(function(x,i){var lock=x.arc>reach,done=e.day[x.id]===S.day;
+    h+='<button class="btn" data-e="'+i+'" style="text-align:left"'+((lock||done||night)?" disabled":"")+'><b>'+esc(x.n)+(e.win[x.id]?" ✓":"")+'</b><br><span style="font-size:13px;color:var(--mute)">'+(lock?"Chegue ao Arco "+x.arc+" no Modo Retornos":done?"Você já enfrentou este eco hoje":"Super chefe · Nv "+(ref+x.lv-4)+" · 1 período · ◆ "+(2+Math.floor(x.arc/2)))+'</span></button>'});
+  h+='<button class="btn small" id="eX">Voltar</button>';
+  var o=ovl(h);$("#eX").onclick=function(){o.hidden=true};
+  o.querySelectorAll("[data-e]").forEach(function(b){b.onclick=function(){
+    var x=ECHO[+b.getAttribute("data-e")];if(!x||S.t>=3)return;e.day[x.id]=S.day;pfSave();advanceTime();o.hidden=true;
+    var cfg=levelize({enemy:x.n,arch:x.arch,lv:refLv()+x.lv-4,tier:"super",noadapt:true,echo:x.id,allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:6+x.arc,xp:30+x.lv*3});
+    startBattle(cfg);
+  }});
+}
+PAX.push(function(lf){return lf.loc==="capital"?'<button class="act" data-ac="echo"><b>Salão dos Ecos</b><span>Revanche com super chefes canônicos. Uma vez por dia cada</span></button>':""});
+PAH.push(function(a){if(a==="echo"){echoMenu();return true}return false});
+ACH.eco1=["Eco vencido","Vença um super chefe no Salão dos Ecos."];
+ACH.ecoall=["Mestre dos ecos","Vença todos os super chefes do Salão dos Ecos."];
+var _ebEcho=endBattle;
+endBattle=function(win){
+  var cfg=(B&&B.cfg)||null,was=B&&B.done;
+  _ebEcho(win);
+  if(was||!cfg||!win||!cfg.echo)return;
+  var e=echoSt(),x=ECHO.filter(function(z){return z.id===cfg.echo})[0],fr=2+Math.floor(x.arc/2),first=!e.win[cfg.echo];
+  e.win[cfg.echo]=1;S.frags+=fr+(first?2:0);unlock("eco1");if(ECHO.every(function(z){return e.win[z.id]}))unlock("ecoall");
+  var it=Math.random()<(first?0.8:0.35)?eqFind(luck()*1.5):null;
+  pfSave();save();
+  var ov=$("#overlay"),p0=ov&&ov.querySelector(".in p");
+  if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0">Eco vencido: ◆ +'+(fr+(first?2:0))+(first?" (primeira vitória)":"")+(it?" · "+esc(it.n)+" ("+RAR[it.r-1]+")":"")+'</p>');
+};
+
+/* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
+   O antigo modo história em slots só aparece para quem ainda tem save nele. */
+var _toTitle8=toTitle;
+toTitle=function(){
+  _toTitle8();
+  var any=false;
+  $("#slots").querySelectorAll(".slot").forEach(function(row){var b=row.querySelector("button");if(b&&/Vazio/.test(b.textContent))row.remove();else any=true});
+  $("#oldSec").hidden=!any;
+  $("#bFree").innerHTML=$("#bFree").innerHTML.replace("Viva dias casuais com todos, sem pressa","Vida, romance, masmorras e ecos. Tudo que você conquista aqui fortalece os Retornos");
+};
 toTitle();
 })();
 </script>
