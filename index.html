@@ -7028,6 +7028,38 @@ paneStore=function(p,keep){
 var _rbLeg=renderBattle;
 renderBattle=function(){_rbLeg();var cs=document.querySelectorAll("#battle .card");for(var i=0;i<cs.length;i++){var id=B&&B.hand[+cs[i].getAttribute("data-i")];if(id&&CARDS[id]&&CARDS[id].leg)cs[i].classList.add("leg")}};
 
+/* ---------- Vida a dois: o cônjuge volta para casa à noite ---------- */
+function liveP(){var p=PF.rel&&PF.rel.partner;return (p&&REL_C[p]&&rsOf(p).live)?p:null}
+function mainHome(){
+  var r=RS(),best=null;
+  Object.keys(r).forEach(function(k){var x=resAt(k);if(!x||k==="casa")return;var sc=x.b+(x.rent?0:50);if(!best||sc>best.sc)best={loc:k,sc:sc}});
+  return best?best.loc:"casa";
+}
+function coupleHome(){var lf=L();if(lf.loc!=="casa"&&resAt(lf.loc)&&!TRIP())return lf.loc;return mainHome()}
+var _poCouple=placeOf;
+placeOf=function(id,day,t){
+  var p=liveP();
+  if(p===id&&S&&S.mode==="free"){
+    if(t>=2)return coupleHome();
+    if(t===0&&hh(day*7+3)<0.7)return coupleHome();
+  }
+  return _poCouple(id,day,t);
+};
+/* morando juntos: se a casa do casal fica perto, Subaru volta para lá para dormir */
+var _spCouple=sleepPlace;
+sleepPlace=function(){
+  var sp=_spCouple(),p=liveP();
+  if(!p||sp.road||sp.far)return sp;
+  var ch=mainHome(),lf=L();
+  if(sp.loc==="casa"&&ch!=="casa"&&!PLBY[ch].far){var x=resAt(ch);return {loc:ch,b:x.b,n:x.n,home:true,walk:lf.loc!==ch}}
+  return sp;
+};
+var _slCouple=sleepDay;
+sleepDay=function(){
+  var p=liveP(),trip=!!TRIP();_slCouple();
+  if(p&&!trip&&S.mode==="free"&&L().loc===coupleHome())setTimeout(function(){toast(REL_C[p].n+" dormiu ao seu lado em "+(resAt(L().loc)||{n:"casa"}).n+".")},900);
+};
+
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
 var _toTitle8=toTitle;
