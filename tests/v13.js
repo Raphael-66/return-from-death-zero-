@@ -1,0 +1,17 @@
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,330))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,250))}};
+ await st('start',`(function(){document.querySelector('#bFree').click();META.maxArc=8;S.coin=5000;return 'h='+S.h+' t='+S.t})()`);
+ await p.screenshot({path:'/tmp/v13_hub.png'});
+ await st('acts x8',`(function(){var out=[];for(var i=0;i<8;i++){var b=[].filter.call(document.querySelectorAll('#hub [data-a]'),function(x){return !x.disabled&&!x.hidden})[0];if(!b){out.push('nobtn');break}doAct(+b.getAttribute('data-a'));var o=document.querySelector('#overlay');o.hidden=true;document.querySelectorAll('.mg').forEach(function(){});renderHub();out.push(fmtH(S.h)+'/san'+S.san)}return out.join(' ')})()`);
+ await st('late clock',`(function(){S.h=25.5;renderHub();return document.querySelector('#hub .hubcard').innerText.slice(0,200)})()`);
+ await p.screenshot({path:'/tmp/v13_late.png'});
+ await st('advance late',`(function(){var s0=S.san;advanceTime(2);return fmtH(S.h)+' san '+s0+'->'+S.san})()`);
+ await st('sleep late',`(function(){S.h=26;var s0=S.san,d=S.day;sleepDay();document.querySelector('#overlay').hidden=true;return 'day '+d+'->'+S.day+' h='+fmtH(S.h)+' san '+s0+'->'+S.san})()`);
+ await st('collapse',`(function(){S.h=30;advanceTime(3);renderHub();var t=document.querySelector('#overlay').innerText.slice(0,80);document.querySelector('#clOk').click();document.querySelector('#overlay').hidden=true;return t+' -> h='+fmtH(S.h)+' day '+S.day})()`);
+ await st('travel short',`(function(){S.h=8;L().loc="casa";goPlace("vila");return L().loc+' '+fmtH(S.h)})()`);
+ await st('travel capital->vollachia',`(function(){S.h=9;L().loc="capital";goPlace("vollachia");return L().loc+' '+fmtH(S.h)})()`);
+ await st('travel long',`(function(){S.h=9;L().loc="vollachia";goPlace("torre");var r=[fmtH(S.h)+' trip '+JSON.stringify(L().trip)];document.querySelector('#overlay').hidden=true;renderHub();r.push(document.querySelector('#overlay').innerText.slice(0,60));document.querySelector('#tCamp').click();document.querySelector('#overlay').hidden=true;renderHub();r.push('after camp '+L().loc+' '+fmtH(S.h)+' day'+S.day+' trip='+JSON.stringify(L().trip));return r.join(' | ')})()`);
+ await st('trade',`(function(){document.querySelector('#overlay').hidden=true;L().loc="pedraferro";L().trip=null;S.h=9;renderHub();placeAction("trade");var b=buyP("ferro","pedraferro");document.querySelector('[data-tr="b5:ferro"]').click();document.querySelector('[data-tr="b5:ferro"]').click();var c=TRD().cargo;L().loc="capital";var sp=sellP("ferro","capital");trSell("ferro",99);return 'buy '+b+' sell capital '+sp+' cargo '+JSON.stringify(c)+' profit '+TRD().profit})()`);
+ await st('trade menu',`(function(){placeAction("trade");return document.querySelector('#overlay').innerText.slice(0,500)})()`);
+ await p.screenshot({path:'/tmp/v13_trade.png'});
+ console.log(o.join('\n'));};
