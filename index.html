@@ -428,6 +428,13 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .mgroups .mg{flex:1;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:9px 6px;color:var(--paper);font-weight:600;min-height:42px}
 .mgroups .mg.on{border-color:var(--gold);color:var(--gold)}
 .tabs.one{display:none}
+.modesw{display:inline-flex;align-items:center;gap:7px;background:var(--ink2);border:1px solid var(--gold);border-radius:99px;padding:4px 12px 4px 6px;color:var(--paper);min-height:40px;max-width:100%;text-align:left}
+.modesw .mi{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.modesw b{display:block;font-size:13.5px;line-height:1.1;white-space:nowrap}
+.modesw small{display:block;font-size:10.5px;color:var(--mute);line-height:1.1;white-space:nowrap}
+#hub header .chtxt{overflow:visible}
+.rgleft{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.rgarc{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
 </style>
 
 
@@ -7881,6 +7888,30 @@ openMenu=function(tab){
   MGROUP.forEach(function(m,i){if(!avail[i])return;var b=document.createElement("button");b.className="mg"+(i===g?" on":"");b.textContent=m[0];b.onclick=function(){openMenu(i===g?ct:avail[i])};row.appendChild(b)});
   tabs.parentNode.insertBefore(row,tabs);
   if(tabs.querySelectorAll(".tab:not([hidden])").length<=1)tabs.classList.add("one");
+};
+
+/* ---------- Troca rápida de modo (Modo Livre ⇄ Modo Retornos) ---------- */
+function modeBtn(to){
+  var b=document.createElement("button");b.className="modesw";b.type="button";
+  b.innerHTML=to==="rg"?'<span class="mi">⇄</span><span><b>Modo Livre</b><small>ir ao Retornos</small></span>':'<span class="mi">⇄</span><span><b>Retornos</b><small>ir ao Modo Livre</small></span>';
+  b.setAttribute("aria-label",to==="rg"?"Trocar para o Modo Retornos":"Trocar para o Modo Livre");
+  b.onclick=function(){if(B&&!B.done)return;sfx("swipe");if(to==="rg")goRG();else goFree()};
+  return b;
+}
+var _rh19=renderHub;
+renderHub=function(){
+  _rh19();
+  if(!S||S.mode!=="free")return;
+  var t=$("#hub header .chtxt");if(t&&!t.querySelector(".modesw")){t.innerHTML="";t.appendChild(modeBtn("rg"))}
+};
+var _rs19=rgShow;
+rgShow=function(c,resume){
+  _rs19(c,resume);
+  var top=$("#rg .rgtop");if(!top||top.querySelector(".modesw"))return;
+  var first=top.firstElementChild;if(!first)return;
+  var box=document.createElement("span");box.className="rgleft";var mb=modeBtn("free");
+  mb.querySelector("small").textContent="Arco "+Math.min(RG.arc,8)+" · trocar";mb.title=first.textContent;
+  box.appendChild(mb);top.replaceChild(box,first);
 };
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.

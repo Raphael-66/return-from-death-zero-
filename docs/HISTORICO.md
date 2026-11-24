@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## 2026-11-24 — Troca rápida de modo
+- Botão "⇄" no lugar do título, no hub do Modo Livre e no topo do Retornos (`modeBtn`), trocando direto de modo (salva antes). Corrige o título "Modo Livre" cortado no topo.
+
 ## 2026-11-24 — Atualização 18: interface em gavetas
 - Hub do Modo Livre reorganizado em gavetas (`hubDrawers`, estado em `PF.ui.open`), sem remover nada: cartão do dia com botão Dormir e ajuda recolhida; ações do lugar agrupadas (Explorar e lutar, Onde dormir e morar, Comércio e serviços, Missões, Festival); Pessoas aqui; Atividades com subgavetas (Vínculos, Treino, Mente, Vida, Da IA, Preparar o próximo Retorno, Especiais); Vida, casa e relacionamentos; Serviços da cidade; Perfil, história e poder (com indicador de poder no título).
 - Menu com 4 categorias (Subaru, Pessoas, Mundo, Jogo) e abas dentro de cada uma (`MGROUP`).
