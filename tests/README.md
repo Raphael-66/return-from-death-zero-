@@ -6,6 +6,7 @@ Rodam o jogo de verdade no Chrome sem janela (Playwright), com um gancho `window
 node tests/harness.js tests/flow.js                  # Modo Livre: viagens, exploração, moradias, sono, masmorra, menus
 node tests/harness.js tests/rg.js                    # Modo Retornos: batalhas canônicas, aprendizado por morte
 node tests/harness.js tests/sim.js                   # simulação de balanceamento por perfil (inicial/meio/fim)
+node tests/harness.js tests/story_sim.js             # chefes da história x perfis (só Retornos / normal / investido)
 MODE=rg SMART=1 N=1500 node tests/harness.js tests/monkey.js    # jogo aleatório com lutas "inteligentes"
 MODE=free SMART=1 N=3000 node tests/harness.js tests/monkey.js
 node tests/harness.js tests/v10.js   # família, sinergias, bestiário, missões

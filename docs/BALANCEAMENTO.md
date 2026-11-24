@@ -1,5 +1,13 @@
 # Balanceamento (números atuais e como foram calibrados)
 
+## Poder de referência (Atualização 14)
+- `refPow(lv)`: com `a = (lv − 2)/3`, dano/rodada `16 + 2,3(a−1)`, defesa/rodada `11 + 2,2(a−1)`, vida `32 + 3,6(a−1)`.
+- `tuneFoe` usa esses valores (não o baralho real). Poder exibido = dano + 0,5×defesa + 0,35×vida efetiva.
+- Resultado da simulação `tests/story_sim.js` (chefes da história, % de vitória na 1ª tentativa):
+  - só joga o Retornos: passa os Arcos 1–2, trava do 3 em diante (o aprendizado por morte acaba liberando).
+  - evolução normal: ~40–100% conforme o chefe (média ~65%).
+  - investiu no Modo Livre: ~100%.
+
 ## Inimigos (`TIERP` em `tuneFoe`)
 | Nível | T (rodadas de dano total do jogador) | a (fração da vida máx. por golpe médio) | b (fração da defesa média por rodada) |
 |---|---|---|---|

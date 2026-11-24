@@ -394,6 +394,9 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .trow{align-items:center}
 .tbtn{display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:104px}
 .tbtn .btn{padding:6px 8px;min-height:34px}
+.powtag{margin:0;font-size:12.5px}.powtag.pgood{color:#7ee2a0}.powtag.pok{color:#ffd28a}.powtag.pbad{color:#ff9bab}
+.powbar{position:relative;height:8px;border-radius:99px;background:#0a0d1a;border:1px solid var(--line);overflow:hidden;margin:6px 0 0}
+.powbar>div{height:100%}.powbar>div.pgood{background:#58c58a}.powbar>div.pok{background:#e4b867}.powbar>div.pbad{background:#ff6b81}
 </style>
 
 
@@ -3538,7 +3541,7 @@ function refLv(){return Math.max(2,Math.round(arcBaseLv(curArc())+(PF.lvl-1)*0.2
 function diffLabel(lv){var d=lv-refLv();return d<=-4?"Fácil":d<=1?"Equilibrado":d<=6?"Difícil":"Mortal"}
 function levelize(cfg){
   var lv=cfg.lv||BATLV[cfg.enemy]||arcBaseLv(curArc());
-  if(!cfg.lvd&&!cfg.noadapt&&S&&S.mode==="rg")lv+=Math.round(0.3*Math.max(0,refLv()-lv));
+  /* chefes da história têm nível fixo: evoluir no Modo Livre ajuda de verdade */
   var ar=ARCH[cfg.arch||BATARCH[cfg.enemy]||"padrao"],ef=lv+7,hp=20+ef*3.2,atk=3.5+ef*0.5,o=Object.assign({},cfg);
   o.lv=lv;o.archn=ar.n;o.archd=ar.d;o.lvd=true;
   o.hp=Math.round(hp*ar.hp);
@@ -5867,12 +5870,12 @@ WSEC.push({id:"net",n:"Relações",render:function(b){
    regen = vida recuperada por rodada. tr2 substitui os traços na fase 2. */
 var CANON=[
  {re:/Elsa/,n:"Elsa Granhiert",tr:{multi:2,enrage:5},tr2:{multi:2,enrage:4},p2:"Elsa sorri e acelera. As lâminas ficam mais rápidas que os olhos."},
- {re:/Baleia Branca/,n:"A Baleia Branca",tr:{regen:2},tr2:{regen:3,armor:3},p2:"A névoa se fecha. A Baleia se divide em sombras e endurece a pele."},
+ {re:/Baleia Branca/,n:"A Baleia Branca",tr:{regen:2},tr2:{armor:2},p2:"A névoa se fecha. A Baleia se divide em sombras e endurece a pele."},
  {re:/Petelgeuse|Culto das Bruxas/,n:"Petelgeuse Romanée-Conti",tr:{multi:2,enrage:7},tr2:{multi:3,enrage:5},p2:"'Que preguiça!' Mãos invisíveis surgem de todos os lados."},
- {re:/Garfiel/,n:"Garfiel Tinsel",tr:{enrage:7},tr2:{armor:4,enrage:6},p2:"Garfiel se transforma num tigre gigante. A pele vira couraça."},
- {re:/Regulus/,n:"Regulus Corneas",tr:{ward:3,armor:2},tr2:{ward:0,enrage:6},p2:"O coração de Regulus fica exposto. Ele finalmente sente dor, e fica furioso."},
- {re:/Reid|Guardiões da Torre/,n:"Reid Astrea",tr:{multi:2,ward:2},tr2:{multi:3,ward:2},p2:"Reid ri alto, troca o hashi pela espada de verdade e para de brincar."},
- {re:/Sphinx|praga dos mortos/,n:"Sphinx",tr:{regen:2},tr2:{regen:4,multi:2},p2:"Sphinx ergue mais mortos. A praga se fecha ao seu redor."},
+ {re:/Garfiel/,n:"Garfiel Tinsel",tr:{enrage:7},tr2:{armor:3,enrage:7},p2:"Garfiel se transforma num tigre gigante. A pele vira couraça."},
+ {re:/Regulus/,n:"Regulus Corneas",tr:{ward:2},tr2:{ward:0,enrage:6},p2:"O coração de Regulus fica exposto. Ele finalmente sente dor, e fica furioso."},
+ {re:/Reid|Guardiões da Torre/,n:"Reid Astrea",tr:{multi:2,ward:2},tr2:{multi:3,ward:2,enrage:6},p2:"Reid ri alto, troca o hashi pela espada de verdade e para de brincar."},
+ {re:/Sphinx|praga dos mortos/,n:"Sphinx",tr:{regen:3},tr2:{regen:4,multi:2},p2:"Sphinx ergue mais mortos. A praga se fecha ao seu redor."},
  {re:/Roswaal/,n:"Roswaal L. Mathers",tr:{multi:2,armor:3},tr2:{multi:2,armor:5,enrage:6},p2:"Roswaal para de sorrir. As quatro cores da magia giram juntas."},
  {re:/Sirius/,n:"Sirius Romanée-Conti",tr:{enrage:5},tr2:{multi:2,enrage:4},p2:"Sirius divide a própria dor com quem está perto. O fogo cresce."}
 ];
@@ -5886,8 +5889,8 @@ function canonOf(name){name=name||"";for(var i=0;i<CANON.length;i++)if(CANON[i].
     if(BATLV[old]!==undefined){BATLV[ren[k]]=BATLV[old]}
     if(BATARCH[old]!==undefined){BATARCH[ren[k]]=BATARCH[old]}
   });
-  BAT.elsa.hold=6;BAT.lobos.tier="boss";BAT.imperio.tier="boss";
-  BAT.lobos.tr={multi:3};BAT.imperio.tr={multi:2,armor:3};
+  BAT.elsa.hold=6;BAT.lobos.tier="boss";BAT.imperio.tier="super";
+  BAT.lobos.tr={multi:3};BAT.imperio.tr={multi:2,armor:3};BAT.imperio.tr2={multi:3,armor:3};
   BATARCH["A Baleia Branca"]="tanque";BATARCH["Reid Astrea, guardião da Torre"]="agil";
 })();
 
@@ -7288,6 +7291,112 @@ function tradeMenu(){
 }
 PAX.push(function(lf){if(!tradeOk(lf.loc))return "";var n=cargoN();return '<button class="act" data-ac="trade"><b>Comércio</b><span>Mercadorias da região'+(n?" · carga "+n+"/"+cargoCap():"")+'. Compre aqui, venda longe</span></button>'});
 PAH.push(function(a){if(a==="trade"){tradeMenu();return true}return false});
+
+/* =====================================================================
+   ATUALIZAÇÃO 14: Modo Livre ligado à história.
+   - Inimigos usam um poder de referência por nível (não copiam mais o seu baralho):
+     evoluir no Modo Livre deixa os chefes da história mais fáceis.
+   - Limites por arco: nível, atributos, laços e etapas do romance.
+   - Poder do jogador x poder recomendado.
+   ===================================================================== */
+/* poder de referência de um jogador "em dia" em cada arco (dano/rodada, defesa/rodada, vida) */
+function refPow(lv){var a=clamp((lv-2)/3,0.7,11);return {d:16+2.3*(a-1),b:11+2.2*(a-1),h:32+3.6*(a-1)}}
+var _tuneOld=tuneFoe;
+tuneFoe=function(o){
+  var tier=tierOf(o),P=TIERP[tier],cn=canonOf(o.enemy),rel=relief(tier,o.lv||refLv()),mul=o.mul||1,R=refPow(o.lv||refLv());
+  o.tier=tier;o.tiern=P.n;
+  if(curArc()<=2&&tier!=="super")mul*=0.9;
+  o.hp=Math.max(12,Math.round(R.d*P.T*rel*mul));
+  var avg=avgOf(o.intents),tgt=(R.h*P.a+R.b*P.b)*rel*mul,f=tgt/avg;
+  o.intents=o.intents.map(function(v){return Math.max(2,Math.round(v*f))});
+  if(tier==="boss"||tier==="super"){var m2=tier==="super"?1.3:1.2;o.i2=o.intents.map(function(v){return Math.round(v*m2)})}
+  if(cn){o.tr=Object.assign({},cn.tr,o.tr||{});o.tr2=Object.assign({},cn.tr2||{});o.p2=cn.p2;o.canon=cn.n;if(!o.drain&&/Petelgeuse|Baleia|Sirius|Sphinx/.test(o.enemy))o.drain=3}
+  var sc=clamp(R.d/20,0.85,2.5);
+  ["tr","tr2"].forEach(function(k){var t=o[k];if(!t)return;["armor","regen","ward"].forEach(function(x){if(t[x])t[x]=Math.max(1,Math.round(t[x]*(x==="ward"?Math.min(sc,1.4):sc)))})});
+  return o;
+};
+/* poder: dano + metade da defesa + 35% da vida efetiva */
+function myPower(){
+  if(!S)return 0;var deck=previewDeck({allies:["?emilia","?rem","?ram","?beatrice"]});
+  return Math.round(estPT(deck,"dmg")+0.5*estPT(deck,"blk")+0.35*maxHp()/(1-resRed()));
+}
+function recPower(lv){var R=refPow(lv);return Math.round(R.d+0.5*R.b+0.35*R.h)}
+function powTag(lv){var m=myPower(),r=recPower(lv),d=m-r;return {m:m,r:r,txt:"Seu poder "+m+" · recomendado "+r,cls:d>=6?"pgood":d>=-3?"pok":"pbad"}}
+var _ftPow=foeTag;
+foeTag=function(cfg){
+  var h=_ftPow(cfg);
+  if(cfg&&cfg.lv&&(cfg.tier==="boss"||cfg.tier==="super")){
+    if(!B||!B.pw){var pt=powTag(cfg.lv);if(B)B.pw=pt;}var p=B&&B.pw?B.pw:powTag(cfg.lv);
+    h+='<p class="powtag '+p.cls+'">'+esc(p.txt)+(p.cls==="pbad"?" · treine no Modo Livre":"")+'</p>';
+  }
+  return h;
+};
+
+/* ---------- limites pelo arco da história ---------- */
+function storyArc(){return Math.max(1,Math.min(8,META.maxArc||1))}
+var LVCAP=[0,8,12,16,20,25,30,35,40];
+function lvCap(){return LVCAP[storyArc()]}
+function atCap(){return 3+3*storyArc()}
+function stCap(){var a=storyArc();return a<=1?2:a===2?3:a<=4?4:5}
+var ROM_ARC={namoro:3,noivado:5,casar:6,filhos:7};
+var capNote={};
+function capToast(k,t){if(capNote[k]===S.day)return;capNote[k]=S.day;toast(t)}
+var _gxCap=gainXP;
+gainXP=function(n,q){
+  if(PF.lvl>=lvCap()){capToast("lv","Nível travado em "+lvCap()+": avance no Modo Retornos (Arco "+(storyArc()+1)+") para crescer mais.");return}
+  var r=_gxCap(n,q);
+  if(PF.lvl>lvCap()){PF.lvl=lvCap();PF.xp=0;pfSave()}
+  return r;
+};
+function capAttrs(snap){
+  var c=atCap(),hit=false;
+  ["vit","res","pow","int"].forEach(function(k){var before=snap?snap[k]:c;if(PF[k]>c){PF[k]=Math.max(c,Math.min(PF[k],before));hit=true}});
+  if(hit){pfSave();capToast("at","Atributos no limite do Arco "+storyArc()+" ("+c+"). A história libera mais.")}
+}
+function attrSnap(){return {vit:PF.vit,res:PF.res,pow:PF.pow,int:PF.int}}
+var _faCap=finishAct;
+finishAct=function(a,q){var s=attrSnap();_faCap(a,q);capAttrs(s)};
+var _yaCap=yAct;
+yAct=function(id,k){var s=attrSnap();_yaCap(id,k);capAttrs(s)};
+var _raCap=relAdd;
+relAdd=function(id,n){
+  var c=REL_C[id]?relOf(id):null,before=c?c.rp:0;
+  _raCap(id,n);
+  if(!c||n<=0)return;var cap=stCap();if(cap>=5)return;
+  var lim=STG[cap+1][1]-1;
+  if(c.rp>lim){c.rp=Math.max(before,lim);if(S&&S.aff&&S.aff[id]!==undefined)S.aff[id]=clamp(Math.floor(c.rp/8),0,14);pfSave();capToast("rp"+id,"Laço com "+REL_C[id].n+" no limite do Arco "+storyArc()+" ("+STG[cap][0]+"). Viva mais da história juntos.")}
+};
+function arcReq(k){return storyArc()>=ROM_ARC[k]?null:"Chegar ao Arco "+ROM_ARC[k]+" no Modo Retornos"}
+var _rqN=reqNamoro;reqNamoro=function(id){var n=_rqN(id),x=arcReq("namoro");if(x)n.unshift(x);return n};
+var _rqE=reqNoivado;reqNoivado=function(id){var n=_rqE(id),x=arcReq("noivado");if(x)n.unshift(x);return n};
+var _rqC=reqCasar;reqCasar=function(id){var n=_rqC(id),x=arcReq("casar");if(x)n.unshift(x);return n};
+var _fhCap=famHTML;
+famHTML=function(id,night){
+  var x=arcReq("filhos");
+  if(x&&famOk(id)&&!rsOf(id).preg&&!KIDS().length)return '<p class="sec" style="margin:6px 0 0">Família</p><p class="fine" style="margin:0">Ter filhos fica liberado ao chegar ao Arco '+ROM_ARC.filhos+' no Modo Retornos.</p>';
+  return _fhCap(id,night);
+};
+var _tkCap=talkKids;talkKids=function(id){if(arcReq("filhos"))return;_tkCap(id)};
+/* mortes deixam Subaru mais forte, mas com teto (antes não havia limite) */
+var _bonusDeaths=bonus;
+bonus=function(o){var b=_bonusDeaths(o);if(o==="subaru"&&S){var raw=Math.floor((S.deaths||0)/2),capd=Math.min(3,Math.floor((S.deaths||0)/8));b-=raw-capd}return b};
+
+/* ---------- painel "Linha canônica" no hub ---------- */
+var STORYBAT={1:"elsa",2:"lobos",3:"baleia",4:"garfiel",5:"regulus",6:"torre",7:"imperio",8:"mortos"};
+/* nível dos chefes da história segue o arco: 2 + 3×arco + 2 */
+(function(){var arcOfBat={elsa:1,lobos:2,baleia:3,culto:3,garfiel:4,regulus:5,torre:6,imperio:7,mortos:8};Object.keys(arcOfBat).forEach(function(k){BATLV[BAT[k].enemy]=arcBaseLv(arcOfBat[k])+2})})();
+function nextStoryBoss(){var r=gget(skey("rg"),null),a=r&&r.rg?Math.min(8,r.rg.arc):1,k=STORYBAT[a],b=BAT[k];return {a:a,n:b.enemy,lv:BATLV[b.enemy]||arcBaseLv(a)}}
+var _rhStory=renderHub;
+renderHub=function(){
+  _rhStory();
+  if(!S||S.mode!=="free")return;
+  var btn=$("#hRG");if(!btn)return;var card=btn.closest(".hubcard");if(!card||card.querySelector(".storylink"))return;
+  var nb=nextStoryBoss(),pt=powTag(nb.lv),a=storyArc(),c=PF.rel&&PF.rel.partner;
+  var h='<div class="storylink"><p class="sec" style="margin:6px 0 2px">Próxima batalha da história</p><p style="margin:0"><b>'+esc(nb.n)+'</b> (Arco '+nb.a+', Nv '+nb.lv+')</p><div class="powbar"><div class="'+pt.cls+'" style="width:'+Math.min(100,Math.round(pt.m/Math.max(1,pt.r)*100))+'%"></div><i></i></div><p class="powtag '+pt.cls+'" style="margin:2px 0 0">'+esc(pt.txt)+'</p>'+
+   '<p class="fine" style="margin:6px 0 0">Para ficar mais forte: equipamentos, árvore de habilidades, atributos (Vitalidade, Resistência, Força), cartas e laços com quem luta ao seu lado.</p>'+
+   '<p class="sec" style="margin:8px 0 2px">Limites do Arco '+a+'</p><p class="fine" style="margin:0">Nível até '+lvCap()+' (agora '+PF.lvl+') · atributos até '+atCap()+' · laços até '+STG[stCap()][0]+'. Romance: namoro no Arco 3, noivado no 5, casamento no 6, filhos no 7.</p></div>';
+  btn.insertAdjacentHTML("beforebegin",h);
+};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

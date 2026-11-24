@@ -1,5 +1,13 @@
 # Histórico de versões
 
+## 2026-11-24 — Atualização 14: Modo Livre ligado à história
+- Inimigos usam um **poder de referência por nível** (`refPow`), não copiam mais o baralho do jogador: evoluir no Modo Livre torna os chefes da história mais fáceis.
+- Chefes da história com nível fixo por arco (2 + 3×arco + 2); o Retornos não ajusta mais o nível ao jogador.
+- Limites pelo arco alcançado no Retornos: nível (8/12/16/20/25/30/35/40), atributos (3 + 3×arco), laços (Amigos no Arco 1 … Inseparáveis no Arco 5), namoro no Arco 3, noivado no 5, casamento no 6, filhos no 7. Progresso antigo acima do limite é mantido.
+- Bônus de mortes com teto (+3), antes ilimitado.
+- Painel "Próxima batalha da história" com poder do jogador × recomendado; o mesmo aviso aparece nas lutas contra chefes.
+- Imperio (Arco 7) virou super chefe; ajustes de traços de Baleia, Regulus, Garfiel, Reid e Sphinx.
+
 ## 2026-11-24 — Relógio de horas e comércio (Atualização 13)
 - Relógio sem limite com cansaço, madrugada, dormir tarde e desmaio às 07:00.
 - Viagens em horas, viagem noturna com emboscadas.

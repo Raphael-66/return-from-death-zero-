@@ -11,6 +11,10 @@
 - **Sinergias**: Laço (carta de alguém próximo logo depois de uma de Subaru), Duplas (`PAIRS`), Par (cura após carta do par; casado salva de golpe fatal 1×), Filhos (carta própria aos 10 anos com laço 40).
 - Animações: `fxDiff` compara estado antes/depois de `playCard`/`endTurn`.
 
+## Ligação entre os modos
+- Força vem do Modo Livre (equipamentos, árvore, atributos, cartas, laços/sinergias, lendárias) e é usada nas batalhas da história, que têm poder fixo por arco.
+- O arco do Retornos (`META.maxArc`, função `storyArc`) limita nível, atributos, laços e etapas do romance no Modo Livre.
+
 ## Modo Retornos
 - 8 arcos (`ARCS`), cartas `K(...)`, medidores, mortes (`DTH`, `rgDie`), memórias, metas (`AGOAL`), prova final (`trialCfg`), emboscadas (`encounterCard`).
 - Batalhas da história: `BAT.elsa` (segurar 6 rodadas), `lobos`, `baleia`, `culto` (Petelgeuse), `garfiel`, `regulus`, `torre` (Reid), `imperio`, `mortos` (Sphinx).
