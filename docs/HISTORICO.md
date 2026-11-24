@@ -1,5 +1,12 @@
 # Histórico de versões
 
+## 2026-11-24 — Atualização 17: grupo de batalha, caçadas lendárias e aliados canônicos
+- Baralhos de parceiro para Felt, Reinhard, Crusch, Wilhelm, Ferris, Julius, Priscilla, Anastasia, Otto, Garfiel, Frederica, Al, Vincent e Roswaal.
+- Modo Retornos: aliados fiéis ao cânone em cada batalha (Elsa: Emilia e Felt; lobos: Rem e Ram; Baleia: Rem, Crusch, Wilhelm, Ferris; Petelgeuse: Julius, Wilhelm, Ferris; Garfiel: Otto e Ram; Regulus: Emilia e Reinhard; Reid: Julius e Emilia; Império: Rem, Al, Vincent; Sphinx: Emilia, Beatrice, Ram). Provas e emboscadas usam o grupo do arco (`ARCALLY`).
+- Modo Livre: "Grupo de batalha" (até 3 parceiros, ou automático) vale em caçadas, masmorras, ecos, torneio e covis (`PF.party`).
+- Caçadas lendárias (`LH`): 7 feras (Garmr, Fênix Cinzenta, Grande Coelho, Hidra, Escorpião Imperador, Dragão de Geada, Serpente Negra); aceitar na Guilda, rastrear explorando 2×, covil com 2 guardiões + lendário; ameaça cresce a cada abate; volta em 7 dias.
+- Ajustes: Baleia sem regeneração na fase 1, Regulus com proteção 3, Sphinx regeneração 4, chefes dos Arcos 6–8 mais duros (`mul`).
+
 ## 2026-11-24 — Atualização 16: ninguém aparece antes da hora
 - `CHAR_ARC` / `CHAR_RE`: cada personagem só aparece a partir do arco em que entra na história (Retornos e Modo Livre): pessoas no mapa, aliados nas lutas, cartas comuns e globais do Retornos, atividades, eventos e eventos de vida.
 - Modo Livre segue a história: `arcReach` não tem mais mínimo de Arco 2. No Arco 1 o cenário é a Capital (Mansão, Irlam, floresta e caverna passam para o Arco 2); Subaru dorme num canto do depósito de Rom; Emilia e Felt aparecem na Capital; atividades neutras da casa acontecem na Capital.

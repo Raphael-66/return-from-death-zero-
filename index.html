@@ -398,6 +398,10 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .powbar{position:relative;height:8px;border-radius:99px;background:#0a0d1a;border:1px solid var(--line);overflow:hidden;margin:6px 0 0}
 .powbar>div{height:100%}.powbar>div.pgood{background:#58c58a}.powbar>div.pok{background:#e4b867}.powbar>div.pbad{background:#ff6b81}
 .canon{width:100%;border-left:2px solid var(--gold);padding-left:10px;display:flex;flex-direction:column;gap:2px}
+.partyg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pchip{background:var(--ink3);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:left;display:flex;flex-direction:column;gap:2px;color:var(--paper)}
+.pchip span{font-size:11.5px;color:var(--mute);line-height:1.3}.pchip.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.act.lhact{border-color:#ff9bab}
 </style>
 
 
@@ -5871,12 +5875,12 @@ WSEC.push({id:"net",n:"Relações",render:function(b){
    regen = vida recuperada por rodada. tr2 substitui os traços na fase 2. */
 var CANON=[
  {re:/Elsa/,n:"Elsa Granhiert",tr:{multi:2,enrage:5},tr2:{multi:2,enrage:4},p2:"Elsa sorri e acelera. As lâminas ficam mais rápidas que os olhos."},
- {re:/Baleia Branca/,n:"A Baleia Branca",tr:{regen:2},tr2:{armor:2},p2:"A névoa se fecha. A Baleia se divide em sombras e endurece a pele."},
+ {re:/Baleia Branca/,n:"A Baleia Branca",tr:{},tr2:{regen:2,armor:2},p2:"A névoa se fecha. A Baleia se divide em sombras e endurece a pele."},
  {re:/Petelgeuse|Culto das Bruxas/,n:"Petelgeuse Romanée-Conti",tr:{multi:2,enrage:7},tr2:{multi:3,enrage:5},p2:"'Que preguiça!' Mãos invisíveis surgem de todos os lados."},
  {re:/Garfiel/,n:"Garfiel Tinsel",tr:{enrage:7},tr2:{armor:3,enrage:7},p2:"Garfiel se transforma num tigre gigante. A pele vira couraça."},
- {re:/Regulus/,n:"Regulus Corneas",tr:{ward:2},tr2:{ward:0,enrage:6},p2:"O coração de Regulus fica exposto. Ele finalmente sente dor, e fica furioso."},
+ {re:/Regulus/,n:"Regulus Corneas",tr:{ward:3,armor:2},tr2:{ward:0,enrage:5},p2:"O coração de Regulus fica exposto. Ele finalmente sente dor, e fica furioso."},
  {re:/Reid|Guardiões da Torre/,n:"Reid Astrea",tr:{multi:2,ward:2},tr2:{multi:3,ward:2,enrage:6},p2:"Reid ri alto, troca o hashi pela espada de verdade e para de brincar."},
- {re:/Sphinx|praga dos mortos/,n:"Sphinx",tr:{regen:3},tr2:{regen:4,multi:2},p2:"Sphinx ergue mais mortos. A praga se fecha ao seu redor."},
+ {re:/Sphinx|praga dos mortos/,n:"Sphinx",tr:{regen:4},tr2:{regen:5,multi:2},p2:"Sphinx ergue mais mortos. A praga se fecha ao seu redor."},
  {re:/Roswaal/,n:"Roswaal L. Mathers",tr:{multi:2,armor:3},tr2:{multi:2,armor:5,enrage:6},p2:"Roswaal para de sorrir. As quatro cores da magia giram juntas."},
  {re:/Sirius/,n:"Sirius Romanée-Conti",tr:{enrage:5},tr2:{multi:2,enrage:4},p2:"Sirius divide a própria dor com quem está perto. O fogo cresce."}
 ];
@@ -7608,6 +7612,147 @@ var _al16=actLoc;actLoc=function(a){var l=_al16(a);if(arcReach()<2&&(l==="casa"|
 var _tm16=tourMenu;tourMenu=function(){if(arcReach()<3){toast("O torneio começa quando a Seleção Real chegar (Arco 3).");return}_tm16()};
 /* Salão dos Ecos: só ecos de quem você já enfrentou na história */
 ECHO.forEach(function(x){if(x.arc<1)x.arc=1});
+
+/* =====================================================================
+   ATUALIZAÇÃO 17: grupo de batalha no Modo Livre, caçadas lendárias
+   e aliados canônicos nas batalhas da história.
+   ===================================================================== */
+/* baralhos de parceiro para quem ainda não tinha */
+(function(){
+  var D={felt:["insignia","furtivo","poeira"],reinhard:["espada","espada"],crusch:["lamina","ordem","friares"],wilhelm:["sabre","sabre","sombra"],
+   ferris:["ferris","ferris"],julius:["espiritos","arco","cavalaria"],priscilla:["favor","reverencia","ousadia"],anastasia:["tatica","leque","contrato"],
+   otto:["fuga","mercperig","barganha"],garfiel:["garra","tigre","salto"],frederica:["frederica","guarda","barreira"],al:["golpeal","combo"],vincent:["decreto","olho"],roswaal:["chama","chama"]};
+  Object.keys(D).forEach(function(k){if(!DECKS[k])DECKS[k]=D[k].filter(function(id){return CARDS[id]})});
+})();
+function allyName(id){return (REL_C[id]&&REL_C[id].n)||NAMES[id]||ONAME[id]||cap(id)}
+
+/* ---------- 1. Aliados canônicos no Modo Retornos ---------- */
+(function(){
+  var A={elsa:["emilia","felt"],lobos:["rem","ram"],baleia:["rem","crusch","wilhelm","ferris"],culto:["julius","wilhelm","ferris"],garfiel:["otto","ram"],
+   regulus:["emilia","reinhard"],torre:["julius","emilia"],imperio:["rem","al","vincent"],mortos:["emilia","beatrice","ram"]};
+  Object.keys(A).forEach(function(k){if(BAT[k])BAT[k].allies=A[k].slice()});
+  /* aliados canônicos dos arcos finais são muito fortes: chefes um pouco mais duros */
+  BAT.torre.mul=1.15;BAT.imperio.mul=1.15;BAT.mortos.mul=1.2;
+})();
+var ARCALLY={1:["emilia"],2:["rem","ram","beatrice"],3:["rem","crusch","wilhelm"],4:["emilia","beatrice","garfiel"],5:["emilia","julius","garfiel"],6:["emilia","beatrice","julius"],7:["rem","al"],8:["emilia","beatrice","ram"]};
+var _tc17=trialCfg;trialCfg=function(){var c=_tc17();c.allies=(ARCALLY[Math.min(RG.arc,8)]||["emilia"]).slice();return c};
+var _ec17=encounterCard;encounterCard=function(){var c=_ec17();var g=GS();if(g&&g.bc)g.bc.allies=(ARCALLY[Math.min(RG.arc,8)]||["emilia"]).slice();return c};
+/* mostra quem luta ao seu lado no começo da batalha da história */
+var _sb17a=startBattle;
+startBattle=function(cfg){
+  _sb17a(cfg);
+  if(B&&S&&S.mode==="rg"&&cfg&&cfg.win==="_rgw"){var al=(B.cfg.allies||[]).map(function(a){return allyName(a.replace("?",""))});if(al.length){B.log+=" Ao seu lado: "+al.join(", ")+".";renderBattle()}}
+};
+
+/* ---------- 2. Grupo de batalha no Modo Livre ---------- */
+var PARTY_MAX=3;
+function partyCands(){
+  var ids=["emilia","rem","ram","beatrice","felt","reinhard","crusch","wilhelm","ferris","julius","priscilla","anastasia","otto","garfiel","frederica","al","vincent"];
+  return ids.filter(function(id){if(!DECKS[id]||!DECKS[id].length||!charOk(id))return false;if(REL_C[id])return stg(id)>=2||(S.aff[id]||0)>=2;if(id==="rem"&&remAsleep())return false;return true});
+}
+function PARTY(){return Array.isArray(PF.party)?PF.party:null}
+function partyNow(){var p=PARTY();if(!p||!p.length)return null;var ok=partyCands();return p.filter(function(id){return ok.indexOf(id)>=0})}
+function partyLabel(){var p=partyNow();return p&&p.length?p.map(allyName).join(", "):"Automático"}
+function partyMenu(back){
+  var c=partyCands(),p=(partyNow()||[]).slice();
+  var h='<p class="sec" style="margin:0">Grupo de batalha</p><h2 style="margin:0">Quem luta ao seu lado</h2><p class="fine" style="margin:0">Escolha até '+PARTY_MAX+' parceiros para caçadas, masmorras, ecos, torneio e caçadas lendárias do Modo Livre. "Automático" leva quem é mais próximo de você. Aparecem aqui só pessoas que já entraram na história e de quem você é pelo menos amigo.</p><div class="partyg">';
+  c.forEach(function(id){var on=p.indexOf(id)>=0,dk=DECKS[id].map(function(x){return CARDS[x].n}).join(", ");
+    h+='<button class="pchip'+(on?" on":"")+'" data-pt="'+id+'"><b>'+esc(allyName(id))+(on?" ✓":"")+'</b><span>'+esc(dk)+(REL_C[id]&&lacoOf(id)?" · Laço +"+lacoOf(id):"")+'</span></button>'});
+  h+='</div><button class="btn" id="pAuto">Automático</button><button class="btn primary" id="pOk">Confirmar</button>';
+  var o=ovl(h);
+  o.querySelectorAll("[data-pt]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-pt"),i=p.indexOf(id);if(i>=0)p.splice(i,1);else{if(p.length>=PARTY_MAX){toast("Máximo de "+PARTY_MAX+" parceiros.");return}p.push(id)}PF.party=p;pfSave();partyMenu(back)}});
+  $("#pAuto").onclick=function(){PF.party=null;pfSave();toast("Grupo automático");partyMenu(back)};
+  $("#pOk").onclick=function(){o.hidden=true;if(back)back();else renderHub()};
+}
+var _sb17b=startBattle;
+startBattle=function(cfg){
+  if(S&&S.mode==="free"&&cfg&&cfg.win==="_hub"){var p=partyNow();if(p&&p.length)cfg=Object.assign({},cfg,{allies:p.slice()})}
+  _sb17b(cfg);
+};
+var _mp17=myPower;myPower=function(){if(S&&S.mode==="free"){var p=partyNow();if(p&&p.length){var deck=previewDeck({allies:p});return Math.round(estPT(deck,"dmg")+0.5*estPT(deck,"blk")+0.35*maxHp()/(1-resRed()))}}return _mp17()};
+PAX.push(function(lf){return '<button class="act" data-ac="party"><b>Grupo de batalha</b><span>'+esc(partyLabel())+'</span></button>'});
+PAH.push(function(a){if(a==="party"){partyMenu();return true}return false});
+
+/* ---------- 3. Caçadas lendárias e covis ---------- */
+var LH=[
+ {id:"garmr",n:"Garmr, o Lobo-Rei",arc:2,at:"floresta",arch:"agil",tr:{multi:3,enrage:6},tr2:{multi:3,regen:3},mi:"Lobo da matilha real",tro:"Presa do Lobo-Rei",d:"Um lobo do tamanho de uma carroça. Ele comanda todas as matilhas ao redor de Irlam."},
+ {id:"fenix",n:"Fênix Cinzenta",arc:3,at:"vale",arch:"mago",tr:{regen:4},tr2:{regen:6,enrage:5},mi:"Ave de brasa",tro:"Pena de cinza eterna",d:"Uma ave que renasce das próprias cinzas e queima as plantações do vale."},
+ {id:"coelho",n:"O Grande Coelho",arc:4,at:"santuario",arch:"fraco",tr:{multi:4,regen:3},tr2:{multi:5,regen:4},mi:"Coelho faminto",tro:"Pelo do Grande Coelho",d:"Não é um coelho: são milhares, com uma fome só. Um dos três grandes mabeasts."},
+ {id:"hidra",n:"Hidra do Aqueduto",arc:5,at:"aqueduto",arch:"tanque",tr:{multi:2,regen:4},tr2:{multi:3,regen:5},mi:"Enguia gigante",tro:"Escama da Hidra",d:"Três cabeças, um apetite. Ela vive no fundo dos túneis sob Pristella."},
+ {id:"escorp",n:"Escorpião Imperador",arc:6,at:"torre",arch:"bruto",tr:{armor:5,ward:2},tr2:{armor:6,ward:2,enrage:5},mi:"Escorpião de areia",tro:"Ferrão do Imperador",d:"Uma carapaça que nenhuma tempestade de areia arranhou em séculos."},
+ {id:"geada",n:"Dragão de Geada",arc:7,at:"fortaleza",arch:"mago",tr:{armor:4,enrage:6},tr2:{multi:2,armor:5,enrage:4},mi:"Cria de geada",tro:"Coração de geada",d:"Um dragão antigo que dorme sob a Fortaleza Gelada e acorda com fome."},
+ {id:"serpente",n:"A Serpente Negra",arc:8,at:"vollachia",arch:"chefe",tr:{multi:2,regen:3},tr2:{multi:2,regen:5,enrage:4},drain:4,mi:"Cria da praga",tro:"Escama da Serpente Negra",d:"Por onde passa, a terra adoece. Um dos três grandes mabeasts."}
+];
+var LHBY={};LH.forEach(function(x){LHBY[x.id]=x;GD("lh_"+x.id,x.tro,4,900+120*x.arc)});
+function LHS(){var s=PF.lh||(PF.lh={act:{},cd:{},rk:{},win:{}});["act","cd","rk","win"].forEach(function(k){if(!s[k])s[k]={}});return s}
+function lhOk(x){return x.arc<=arcReach()&&PLBY[x.at]&&PLBY[x.at].arc<=arcReach()}
+function lhBoard(){
+  var s=LHS(),night=false;
+  var h='<p class="sec" style="margin:0">Guilda de caçadores</p><h2 style="margin:0">Caçadas lendárias</h2><p class="fine" style="margin:0">Aceite uma caçada, rastreie a fera explorando o lugar dela (2 vezes) e entre no covil: dois guardiões e o lendário, em sequência. Cada vitória deixa a próxima caçada da mesma fera mais forte e mais rica. Depois de abatida, ela volta em 7 dias. Até 2 caçadas ativas.</p>';
+  LH.forEach(function(x){
+    var lock=!lhOk(x),a=s.act[x.id],cd=s.cd[x.id]&&s.cd[x.id]>S.day,rk=s.rk[x.id]||0;
+    var st=lock?"Chegue ao Arco "+Math.max(x.arc,PLBY[x.at]?PLBY[x.at].arc:1)+".":cd?"Abatida. Volta no dia "+s.cd[x.id]+".":a?(a.st===0?"Rastreando em "+PLBY[x.at].n+" ("+(a.c||0)+"/2 explorações).":"Covil encontrado em "+PLBY[x.at].n+". Vá até lá e entre."):"Disponível · Nível de ameaça "+(rk+1)+".";
+    h+='<div class="item'+(lock?" locked":s.win[x.id]?" got":"")+'"><div><b>'+esc(x.n)+(s.win[x.id]?" ✓":"")+'</b><span>'+esc(x.d)+' '+esc(st)+'</span></div>'+((!lock&&!cd&&!a)?'<button class="btn small" data-lh="'+x.id+'"'+(Object.keys(s.act).length>=2?" disabled":"")+'>Aceitar</button>':'')+'</div>';
+  });
+  h+='<button class="btn small" id="lhX">Voltar</button>';
+  var o=ovl(h);$("#lhX").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-lh]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-lh");if(Object.keys(s.act).length>=2)return;s.act[id]={st:0,c:0};pfSave();toast("Caçada aceita: "+LHBY[id].n);dj("luta","Aceitou a caçada lendária: "+LHBY[id].n+".");lhBoard()}});
+}
+var _ex17=explore;
+explore=function(){
+  var ok=S.t<3,loc=L().loc;_ex17();if(!ok||S.mode!=="free")return;
+  var s=LHS();Object.keys(s.act).forEach(function(id){var a=s.act[id],x=LHBY[id];if(a.st===0&&x.at===loc){a.c=(a.c||0)+1;if(a.c>=2){a.st=1;toast("Rastros frescos! Você achou o covil de "+x.n+".");dj("luta","Encontrou o covil de "+x.n+".")}else toast("Rastros de "+x.n+" ("+a.c+"/2)");pfSave()}});
+};
+function lhFight(id,step){
+  var x=LHBY[id],rk=LHS().rk[id]||0,lv=refLv()+3+3*rk+step;
+  var boss=step===2,cfg=levelize({enemy:boss?x.n:x.mi+(step?" maior":""),arch:boss?x.arch:rnd(["agil","bruto","padrao"]),lv:lv,tier:boss?"super":"elite",mul:1.05+0.08*rk,noadapt:true,
+    lair:{id:id,step:step},allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:boss?8+x.arc:3,xp:boss?60+10*x.arc:15});
+  if(boss){cfg.tr=Object.assign({},x.tr);cfg.tr2=Object.assign({},x.tr2);if(x.drain)cfg.drain=x.drain;cfg.p2=x.n+" se enfurece. O covil inteiro treme."}
+  $("#overlay").hidden=true;startBattle(cfg);
+}
+function lhEnter(id){
+  var x=LHBY[id],a=LHS().act[id];if(!a||a.st!==1||L().loc!==x.at)return;
+  if(S.san<25){toast("Sua mente está fraca demais para o covil. Descanse antes.");return}
+  var o=ovl('<p class="sec" style="margin:0">Covil lendário · '+esc(PLBY[x.at].n)+'</p><h2 style="margin:0">'+esc(x.n)+'</h2><p style="margin:0;font-size:16px;line-height:1.5">'+esc(x.d)+'</p><p class="fine" style="margin:0">Três lutas seguidas: dois guardiões e o lendário. Se cair, você é expulso e precisa tentar de novo outro dia. Grupo: <b>'+esc(partyLabel())+'</b>.</p><button class="btn primary" id="lhGo">Entrar no covil · 2h</button><button class="btn" id="lhP">Trocar o grupo</button><button class="btn small" id="lhB">Voltar</button>');
+  $("#lhGo").onclick=function(){advanceTime();lhFight(id,0)};
+  $("#lhP").onclick=function(){partyMenu(function(){lhEnter(id)})};
+  $("#lhB").onclick=function(){o.hidden=true};
+}
+var _eb17=endBattle;
+endBattle=function(win){
+  var cfg=(B&&B.cfg)||null,was=B&&B.done;
+  _eb17(win);
+  if(was||!cfg||!cfg.lair||!B||!B.done)return;
+  var id=cfg.lair.id,step=cfg.lair.step,x=LHBY[id],s=LHS(),nb=$("#bNext"),ov=$("#overlay"),p0=ov&&ov.querySelector(".in p");
+  if(!win){if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0">O covil expulsou você. Tente outro dia.</p>');return}
+  if(step<2){
+    S.san=clamp(S.san-3,0,100);save();
+    if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0;color:#ffd28a">Guardião '+(step+1)+' de 2 caiu. '+(step===1?"O lendário espera no fundo do covil.":"Há mais um guardião adiante.")+' (sanidade −3)</p>');
+    if(nb)nb.onclick=function(){ov.hidden=true;ov.className="";B=null;lhFight(id,step+1)};
+    return;
+  }
+  var rk=s.rk[id]||0,c=Math.round((600+250*rk)*(1+0.1*x.arc)),f=4+rk+Math.floor(x.arc/2),it=eqFind(luck()*2.2);
+  S.coin+=c;S.frags+=f;gotGood("lh_"+id,1);s.rk[id]=rk+1;s.win[id]=(s.win[id]||0)+1;s.cd[id]=S.day+7;delete s.act[id];
+  unlock("lh1");if(LH.every(function(z){return s.win[z.id]}))unlock("lhall");
+  pfSave();save();dj("luta","Abateu "+x.n+" (ameaça "+(rk+1)+").");
+  if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0;color:#ffd28a">Caçada lendária concluída! ¤ +'+c+' · ◆ +'+f+' · '+esc(x.tro)+(it?' · '+esc(it.n)+' ('+RAR[it.r-1]+')':'')+'</p>');
+};
+ACH.lh1=["Caçador de lendas","Abata uma fera lendária."];
+ACH.lhall=["Fim das lendas","Abata todas as feras lendárias."];
+PAX.push(function(lf){
+  if(["capital","vila","caravana","guaral"].indexOf(lf.loc)<0||!LH.some(lhOk))return "";
+  return '<button class="act" data-ac="lhb"><b>Guilda de caçadores</b><span>Caçadas lendárias e covis</span></button>';
+});
+PAX.push(function(lf){
+  var s=LHS(),h="";Object.keys(s.act).forEach(function(id){var x=LHBY[id],a=s.act[id];if(x.at===lf.loc&&a.st===1)h+='<button class="act lhact" data-ac="lh:'+id+'"><b>Covil: '+esc(x.n)+'</b><span>Dois guardiões e o lendário. Prepare o grupo</span></button>'});
+  return h;
+});
+PAH.push(function(a){if(a==="lhb"){lhBoard();return true}if(a.indexOf("lh:")===0){lhEnter(a.slice(3));return true}return false});
+WSEC.push({id:"lh",n:"Caçadas lendárias",render:function(b){
+  var s=LHS(),h='<p class="fine" style="margin:0 0 8px">Aceite na Guilda de caçadores (Capital, Irlam, Caravana ou Guaral). Rastreie explorando o lugar da fera e enfrente o covil.</p>';
+  LH.forEach(function(x){var lock=!lhOk(x);h+='<div class="item'+(lock?" locked":s.win[x.id]?" got":"")+'"><div><b>'+esc(lock?"???":x.n)+'</b><span>'+(lock?"Chegue ao Arco "+x.arc+".":esc(PLBY[x.at].n)+" · abatida "+(s.win[x.id]||0)+"× · ameaça "+((s.rk[x.id]||0)+1))+'</span></div></div>'});
+  b.innerHTML=h;
+}});
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

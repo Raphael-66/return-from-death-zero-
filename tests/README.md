@@ -14,6 +14,7 @@ node tests/harness.js tests/v10.js   # família, sinergias, bestiário, missões
 node tests/harness.js tests/v11.js   # torneio, móveis, forja lendária
 node tests/harness.js tests/v12.js   # cônjuge em casa
 node tests/harness.js tests/v13.js   # relógio, viagens em horas, comércio
+node tests/harness.js tests/v17.js   # grupo de batalha, caçada lendária, aliados canônicos
 ```
 
 Saída esperada no fim: `no page errors`. Linhas `FAIL` indicam passo de teste quebrado.
