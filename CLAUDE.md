@@ -32,6 +32,7 @@ Leia também: `docs/ARQUITETURA.md`, `docs/SISTEMAS.md`, `docs/BALANCEAMENTO.md`
 
 ## Armadilhas conhecidas
 - **Coerência com a história:** nenhum personagem ou lugar pode aparecer antes do arco em que entra no cânone. Ao criar conteúdo novo com personagens, confira `CHAR_ARC`/`CHAR_RE` (Atualização 16); textos que citam nomes são filtrados automaticamente por `textArc`.
+- **Interface do hub:** `hubDrawers` reorganiza o DOM depois do `renderHub` (Atualização 18). Cartões novos com `.sec`/título caem em "Mais" se não forem classificados; ações novas do mapa precisam de uma categoria em `ACAT` (pelo `data-ac`). Abas novas do menu precisam entrar em `MGROUP`.
 - `S.t` no Modo Livre é um **getter** calculado de `S.h` (horas). Nunca retorna 3; use `S.h` para horário. `advanceTime(h)` aceita horas (padrão 2h).
 - Overlays (`#overlay`) são reaproveitados: sempre conferir `$("#overlay").hidden` antes de abrir outro automaticamente.
 - `renderBattle` recria o DOM da batalha: animações flutuantes vão para a camada fixa `#fxl`.

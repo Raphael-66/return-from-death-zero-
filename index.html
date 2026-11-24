@@ -402,6 +402,32 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .pchip{background:var(--ink3);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:left;display:flex;flex-direction:column;gap:2px;color:var(--paper)}
 .pchip span{font-size:11.5px;color:var(--mute);line-height:1.3}.pchip.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
 .act.lhact{border-color:#ff9bab}
+.drawer{border:1px solid var(--line);border-radius:12px;background:var(--ink2);margin:0}
+.drawer>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;min-height:48px;font-weight:600}
+.drawer>summary::-webkit-details-marker{display:none}
+.drawer>summary::marker{content:""}
+.drawer>summary::before{content:none!important;display:none}
+.drawer>summary::after{content:"›";font-size:20px;color:var(--mute);transition:transform .15s;margin-left:6px}
+.drawer[open]>summary::after{transform:rotate(90deg)}
+.drawer .dt{flex:1}
+.drawer .db{font-size:12px;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+.drawer .db i{font-style:normal}.drawer .db i.pgood{color:#7ee2a0}.drawer .db i.pok{color:#ffd28a}.drawer .db i.pbad{color:#ff9bab}
+.drawer>.dbody{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}
+.drawer.big{background:var(--ink2)}
+.drawer.big>summary{font-family:var(--display);font-weight:400;font-size:18px}
+.drawer.sub{background:var(--ink3)}
+.drawer.sub>summary{font-size:15px;min-height:44px;padding:10px 12px}
+.drawer.mini{border:none;background:none}.drawer.mini>summary{padding:4px 0;min-height:0;font-size:13px;color:var(--mute);font-weight:400}
+.drawer.mini>.dbody{padding:0}
+.placedrw{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.placedrw .drawer{background:var(--ink3)}
+.placedrw .drawer>summary{font-size:14.5px;min-height:44px;padding:10px 12px}
+.hubcard.inner{border:none;padding:0;background:none;margin:0}
+.quick{display:flex;gap:8px;margin-top:8px}.quick .qbtn{flex:1;min-height:52px}
+.mgroups{display:flex;gap:6px;margin-bottom:6px}
+.mgroups .mg{flex:1;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:9px 6px;color:var(--paper);font-weight:600;min-height:42px}
+.mgroups .mg.on{border-color:var(--gold);color:var(--gold)}
+.tabs.one{display:none}
 </style>
 
 
@@ -7608,7 +7634,7 @@ GT.forEach(function(t){var a=Math.max(CHAR_ARC[t[0]]||1,textArc(t[3]+" "+t[4]+" 
 /* no Arco 1, as atividades da casa que não citam ninguém do futuro acontecem na Capital */
 var _al16=actLoc;actLoc=function(a){var l=_al16(a);if(arcReach()<2&&(l==="casa"||l==="vila"||l==="floresta")&&textArc(a.n+" "+(a.d||""))<=1&&!/floresta|lago|vilarejo|Irlam|mans/i.test(a.n+" "+(a.d||"")))return "capital";return l};
 /* torneio só depois da Seleção Real (os finalistas chegam no Arco 3) */
-(function(){for(var i=0;i<PAX.length;i++){var f=PAX[i];if(/Torneio da Capital/.test(String(f))){PAX[i]=function(lf){return arcReach()>=3?f(lf):""}}}})();
+(function(){PAX.forEach(function(f,i){if(/Torneio da Capital/.test(String(f)))PAX[i]=function(lf){return arcReach()>=3?f(lf):""}})})();
 var _tm16=tourMenu;tourMenu=function(){if(arcReach()<3){toast("O torneio começa quando a Seleção Real chegar (Arco 3).");return}_tm16()};
 /* Salão dos Ecos: só ecos de quem você já enfrentou na história */
 ECHO.forEach(function(x){if(x.arc<1)x.arc=1});
@@ -7753,6 +7779,109 @@ WSEC.push({id:"lh",n:"Caçadas lendárias",render:function(b){
   LH.forEach(function(x){var lock=!lhOk(x);h+='<div class="item'+(lock?" locked":s.win[x.id]?" got":"")+'"><div><b>'+esc(lock?"???":x.n)+'</b><span>'+(lock?"Chegue ao Arco "+x.arc+".":esc(PLBY[x.at].n)+" · abatida "+(s.win[x.id]||0)+"× · ameaça "+((s.rk[x.id]||0)+1))+'</span></div></div>'});
   b.innerHTML=h;
 }});
+
+/* =====================================================================
+   ATUALIZAÇÃO 18: interface do Modo Livre em gavetas.
+   Nada foi removido: os cartões viram seções recolhíveis, as ações do
+   lugar ficam agrupadas e o menu ganha categorias.
+   ===================================================================== */
+function UI(){return PF.ui||(PF.ui={open:{}})}
+function drawer(key,title,badge,nodes,openDef,cls){
+  var st=UI().open,open=st[key]===undefined?!!openDef:!!st[key];
+  var d=document.createElement("details");d.className="drawer"+(cls?" "+cls:"");if(open)d.open=true;
+  var sm=document.createElement("summary");sm.innerHTML='<span class="dt">'+title+'</span>'+(badge?'<span class="db">'+badge+'</span>':'');
+  d.appendChild(sm);var body=document.createElement("div");body.className="dbody";d.appendChild(body);
+  nodes.forEach(function(n){if(n)body.appendChild(n)});
+  d.addEventListener("toggle",function(){UI().open[key]=d.open;pfSave()});
+  return d;
+}
+function visCount(el){var n=0;el.querySelectorAll("button").forEach(function(b){if(!b.hidden&&!b.closest("[hidden]"))n++});return n}
+function cardTitle(c){var e=c.querySelector(".sec")||c.querySelector("h2")||c.querySelector("b");return e?e.textContent.trim():""}
+var ACAT=[
+ ["luta","Explorar e lutar",/^(explore|dg:|lh:|party)$|^dg:|^lh:/],
+ ["casa","Onde dormir e morar",/^(inn1|inn2|res|deco)$/],
+ ["serv","Comércio e serviços",/^(trade|stable|tour|echo|lhb)$|^biz:/],
+ ["miss","Missões",/^sq$/],
+ ["fest","Festival",/^fest:/]
+];
+function hubDrawers(){
+  var hub=$("#hub");if(!hub||!S||S.mode!=="free")return;
+  var cards=[].slice.call(hub.querySelectorAll(":scope > .hubcard"));if(cards.length<3)return;
+  var day=cards[0],map=$("#hMapCard");
+  /* Dormir e Mesa sempre à mão no cartão do dia */
+  var sl=$("#hSleep");if(sl&&day){var qa=document.createElement("div");qa.className="quick";qa.appendChild(sl);sl.classList.add("qbtn");day.appendChild(qa)}
+  /* ações do lugar em gavetas */
+  if(map){
+    var acts=map.querySelector(".acts");
+    if(acts){
+      var groups={};ACAT.forEach(function(c){groups[c[0]]=[]});var other=[];
+      [].slice.call(acts.children).forEach(function(b){var k=b.getAttribute&&b.getAttribute("data-ac")||"",hit=null;ACAT.forEach(function(c){if(!hit&&c[2].test(k))hit=c[0]});(hit?groups[hit]:other).push(b)});
+      var hf=$("#hFight");if(hf&&!hf.hidden){groups.luta.unshift(hf)}
+      var wrap=document.createElement("div");wrap.className="placedrw";
+      ACAT.forEach(function(c){var list=groups[c[0]].filter(function(b){return !b.hidden});if(!list.length)return;
+        var box=document.createElement("div");box.className="acts";list.forEach(function(b){box.appendChild(b)});
+        wrap.appendChild(drawer("pl_"+c[0],c[1],list.length,[box],c[0]==="luta"||c[0]==="miss"))});
+      if(other.length){var box2=document.createElement("div");box2.className="acts";other.forEach(function(b){box2.appendChild(b)});wrap.appendChild(drawer("pl_outros","Outros",other.length,[box2],false))}
+      acts.parentNode.replaceChild(wrap,acts);
+    }
+    /* pessoas aqui */
+    var ps=[].filter.call(map.querySelectorAll(".sec"),function(e){return /Pessoas aqui/.test(e.textContent)})[0];
+    if(ps){var lst=ps.nextElementSibling;var n=lst?lst.querySelectorAll("button").length:0;var dr=drawer("pl_pessoas","Pessoas aqui agora",n,[lst],true);ps.parentNode.replaceChild(dr,ps)}
+    else{var none=[].filter.call(map.querySelectorAll("p.fine"),function(e){return /Ninguém por aqui/.test(e.textContent)})[0];if(none)none.classList.add("nobody")}
+    /* texto de ajuda do mapa vira gaveta pequena */
+    var help=[].filter.call(map.querySelectorAll("p.fine"),function(e){return /Toque num lugar do mapa/.test(e.textContent)})[0];
+    if(help){var t=help.textContent,cut=t.indexOf("Toque num lugar do mapa"),desc=document.createElement("p");desc.className="fine";desc.style.margin="0 0 6px";desc.textContent=t.slice(0,cut).trim();
+      var hp=document.createElement("p");hp.className="fine";hp.style.margin="0";hp.textContent=t.slice(cut);help.parentNode.insertBefore(desc,help);help.parentNode.replaceChild(drawer("pl_help","Como viajar","",[hp],false,"mini"),help)}
+  }
+  /* cartões restantes: agrupar em gavetas */
+  var byTitle=function(re){return cards.filter(function(c){return c!==day&&c!==map&&re.test(cardTitle(c))})};
+  var actGroups=cards.filter(function(c){return c!==day&&c!==map&&/^(Vínculos|Treino|Mente|Vida|Da IA)$/.test(cardTitle(c))&&c.querySelector(".acts")});
+  var prep=byTitle(/^Preparar o próximo Retorno/)[0],esp=byTitle(/^Especiais/)[0];
+  var life=cards.filter(function(c){return c!==day&&c!==map&&/^Vida\b/.test(cardTitle(c))&&!c.querySelector(".acts")})[0];
+  var rel=byTitle(/^Relacionamentos/)[0],city=byTitle(/^Cidade|^Clima|^Tempo/)[0],story=byTitle(/^Linha canônica/)[0],lvl=byTitle(/^Nível/)[0];
+  var used=[day,map];
+  /* Atividades (subgavetas por tipo) */
+  var subs=[];
+  actGroups.forEach(function(c){used.push(c);var a=c.querySelector(".acts"),n=visCount(a);if(!n)return;subs.push(drawer("act_"+cardTitle(c),cardTitle(c),n,[a],false,"sub"))});
+  if(prep){used.push(prep);var pa=prep.querySelector(".acts");if(pa&&visCount(pa))subs.push(drawer("act_prep","Preparar o próximo Retorno",visCount(pa),[pa],false,"sub"))}
+  if(esp){used.push(esp);var ea=esp.querySelector(".acts");if(ea&&visCount(ea))subs.push(drawer("act_esp","Especiais",visCount(ea),[ea],false,"sub"))}
+  var total=0;subs.forEach(function(d){total+=+(d.querySelector(".db")||{textContent:0}).textContent||0});
+  var outer=[];
+  if(subs.length)outer.push(drawer("g_atividades","Atividades",total,subs,true));
+  var lifeN=[life,rel].filter(Boolean);lifeN.forEach(function(c){used.push(c)});
+  if(lifeN.length)outer.push(drawer("g_vida","Vida, casa e relacionamentos","",lifeN,false));
+  if(city){used.push(city);outer.push(drawer("g_cidade","Serviços da cidade","",[city],false))}
+  var hist=[lvl,story].filter(Boolean);hist.forEach(function(c){used.push(c)});
+  if(hist.length){var badge="";try{if(story){var pt=powTag(nextStoryBoss().lv);badge='<i class="'+pt.cls+'">'+pt.m+'/'+pt.r+'</i>'}}catch(_){}outer.push(drawer("g_hist","Perfil, história e poder",badge,hist,false))}
+  /* qualquer cartão que sobrou vai para "Mais" */
+  var rest=cards.filter(function(c){return used.indexOf(c)<0&&!c.hidden});
+  if(rest.length)outer.push(drawer("g_mais","Mais",rest.length,rest,false));
+  outer.forEach(function(d){d.classList.add("big");hub.appendChild(d)});
+  /* cartões que ficaram vazios */
+  actGroups.concat([prep,esp]).forEach(function(c){if(c&&c.parentNode&&!c.closest(".drawer"))c.remove()});
+  cards.forEach(function(c){if(c!==day&&c!==map&&c.parentNode&&!c.closest(".drawer")&&!c.querySelector("button"))c.remove()});
+  /* ajuda do relógio vira gaveta pequena */
+  var dh=[].filter.call(day.querySelectorAll("p.fine"),function(e){return /A maioria das ações gasta 2h/.test(e.textContent)})[0];
+  if(dh){var hp2=document.createElement("p");hp2.className="fine";hp2.style.margin="0";hp2.textContent=dh.textContent;dh.parentNode.replaceChild(drawer("day_help","Como funciona o tempo","",[hp2],false,"mini"),dh)}
+  hub.querySelectorAll(".drawer.big > .dbody > .hubcard").forEach(function(c){c.classList.add("inner")});
+}
+var _rh18=renderHub;
+renderHub=function(){_rh18();try{hubDrawers()}catch(e){if(window.console)console.error(e)}};
+
+/* ---------- menu com categorias ---------- */
+var MGROUP=[["Subaru",["Perfil","Metas","Habilidades","Equipamento","Loja","Relíquias","Vida"]],["Pessoas",["Vínculos","Romance","Família"]],["Mundo",["Mundo","Missões","Pedidos","Negócios","Mercado","Pesca","Bestiário","Códice","Diário"]],["Jogo",["Conquistas","Galeria","Oficina","Ajustes"]]];
+function mgOf(t){for(var i=0;i<MGROUP.length;i++)if(MGROUP[i][1].indexOf(t)>=0)return i;return 3}
+var _om18=openMenu;
+openMenu=function(tab){
+  _om18(tab);
+  var o=$("#overlay"),tabs=o.querySelector(".tabs");if(!tabs)return;
+  var cur=o.querySelector('.tab[aria-selected="true"]'),ct=cur?cur.getAttribute("data-t"):tab,g=mgOf(ct),avail={};
+  tabs.querySelectorAll(".tab").forEach(function(b){var t=b.getAttribute("data-t"),gi=mgOf(t);avail[gi]=avail[gi]||t;if(gi!==g)b.hidden=true});
+  var row=document.createElement("div");row.className="mgroups";
+  MGROUP.forEach(function(m,i){if(!avail[i])return;var b=document.createElement("button");b.className="mg"+(i===g?" on":"");b.textContent=m[0];b.onclick=function(){openMenu(i===g?ct:avail[i])};row.appendChild(b)});
+  tabs.parentNode.insertBefore(row,tabs);
+  if(tabs.querySelectorAll(".tab:not([hidden])").length<=1)tabs.classList.add("one");
+};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

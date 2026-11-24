@@ -1,5 +1,10 @@
 # Histórico de versões
 
+## 2026-11-24 — Atualização 18: interface em gavetas
+- Hub do Modo Livre reorganizado em gavetas (`hubDrawers`, estado em `PF.ui.open`), sem remover nada: cartão do dia com botão Dormir e ajuda recolhida; ações do lugar agrupadas (Explorar e lutar, Onde dormir e morar, Comércio e serviços, Missões, Festival); Pessoas aqui; Atividades com subgavetas (Vínculos, Treino, Mente, Vida, Da IA, Preparar o próximo Retorno, Especiais); Vida, casa e relacionamentos; Serviços da cidade; Perfil, história e poder (com indicador de poder no título).
+- Menu com 4 categorias (Subaru, Pessoas, Mundo, Jogo) e abas dentro de cada uma (`MGROUP`).
+- Correção: botão do Torneio era substituído por um Comércio duplicado (variável capturada errada na Atualização 16).
+
 ## 2026-11-24 — Atualização 17: grupo de batalha, caçadas lendárias e aliados canônicos
 - Baralhos de parceiro para Felt, Reinhard, Crusch, Wilhelm, Ferris, Julius, Priscilla, Anastasia, Otto, Garfiel, Frederica, Al, Vincent e Roswaal.
 - Modo Retornos: aliados fiéis ao cânone em cada batalha (Elsa: Emilia e Felt; lobos: Rem e Ram; Baleia: Rem, Crusch, Wilhelm, Ferris; Petelgeuse: Julius, Wilhelm, Ferris; Garfiel: Otto e Ram; Regulus: Emilia e Reinhard; Reid: Julius e Emilia; Império: Rem, Al, Vincent; Sphinx: Emilia, Beatrice, Ram). Provas e emboscadas usam o grupo do arco (`ARCALLY`).
