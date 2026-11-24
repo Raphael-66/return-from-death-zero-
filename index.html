@@ -383,6 +383,17 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .brr.lost{border-color:#ff6b81}.brr.lost .brs{color:#ff9bab}
 .card.leg{border-color:#e4b867;box-shadow:0 0 0 1px #e4b867,0 0 14px rgba(228,184,103,.45);background:linear-gradient(160deg,#3a2f17,var(--ink3) 60%)}
 .legi b{color:#ffd28a}
+.hclock{font-variant-numeric:tabular-nums;font-size:16px;color:var(--paper)}
+.hclock.late1{color:#ffd28a}.hclock.late2{color:#ff9bab}
+.latetag{font-size:12px;color:#ffd28a}.latetag.hard{color:#ff9bab}
+.daybar{position:relative;height:8px;border-radius:99px;background:#0a0d1a;border:1px solid var(--line);overflow:hidden;margin:6px 0 2px}
+.daybar>div{height:100%;background:linear-gradient(90deg,#e4b867,#8fd3ff 60%,#9a78ee 80%,#ff7a9c)}
+.daybar i{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.35)}
+.item em.ttag{display:inline-block;font-style:normal;font-size:10.5px;border-radius:99px;padding:1px 7px;margin-left:4px;border:1px solid;vertical-align:middle}
+.ttag.cheap{color:#7ee2a0;border-color:#58c58a}.ttag.dear{color:#ffd28a;border-color:#e4b867}
+.trow{align-items:center}
+.tbtn{display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:104px}
+.tbtn .btn{padding:6px 8px;min-height:34px}
 </style>
 
 
@@ -1547,7 +1558,7 @@ function addMsg(kind,text,who){
 }
 /* ---------- Oficina (dev com IA) ---------- */
 function gameSpec(){
-  return "Jogo atual: Retorno pela Morte. Visual novel mobile com batalhas de cartas por turnos (energia 3, mão de 5 cartas, cartas de dano, escudo, cura, compra, enfraquecer, sanidade), sistema de Retorno pela Morte (memórias e fragmentos), vínculos com Emilia, Rem, Ram e Beatrice, sanidade (bônus de dano acima de 80, mão menor abaixo de 30, vozes, glitch de texto, colapso mental), seis capítulos (capital, mansão, noite dos lobos com o Alfa, biblioteca com puzzle de runas, câmara das lembranças com o Presságio, lago), cinco finais (Rem, Emilia, amizade, loucura, verdadeiro), loja, conquistas, galeria de imagens do jogador, três slots de save, dificuldade, Modo Livre (hub com dias de três períodos, atividades, eventos aleatórios, caçadas) e IA (mesa do Mestre, cenas geradas e esta oficina). Conteúdo gerado pela IA hoje: "+PACK.eventos.length+" eventos, "+PACK.cartas.length+" cartas, "+PACK.atividades.length+" atividades.";
+  return "Jogo atual: Retorno pela Morte. Visual novel mobile com batalhas de cartas por turnos (energia 3, mão de 5 cartas, cartas de dano, escudo, cura, compra, enfraquecer, sanidade), sistema de Retorno pela Morte (memórias e fragmentos), vínculos com Emilia, Rem, Ram e Beatrice, sanidade (bônus de dano acima de 80, mão menor abaixo de 30, vozes, glitch de texto, colapso mental), seis capítulos (capital, mansão, noite dos lobos com o Alfa, biblioteca com puzzle de runas, câmara das lembranças com o Presságio, lago), cinco finais (Rem, Emilia, amizade, loucura, verdadeiro), loja, conquistas, galeria de imagens do jogador, três slots de save, dificuldade, Modo Livre (hub com relógio de horas, atividades, eventos aleatórios, caçadas) e IA (mesa do Mestre, cenas geradas e esta oficina). Conteúdo gerado pela IA hoje: "+PACK.eventos.length+" eventos, "+PACK.cartas.length+" cartas, "+PACK.atividades.length+" atividades.";
 }
 /* ---------- title ---------- */
 var delArm=0;
@@ -2810,7 +2821,7 @@ function renderHub(){
   h+='</div></div><div class="hubcard"><div class="sec" style="margin:0">Especiais</div><div class="acts">';
   h+='<button class="act" id="hFight"'+(dayDone?" disabled":"")+'><b>Caçar mabeasts</b><span>Escolha o perigo: Fácil a Mortal. Nível do inimigo visível</span></button>';
   h+='<button class="act aiact" id="hScene"'+(dayDone?" disabled":"")+'><b>Cena nova com a IA</b><span>O Mestre escreve algo só para você</span></button>';
-  h+='<button class="act" id="hTea"'+(S.tea<1?" disabled":"")+'><b>Beber chá calmante</b><span>+15 de sanidade, sem gastar período</span></button>';
+  h+='<button class="act" id="hTea"'+(S.tea<1?" disabled":"")+'><b>Beber chá calmante</b><span>+15 de sanidade, sem gastar tempo</span></button>';
   h+='<button class="act aiact" id="hAI"><b>Mesa do Mestre</b><span>Converse com a IA, com personagens e peça dicas</span></button>';
   h+='<button class="act" id="hSleep"><b>Dormir</b><span>Termina o dia, recupera sanidade</span></button>';
   h+='</div></div>';
@@ -3775,7 +3786,7 @@ function paneRomance(p){
   h+='<span class="chipb" style="opacity:.6">'+hidden+' ainda a descobrir</span></div>';
   h+='<p class="sec">Encontros</p>';
   if(!free)h+='<p class="fine" style="margin:0 0 6px">Encontros acontecem no Modo Livre. Aqui você vê o estado da relação e os bônus.</p>';
-  h+='<div class="stack"><button class="btn" data-a="talk"'+(dayOk?"":" disabled")+'>Conversar (gasta um período)'+(free&&c.last===S.day?" · já conversaram hoje":"")+'</button>';
+  h+='<div class="stack"><button class="btn" data-a="talk"'+(dayOk?"":" disabled")+'>Conversar (gasta 2h)'+(free&&c.last===S.day?" · já conversaram hoje":"")+'</button>';
   h+='<button class="btn" data-a="giftm"'+(giftOk?"":" disabled")+'>Presentear'+(free&&c.lastg===S.day?" · já presenteou hoje":"")+'</button></div>';
   if(RLUI.gift&&giftOk){
     h+='<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">';
@@ -4338,7 +4349,7 @@ function goPlace(id){
   var cur=L().loc;if(cur===id)return;
   var cost=(PLBY[cur].far||pl.far)?1:0;
   if(cost&&S.t>=3){toast("Já é noite. Durma e viaje amanhã.");return}
-  if(cost){advanceTime();toast("Viagem até "+pl.n+" (1 período)")}
+  if(cost){advanceTime();toast("Viagem até "+pl.n+" (2h)")}
   L().loc=id;pfSave();renderHub();
 }
 function mapHub(){
@@ -4355,7 +4366,7 @@ function mapHub(){
   ["hScene","hAI","hTea"].forEach(function(id){var e=$("#"+id);if(e&&lf.loc!=="casa")e.hidden=true});
   var mk=$("#hMk");if(mk){var cd=mk.closest(".hubcard");if(cd&&["vila","capital","pristella","vollachia","caravana","liphas","guaral","ribeirinha","pedraferro"].indexOf(lf.loc)<0)cd.hidden=true}
   hub.querySelectorAll(".hubcard").forEach(function(c){var ac=c.querySelector(".acts");if(!ac||c.id==="hMapCard")return;var any=false;ac.querySelectorAll("button").forEach(function(b){if(!b.hidden)any=true});if(!any)c.hidden=true});
-  var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Dentro da mesma região a viagem é rápida; entre regiões leva de 1 período (1p) a meio dia (½d), e as extremidades levam 1 a 2 dias (1d, 2d), dormindo na estrada. Montarias encurtam a viagem.</p>'+placeActions(lf);
+  var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Dentro da mesma região a viagem leva de 30 min a 1h; entre regiões, de 3h a meio dia (6h), e as extremidades levam 1 a 2 dias, acampando na estrada. Viajar de noite cansa e atrai emboscadas. Montarias encurtam a viagem.</p>'+placeActions(lf);
   var pp=peopleHere();
   if(pp.length){
     h+='<div class="sec" style="margin:6px 0 4px">Pessoas aqui agora</div><div style="display:flex;flex-direction:column;gap:6px">';
@@ -4685,7 +4696,7 @@ function giftMenu(id){
 function dateMenu(id){
   var lf=L(),opts=DATES.filter(function(d){return d.loc===lf.loc&&stIdx(id)>=(d.min||0)});
   if(S.t>=3){toast("Já é noite.");return}
-  var h='<h2 style="margin:0">Encontro com '+esc(pn(id))+'</h2><p class="fine" style="margin:0">Cada encontro gasta um período e vale pontos de relação, conforme o desempenho no minijogo.</p>';
+  var h='<h2 style="margin:0">Encontro com '+esc(pn(id))+'</h2><p class="fine" style="margin:0">Cada encontro gasta 2h e vale pontos de relação, conforme o desempenho no minijogo.</p>';
   if(!opts.length)h+='<p style="margin:0;color:var(--mute)">Aqui não há uma boa ocasião para um encontro. Tente na vila, na floresta, em casa ou na capital.</p>';
   opts.forEach(function(d){h+='<button class="btn" data-d="'+d.id+'"'+(S.coin<d.c?" disabled":"")+'>'+esc(d.n)+(d.c?' · ¤ '+d.c:' · grátis')+'</button>'});
   h+='<button class="btn" id="dBack">Voltar</button>';
@@ -4795,14 +4806,14 @@ function personMenu(id){
   var C=REL_C[id];
   if(!C){
     var np=NPCS[id];
-    var o=ovl('<h2 style="margin:0">'+esc(np[0])+'</h2><p class="fine" style="margin:0">'+esc(np[2])+'</p><button class="btn" id="nTalk"'+(S.t>=3?" disabled":"")+'>Conversar (1 período)</button><button class="btn" id="nBack">Voltar</button>');
+    var o=ovl('<h2 style="margin:0">'+esc(np[0])+'</h2><p class="fine" style="margin:0">'+esc(np[2])+'</p><button class="btn" id="nTalk"'+(S.t>=3?" disabled":"")+'>Conversar (2h)</button><button class="btn" id="nBack">Voltar</button>');
     $("#nBack").onclick=function(){o.hidden=true};
     $("#nTalk").onclick=function(){advanceTime();L().rep=Math.min(100,L().rep+1);gainXP(5,true);dj("vida","Conversou com "+np[0]+".");pfSave();o.innerHTML='<div class="in"><p style="margin:0;font-size:17px;line-height:1.55">'+esc(np[0]+": "+rnd(NLINE[id]||["'Bom te ver.'"]))+'</p><p class="sec" style="margin:0">Reputação +1 · XP +5</p><button class="btn primary" id="bOk">Continuar</button></div>';$("#bOk").onclick=function(){o.hidden=true;renderHub()}};
     return;
   }
   var c=relOf(id),st=stageOf(c.rp),par=PF.rel.partner===id,r=rsOf(id),night=S.t>=3;
   var h='<div class="relhead" style="--c:'+C.c+'"><span class="rpic big">'+esc(C.n.charAt(0))+'</span><div><b>'+esc(C.n)+(par?" ♥":"")+'</b><span>'+esc(statusText(id))+'</span></div></div><p class="fine" style="margin:0">'+esc(C.tag)+'</p><div class="stack" style="width:100%">';
-  h+='<button class="btn" data-m="talk"'+((night||c.last===S.day)?" disabled":"")+'>Conversar (1 período)'+(c.last===S.day?" · já hoje":"")+'</button>';
+  h+='<button class="btn" data-m="talk"'+((night||c.last===S.day)?" disabled":"")+'>Conversar (2h)'+(c.last===S.day?" · já hoje":"")+'</button>';
   h+='<button class="btn" data-m="gift">Presentear</button>';
   var hint=[];
   if(par&&st>=2)h+='<button class="btn" data-m="date"'+(night?" disabled":"")+'>Convidar para um encontro</button>';
@@ -5076,13 +5087,13 @@ function mapSVG(lf){
 function placeActions(lf){
   var here=PLBY[lf.loc],h='<div class="acts" style="margin:6px 0">';
   var night=S.t>=3;
-  h+='<button class="act" data-ac="explore"'+(night?" disabled":"")+'><b>Explorar os arredores</b><span>1 período. Sorte '+Math.round(luck()*100)+'%. Materiais, moedas e peças</span></button>';
+  h+='<button class="act" data-ac="explore"'+(night?" disabled":"")+'><b>Explorar os arredores</b><span>2h. Sorte '+Math.round(luck()*100)+'%. Materiais, moedas e peças</span></button>';
   if(here.far){
     var inn=lf.inn&&lf.inn.loc===lf.loc&&lf.inn.day===S.day;
     h+='<button class="act" data-ac="inn1"'+((inn||S.coin<30)?" disabled":"")+'><b>Quarto simples</b><span>'+(inn?"Quarto já reservado hoje":"¤ 30. Sono +5 de sanidade")+'</span></button>';
     h+='<button class="act" data-ac="inn2"'+((inn||S.coin<90)?" disabled":"")+'><b>Suíte da estalagem</b><span>'+(inn?"Quarto já reservado hoje":"¤ 90. Sono +12 de sanidade")+'</span></button>';
   }
-  BIZ.forEach(function(b){var o=BZ()[b.id];if(o&&b.loc===lf.loc)h+='<button class="act" data-ac="biz:'+b.id+'"'+((night||o.day===S.day)?" disabled":"")+'><b>Atender: '+esc(b.n)+'</b><span>'+(o.day===S.day?"Já atendeu hoje":"1 período. Produção extra e reputação")+'</span></button>'});
+  BIZ.forEach(function(b){var o=BZ()[b.id];if(o&&b.loc===lf.loc)h+='<button class="act" data-ac="biz:'+b.id+'"'+((night||o.day===S.day)?" disabled":"")+'><b>Atender: '+esc(b.n)+'</b><span>'+(o.day===S.day?"Já atendeu hoje":"2h. Produção extra e reputação")+'</span></button>'});
   return h+'</div>';
 }
 function placeAction(a){
@@ -5330,7 +5341,7 @@ mapSVG=function(lf){
     s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+12)+'" class="wlb">'+esc(p.s||p.n.replace("Floresta e lago","Floresta").replace("Vila de Irlam","Irlam").replace("Torre de Vigia","Torre").replace("Capital Real","Capital"))+'</text>';
     if(p.dg&&!lock&&rec[p.id])s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+22)+'" class="wrec">'+(p.inf?"Rec. andar ":"Andar ")+rec[p.id]+'</text>';
     if(lock)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">Arco '+p.arc+'</text>';
-    else if(!cur){var tv=tShort(travelP(lf.loc,p.id));if(tv)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">'+tv+'</text>'}
+    else if(!cur){var tv=tShort(travelH(lf.loc,p.id));if(tv)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">'+tv+'</text>'}
     ppl.slice(0,4).forEach(function(id,i){var col=REL_C[id]?REL_C[id].c:"#8f9abb";s+='<circle cx="'+(xy[0]-15+i*10)+'" cy="'+(xy[1]-R-8)+'" r="4.5" fill="'+col+'" class="wp"/>'});
     s+='</g>';
   });
@@ -5363,8 +5374,8 @@ function dgIntro(id){
   var h='<p class="sec" style="margin:0">'+(d.inf?"Torre sem fim":"Masmorra · "+d.fl+" andares")+'</p><h2 style="margin:0">'+esc(pl.n)+'</h2><p style="margin:0;font-size:16px;line-height:1.5">'+esc(pl.d)+'</p><p class="fine" style="margin:0">Cada andar custa 2 de sanidade. O saque fica numa mochila: se você sair, leva tudo; se cair, perde metade. '+(d.inf?"A cada 5 andares há um guardião, e os níveis nunca param de subir. ":"A cada 5 andares há um guardião e, no último, o chefe da masmorra. Os inimigos mudam a cada visita. ")+'Recorde: andar '+rec+'.</p>';
   if(r&&r.id===id)h+='<button class="btn primary" data-k="res">Continuar a expedição (andar '+r.fl+')</button>';
   else{
-    h+='<button class="btn primary" data-k="s1"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar 1 · 1 período</button>';
-    if(rec>=5){var cp=Math.min(Math.floor(rec/5)*5+1,d.inf?99999:d.fl);if(cp>1)h+='<button class="btn" data-k="s'+cp+'"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar '+cp+' (ponto de salvamento) · 1 período</button>'}
+    h+='<button class="btn primary" data-k="s1"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar 1 · 2h</button>';
+    if(rec>=5){var cp=Math.min(Math.floor(rec/5)*5+1,d.inf?99999:d.fl);if(cp>1)h+='<button class="btn" data-k="s'+cp+'"'+(S.t>=3?" disabled":"")+'>Entrar pelo andar '+cp+' (ponto de salvamento) · 2h</button>'}
   }
   h+='<button class="btn small" data-k="x">Voltar</button>';
   var o=ovl(h);
@@ -5496,9 +5507,9 @@ renderHub=function(){
 PAX.push(function(lf){
   var f=festToday();if(!f||lf.loc!=="vila")return "";
   var st=FST(),night=S.t>=3,par=PF.rel&&PF.rel.partner,h='<div class="sec" style="margin:6px 0 2px;color:var(--gold)">'+esc(f.n)+'</div>';
-  h+='<button class="act" data-ac="fest:contest"'+((st.c||night)?" disabled":"")+'><b>Concurso do festival</b><span>'+(st.c?"Você já competiu hoje":"1 período. Prêmios em moedas, reputação e um troféu raro")+'</span></button>';
+  h+='<button class="act" data-ac="fest:contest"'+((st.c||night)?" disabled":"")+'><b>Concurso do festival</b><span>'+(st.c?"Você já competiu hoje":"2h. Prêmios em moedas, reputação e um troféu raro")+'</span></button>';
   h+='<button class="act" data-ac="fest:stall"'+(st.stall?" disabled":"")+'><b>Montar uma banca</b><span>'+(st.stall?"Banca montada. Mercadorias valem +50% hoje":"Grátis. Suas mercadorias valem +50% no Mercado hoje")+'</span></button>';
-  h+='<button class="act" data-ac="fest:dance"'+((st.d||night)?" disabled":"")+'><b>'+(par&&REL_C[par]?"Dançar com "+esc(REL_C[par].n):"Dançar na praça")+'</b><span>'+(st.d?"Você já dançou hoje":"1 período. Relação e sanidade")+'</span></button>';
+  h+='<button class="act" data-ac="fest:dance"'+((st.d||night)?" disabled":"")+'><b>'+(par&&REL_C[par]?"Dançar com "+esc(REL_C[par].n):"Dançar na praça")+'</b><span>'+(st.d?"Você já dançou hoje":"2h. Relação e sanidade")+'</span></button>';
   h+='<button class="act" data-ac="fest:eat"'+((st.e||S.coin<15)?" disabled":"")+'><b>Comer nas barracas</b><span>'+(st.e?"Você já comeu bem hoje":"¤ 15. Sanidade +6")+'</span></button>';
   return h;
 });
@@ -5627,9 +5638,9 @@ function petLv(id){var x=PT().own[id]||0,l=1;PXP.forEach(function(v,i){if(x>=v)l
 function petAdd(id,n){var P=PT(),b=petLv(id);P.own[id]=(P.own[id]||0)+n;var a=petLv(id);if(a>b)toast(PBY[id].n+" subiu para o nível "+a+"!");pfSave()}
 function petGet(id){var P=PT();if(P.own[id]!==undefined)return false;P.own[id]=0;if(!P.act)P.act=id;pfSave();return true}
 var MOUNTS=[
- {id:"pony",n:"Pônei de estrada",c:450,free:1,st:{},d:"1 viagem por dia sem gastar período."},
- {id:"cavalo",n:"Cavalo de caravana",c:1100,free:2,st:{},d:"2 viagens por dia sem gastar período."},
- {id:"lagarto",n:"Dragão terrestre",c:2600,free:3,st:{luck:3},d:"3 viagens por dia sem gastar período e Sorte +3%."}
+ {id:"pony",n:"Pônei de estrada",c:450,free:1,st:{},d:"1 viagem por dia sem gastar tempo."},
+ {id:"cavalo",n:"Cavalo de caravana",c:1100,free:2,st:{},d:"2 viagens por dia sem gastar tempo."},
+ {id:"lagarto",n:"Dragão terrestre",c:2600,free:3,st:{luck:3},d:"3 viagens por dia sem gastar tempo e Sorte +3%."}
 ];
 var MBY={};MOUNTS.forEach(function(m){MBY[m.id]=m});
 function mountNow(){var P=PT();return P.mnt&&MBY[P.mnt]&&P.mounts[P.mnt]?MBY[P.mnt]:null}
@@ -5643,7 +5654,7 @@ goPlace=function(id){
     if(mt.n<m.free){
       mt.n++;var at=advanceTime;advanceTime=function(){};
       try{_gp64(id)}finally{advanceTime=at}
-      toast("Viagem de "+m.n+": sem gastar período ("+mt.n+"/"+m.free+")");return;
+      toast("Viagem de "+m.n+": sem gastar tempo ("+mt.n+"/"+m.free+")");return;
     }
   }
   _gp64(id);
@@ -5694,7 +5705,7 @@ WSEC.push({id:"fac",n:"Facções",render:function(b){
   };
 }});
 WSEC.push({id:"pet",n:"Companhia",render:function(b){
-  var P=PT(),h='<p class="fine" style="margin:0 0 8px">Um pet ativo dá bônus. Dê frutas ou pães para ele subir de nível. Montarias economizam períodos nas viagens. Pets e montarias são comprados no Estábulo, em Irlam.</p>';
+  var P=PT(),h='<p class="fine" style="margin:0 0 8px">Um pet ativo dá bônus. Dê frutas ou pães para ele subir de nível. Montarias encurtam as viagens. Pets e montarias são comprados no Estábulo, em Irlam.</p>';
   var any=false;
   PETS.forEach(function(p){
     if(P.own[p.id]===undefined)return;any=true;
@@ -6201,7 +6212,7 @@ mapSVG=function(lf){
     if(home&&!lock&&p.id!=="casa")s+='<text x="'+(xy[0]-R+1)+'" y="'+(xy[1]-R+5)+'" class="whome">⌂</text>';
     if(p.dg&&!lock&&rec[p.id])s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+24)+'" class="wrec">'+(p.inf?"Rec. andar ":"Andar ")+rec[p.id]+'</text>';
     if(lock)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">Arco '+p.arc+'</text>';
-    else if(!cur){var tv=tShort(travelP(lf.loc,p.id));if(tv)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">'+tv+'</text>'}
+    else if(!cur){var tv=tShort(travelH(lf.loc,p.id));if(tv)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">'+tv+'</text>'}
     ppl.slice(0,4).forEach(function(id,i){var col=REL_C[id]?REL_C[id].c:"#8f9abb";s+='<circle cx="'+(xy[0]-15+i*10)+'" cy="'+(xy[1]-R-8)+'" r="4.5" fill="'+col+'" class="wp"/>'});
     s+='</g>';
   });
@@ -6285,7 +6296,7 @@ function echoMenu(){
   var e=echoSt(),reach=arcReach(),ref=refLv(),night=S.t>=3;
   var h='<p class="sec" style="margin:0">Capital Real · Salão dos Ecos</p><h2 style="margin:0">Ecos lendários</h2><p class="fine" style="margin:0">Um velho mago guarda ecos das lutas que Subaru lembra. Cada eco é um super chefe com traços próprios, uma vez por dia. Vencer dá ◆ e equipamentos melhores. Seu nível de referência: <b>'+ref+'</b>.</p>';
   ECHO.forEach(function(x,i){var lock=x.arc>reach,done=e.day[x.id]===S.day;
-    h+='<button class="btn" data-e="'+i+'" style="text-align:left"'+((lock||done||night)?" disabled":"")+'><b>'+esc(x.n)+(e.win[x.id]?" ✓":"")+'</b><br><span style="font-size:13px;color:var(--mute)">'+(lock?"Chegue ao Arco "+x.arc+" no Modo Retornos":done?"Você já enfrentou este eco hoje":"Super chefe · Nv "+(ref+x.lv-4)+" · 1 período · ◆ "+(2+Math.floor(x.arc/2)))+'</span></button>'});
+    h+='<button class="btn" data-e="'+i+'" style="text-align:left"'+((lock||done||night)?" disabled":"")+'><b>'+esc(x.n)+(e.win[x.id]?" ✓":"")+'</b><br><span style="font-size:13px;color:var(--mute)">'+(lock?"Chegue ao Arco "+x.arc+" no Modo Retornos":done?"Você já enfrentou este eco hoje":"Super chefe · Nv "+(ref+x.lv-4)+" · 2h · ◆ "+(2+Math.floor(x.arc/2)))+'</span></button>'});
   h+='<button class="btn small" id="eX">Voltar</button>';
   var o=ovl(h);$("#eX").onclick=function(){o.hidden=true};
   o.querySelectorAll("[data-e]").forEach(function(b){b.onclick=function(){
@@ -6312,7 +6323,7 @@ endBattle=function(win){
 };
 
 /* ---------- 6. Viagens por regiões ---------- */
-/* Mesma região: grátis (ou 1 período se for longe dentro dela). Entre regiões: 1 período,
+/* Mesma região: grátis (ou 2h se for longe dentro dela). Entre regiões: 2h,
    meio dia (2 períodos) ou 1 a 2 dias para as extremidades, dormindo na estrada. */
 var ZONE={casa:"M",vila:"M",floresta:"M",caverna:"M",santuario:"M",camaras:"M",
  capital:"C",cripta:"C",torreeco:"C",liphas:"C",pedraferro:"C",mina:"C",
@@ -6327,10 +6338,10 @@ function travelP(a,b){
   if(za===zb){var p=POS[a],q=POS[b];return (p&&q&&Math.hypot(p[0]-q[0],p[1]-q[1])>120)?1:0}
   return ZT[za+zb]||ZT[zb+za]||2;
 }
-function tLabel(n){return n<=0?"rápido":n===1?"1 período":n===2?"½ dia":n===3?"1 dia":n<=5?"1½ dia":"2 dias"}
+function tLabel(n){return n<=0?"rápido":n===1?"2h":n===2?"½ dia":n===3?"1 dia":n<=5?"1½ dia":"2 dias"}
 function tShort(n){return n<=0?"":n===1?"1p":n===2?"½d":n===3?"1d":n<=5?"1½d":"2d"}
 function mountCut(n){return n<=0?0:Math.max(1,Math.floor(n/3))}
-MOUNTS.forEach(function(m){m.d=(m.free===1?"1 viagem":m.free+" viagens")+" por dia mais rápida: −1 período, ou −1 por dia de estrada."+(m.st&&m.st.luck?" Sorte +"+m.st.luck+"%.":"")});
+MOUNTS.forEach(function(m){m.d=(m.free===1?"1 viagem":m.free+" viagens")+" por dia mais rápida: −2h, ou −1 por dia de estrada."+(m.st&&m.st.luck?" Sorte +"+m.st.luck+"%.":"")});
 function TRIP(){return L().trip||null}
 goPlace=function(id){
   var lf=L(),pl=PLBY[id],cur=lf.loc;
@@ -6683,9 +6694,9 @@ function paneQuests(p){
 var YACT=[
  {k:"elogio",n:"Elogiar",d:"Grátis, 1 vez por dia",min:1,p:0},
  {k:"conselho",n:"Pedir um conselho",d:"Grátis, 1 vez por dia",min:2,p:0},
- {k:"treino",n:"Treinar juntos",d:"1 período · Força ou Resistência",min:1,p:1},
- {k:"cozinha",n:"Cozinhar juntos",d:"1 período · em casa",min:2,p:1,home:1},
- {k:"passeio",n:"Passear por aqui",d:"1 período",min:2,p:1},
+ {k:"treino",n:"Treinar juntos",d:"2h · Força ou Resistência",min:1,p:1},
+ {k:"cozinha",n:"Cozinhar juntos",d:"2h · em casa",min:2,p:1,home:1},
+ {k:"passeio",n:"Passear por aqui",d:"2h",min:2,p:1},
  {k:"maos",n:"Dar as mãos",d:"Grátis, 1 vez por dia",min:3,p:0,love:1},
  {k:"estrelas",n:"Ver as estrelas",d:"Só à noite · 1 vez por dia",min:3,p:0,love:1,night:1}
 ];
@@ -6701,7 +6712,7 @@ function yDone(r,k){r.yd=r.yd||{};return r.yd[k]===S.day}
 function atHome(){var lf=L();return lf.loc==="casa"||!!resAt(lf.loc)}
 function yAct(id,k){
   var C=REL_C[id],r=rsOf(id),a=YACT.filter(function(x){return x.k===k})[0],N=C.n;if(!a||yDone(r,k))return;
-  if(a.p&&S.t>=3)return;if(a.night&&S.t<3)return;if(a.home&&!atHome())return;
+  if(a.night&&!isNight())return;if(a.home&&!atHome())return;
   r.yd=r.yd||{};r.yd[k]=S.day;if(a.p)advanceTime();
   var txt="",eff=[];
   if(k==="elogio"){var g=1+Math.floor(Math.random()*3);relAdd(id,g);txt=rnd(PRAISE[id]||["'Obrigada.' Ela sorri."]);eff.push("Relação +"+g)}
@@ -6787,8 +6798,8 @@ personMenu=function(id){
   var h='<p class="sec" style="margin:6px 0 0">Fazer juntos</p><div class="yacts">';
   YACT.forEach(function(a){
     if(a.love&&!love)return;
-    var lock=s<a.min,dis=lock||yDone(r,a.k)||(a.p&&night)||(a.night&&!night)||(a.home&&!atHome());
-    h+='<button class="act" data-m="y:'+a.k+'"'+(dis?" disabled":"")+'><b>'+esc(a.n)+'</b><span>'+(lock?"Requer "+esc(STG[a.min][0]):yDone(r,a.k)?"Já hoje":(a.home&&!atHome())?"Só em casa":(a.night&&!night)?"Só à noite":esc(a.d))+'</span></button>';
+    var lock=s<a.min,dis=lock||yDone(r,a.k)||(a.night&&!isNight())||(a.home&&!atHome());
+    h+='<button class="act" data-m="y:'+a.k+'"'+(dis?" disabled":"")+'><b>'+esc(a.n)+'</b><span>'+(lock?"Requer "+esc(STG[a.min][0]):yDone(r,a.k)?"Já hoje":(a.home&&!atHome())?"Só em casa":(a.night&&!isNight())?"A partir das 19:00":esc(a.d))+'</span></button>';
   });
   h+='</div>';
   if(par&&C.rom)h+=famHTML(id,night);
@@ -6884,7 +6895,7 @@ ACH.tour1=["Campeão da Capital","Vença o torneio semanal da Capital."];
 ACH.tour3=["Lenda da arena","Vença o torneio da Capital 3 vezes."];
 function tourMenu(){
   var t=TOUR(),wk=weekOf(),cur=t.wk===wk,night=S.t>=3,fin=tFinal();
-  var h='<p class="sec" style="margin:0">Capital Real · Arena</p><h2 style="margin:0">Torneio semanal</h2><p class="fine" style="margin:0">Uma chave por semana, três lutas: quartas, semifinal e final. Cada luta gasta 1 período. Perder elimina, mas você leva o prêmio da fase alcançada. Títulos seguidos aumentam os prêmios (agora ×'+tMul().toFixed(2)+'). Títulos: <b>'+t.titles+'</b>.</p>';
+  var h='<p class="sec" style="margin:0">Capital Real · Arena</p><h2 style="margin:0">Torneio semanal</h2><p class="fine" style="margin:0">Uma chave por semana, três lutas: quartas, semifinal e final. Cada luta gasta 2h. Perder elimina, mas você leva o prêmio da fase alcançada. Títulos seguidos aumentam os prêmios (agora ×'+tMul().toFixed(2)+'). Títulos: <b>'+t.titles+'</b>.</p>';
   if(!cur){
     h+='<div class="item"><div><b>Chave da semana '+(wk+1)+'</b><span>Finalista favorito: '+esc(fin[0])+' (super chefe). Prêmio do campeão: ¤ '+Math.round(800*tMul())+', ◆ 5, troféu e equipamento.</span></div><button class="btn small" id="tIn"'+(S.coin<tFee()?" disabled":"")+'>Inscrever · ¤ '+tFee()+'</button></div>';
   }else{
@@ -6895,7 +6906,7 @@ function tourMenu(){
     h+='</div><p class="fine" style="margin:0">Também na chave: '+esc((t.others||[]).join(", "))+'.</p>';
     if(t.r>=3)h+='<p class="sec" style="margin:0;color:var(--gold)">Você é o campeão desta semana! Volte na próxima para defender o título.</p>';
     else if(t.out)h+='<p class="sec" style="margin:0">Eliminado. Nova chave na semana que vem.</p>';
-    else h+='<button class="btn primary" id="tGo"'+(night?" disabled":"")+'>Lutar: '+esc(rn[t.r])+' contra '+esc(t.br[t.r])+' · 1 período</button>';
+    else h+='<button class="btn primary" id="tGo"'+(night?" disabled":"")+'>Lutar: '+esc(rn[t.r])+' contra '+esc(t.br[t.r])+' · 2h</button>';
   }
   h+='<button class="btn small" id="tX">Voltar</button>';
   var o=ovl(h);$("#tX").onclick=function(){o.hidden=true;renderHub()};
@@ -7059,6 +7070,224 @@ sleepDay=function(){
   var p=liveP(),trip=!!TRIP();_slCouple();
   if(p&&!trip&&S.mode==="free"&&L().loc===coupleHome())setTimeout(function(){toast(REL_C[p].n+" dormiu ao seu lado em "+(resAt(L().loc)||{n:"casa"}).n+".")},900);
 };
+
+/* =====================================================================
+   ATUALIZAÇÃO 13: relógio de horas sem limite (com cansaço) e
+   comércio entre cidades.
+   ===================================================================== */
+
+/* ---------- 1. Relógio ---------- */
+/* S.h = hora do dia: 7 = 07:00, 24 = meia-noite, 31 = 07:00 do dia seguinte sem dormir.
+   S.t continua existindo para o código antigo: 0 manhã, 1 tarde, 2 noite (nunca 3: nada fica bloqueado). */
+var PSTART=[7,12,17,22];
+function clockify(s){
+  if(!s||s.mode!=="free")return s;
+  var d=Object.getOwnPropertyDescriptor(s,"t");if(d&&d.get)return s;
+  var t=s.t||0;if(typeof s.h!=="number"||!isFinite(s.h))s.h=PSTART[clamp(t,0,3)];
+  delete s.t;
+  Object.defineProperty(s,"t",{enumerable:true,configurable:true,
+    get:function(){return this.h<12?0:this.h<17?1:2},
+    set:function(v){v=clamp(Math.floor(v),0,3);this.h=v===0?7:Math.max(this.h,PSTART[v])}});
+  return s;
+}
+function fmtH(h){h=((h%24)+24)%24;var m=Math.round((h%1)*60),H=Math.floor(h);if(m===60){H=(H+1)%24;m=0}return (H<10?"0":"")+H+":"+(m<10?"0":"")+m}
+function phaseOf(h){return h<12?"Manhã":h<17?"Tarde":h<22?"Noite":h<24?"Noite avançada":"Madrugada"}
+function isNight(){return S&&S.h>=19}
+function lateLv(){return !S||S.mode!=="free"?0:S.h>=24?2:S.h>=22?1:0}
+var _ffClock=freshFree;freshFree=function(){return clockify(_ffClock())};
+var _nmClock=normalize;normalize=function(s){s=_nmClock(s);return clockify(s)};
+var _atClock=advanceTime;
+advanceTime=function(hrs){
+  if(!S||S.mode!=="free"){_atClock();return}
+  clockify(S);hrs=hrs==null?2:hrs;var h0=S.h,h1=Math.min(31,h0+hrs),cost=0;
+  for(var x=h0;x<h1;x+=0.5){cost+=x>=24?1.25:x>=22?0.5:0}
+  S.h=h1;cost=Math.round(cost);
+  if(cost){S.san=clamp(S.san-cost,0,100);toast("Cansaço: −"+cost+" de sanidade ("+fmtH(S.h)+")")}
+  save();
+};
+/* madrugada: menos XP e menos vida nas lutas */
+var _gxClock=gainXP;
+gainXP=function(n,q){if(S&&S.mode==="free"&&S.h>=24)n=Math.round(n*0.75);return _gxClock(n,q)};
+var _sbClock=startBattle;
+startBattle=function(cfg){
+  _sbClock(cfg);
+  if(B&&S.mode==="free"&&S.h>=24){var cut=Math.round(B.php*0.15);B.php-=cut;B.log+=" Você está exausto da madrugada: −"+cut+" de vida.";renderBattle()}
+};
+/* dormir tarde rende menos e faz acordar mais tarde; virar a noite derruba Subaru */
+var _slClock=sleepDay;
+sleepDay=function(collapse){
+  if(!S||S.mode!=="free"){_slClock();return}
+  clockify(S);var h0=S.h,san0=S.san,trip=!!TRIP();
+  _slClock();
+  var gain=S.san-san0,wake=7,msg="";
+  if(collapse===true||h0>=31){S.san=clamp(san0-10,0,100);wake=12;msg="Você virou a noite e desabou de cansaço. Sanidade −10. Acordou ao meio-dia."}
+  else if(h0>=24){var f=Math.max(0.3,1-(h0-24)*0.12);if(gain>0)S.san=clamp(san0+Math.round(gain*f),0,100);wake=Math.min(12,7+(h0-23));msg="Dormiu às "+fmtH(h0)+": descanso reduzido. Acordou às "+fmtH(wake)+"."}
+  else if(h0<19&&!trip){wake=7}
+  if(trip)wake=7;
+  S.h=wake;save();
+  if(msg)setTimeout(function(){toast(msg)},700);
+};
+function collapseNow(){
+  var o=ovl('<p class="sec" style="margin:0">'+fmtH(S.h)+' · amanhecendo</p><h2 style="margin:0">O corpo cobra a conta</h2><p style="margin:0;font-size:17px;line-height:1.55">O céu clareia e Subaru nem percebe quando os joelhos cedem. Ele apaga ali mesmo, onde estava.</p><p class="sec" style="margin:0">Virar a noite: sanidade −10 e você só acorda ao meio-dia.</p><button class="btn primary" id="clOk">Desmaiar</button>');
+  $("#clOk").onclick=function(){o.hidden=true;sleepDay(true)};
+}
+/* cartão do dia no hub: relógio em vez de períodos */
+var _rhClock=renderHub;
+renderHub=function(){
+  if(S&&S.mode==="free")clockify(S);
+  _rhClock();
+  if(!S||S.mode!=="free")return;
+  var hub=$("#hub"),pips=hub&&hub.querySelector(".pips");
+  if(pips){
+    var row=pips.previousElementSibling,sp=row&&row.querySelector("span"),lv=lateLv();
+    if(sp)sp.innerHTML='<b class="hclock'+(lv?" late"+lv:"")+'">'+fmtH(S.h)+'</b> · '+phaseOf(S.h)+(S.h>=24?" (dia "+(S.day+1)+")":"")+(lv===1?' · <span class="latetag">cansaço leve</span>':lv===2?' · <span class="latetag hard">exausto</span>':'');
+    var pct=Math.min(100,Math.max(0,(S.h-7)/24*100));
+    pips.outerHTML='<div class="daybar"><div style="width:'+pct+'%"></div><i style="left:'+((22-7)/24*100)+'%"></i><i style="left:'+((24-7)/24*100)+'%"></i></div><p class="fine" style="margin:2px 0 0">A maioria das ações gasta 2h. Depois das 22:00 o cansaço cobra sanidade; de madrugada, também XP e vida nas lutas. Virar a noite derruba você às 07:00.</p>';
+  }
+  if(S.h>=31&&$("#overlay").hidden)collapseNow();
+};
+
+/* ---------- 2. Viagens em horas ---------- */
+function travelH(a,b){
+  if(a===b)return 0;var n=travelP(a,b);
+  if(n<=0){var p=POS[a],q=POS[b];return (p&&q&&Math.hypot(p[0]-q[0],p[1]-q[1])>80)?1:0.5}
+  return [0,3,6,14,20,24,30][Math.min(n,6)];
+}
+tLabel=function(h){return h<1?"30 min":h<12?h+"h":h<20?"1 dia":h<28?"1 dia e meio":"2 dias"};
+tShort=function(h){return h<1?"30m":h<12?h+"h":h<20?"1d":h<28?"1½d":"2d"};
+function hCut(h){return h<=6?Math.min(h-0.5,1):Math.round(h*0.25)}
+var _tpSkip=travelP;
+goPlace=function(id){
+  var lf=L(),pl=PLBY[id],cur=lf.loc;
+  if(!pl||pl.arc>arcReach()){toast("Chegue ao Arco "+(pl?pl.arc:"?")+" no Modo Retornos para viajar até lá.");return}
+  if(cur===id||TRIP())return;
+  clockify(S);
+  var h=travelH(cur,id),m=mountNow(),cut=0;
+  if(h>=1&&m){var mt=MTR();if(mt.n<m.free){cut=Math.max(0,hCut(h));mt.n++}}
+  h=Math.max(0.5,h-cut);
+  if(DR()&&cur!==id)dgEnd("Você deixa a expedição.",false);
+  var night=S.h>=21;
+  if(S.h+h<=22||h<6){
+    advanceTime(h);lf.loc=id;pfSave();save();
+    toast("Viagem até "+pl.n+": "+tLabel(h)+(cut?" ("+m.n+" poupou "+cut+"h)":"")+" · "+fmtH(S.h));
+    renderHub();
+    if(night&&h>=1&&Math.random()<(S.h>=24?0.3:0.18))setTimeout(nightAmbush,60);
+    return;
+  }
+  var go=Math.max(0,22-S.h);if(go)advanceTime(go);
+  lf.trip={to:id,from:cur,left:h-go,tot:h,hrs:1};pfSave();save();
+  toast("Viagem longa até "+pl.n+": "+tLabel(h)+(cut?" ("+m.n+" poupou "+cut+"h)":""));
+  dj("vida","Partiu de "+PLBY[cur].n+" rumo a "+pl.n+" ("+tLabel(h)+").");
+  renderHub();
+};
+function nightAmbush(){
+  var o=ovl('<p class="sec" style="margin:0">Estrada · '+fmtH(S.h)+'</p><h2 style="margin:0">Emboscada no escuro!</h2><p style="margin:0;font-size:17px;line-height:1.55">Viajar de noite tem preço. Algo salta da beira da estrada.</p><button class="btn primary" id="naGo">Lutar</button>');
+  $("#naGo").onclick=function(){o.hidden=true;startHubFight()};
+}
+function fixTrip(){var tp=L().trip;if(tp&&!tp.hrs){tp.left=tp.left*5;tp.tot=(tp.tot||tp.left)*5;tp.hrs=1;pfSave()}return tp}
+tripStep=function(){
+  var lf=L(),tp=fixTrip();if(!tp||S.h>=22)return;
+  var k=Math.min(tp.left,22-S.h);S.h+=k;tp.left-=k;
+  if(tp.left<=0.01){lf.loc=tp.to;lf.trip=null;toast("Você chegou a "+PLBY[tp.to].n+" ("+fmtH(S.h)+").");dj("vida","Chegou a "+PLBY[tp.to].n+".")}
+  pfSave();save();
+};
+campOverlay=function(){
+  var tp=fixTrip();if(!tp)return;
+  var road=["A estrada some no escuro. Você monta um acampamento simples e escuta os grilos.","As carroças param para a noite. Alguém divide pão e histórias em volta da fogueira.","O vento muda. Você dorme encostado numa pedra, com a mochila de travesseiro."];
+  var o=ovl('<p class="sec" style="margin:0">Em viagem · '+esc(PLBY[tp.from].n)+' → '+esc(PLBY[tp.to].n)+' · '+fmtH(S.h)+'</p><h2 style="margin:0">Noite na estrada</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(road[(S.day+Math.round(tp.left))%road.length])+'</p><p class="sec" style="margin:0">Faltam '+tLabel(tp.left)+' de viagem.</p>'+
+   '<button class="btn primary" id="tCamp">Acampar e seguir amanhã</button><button class="btn" id="tNight">Seguir viajando de noite (cansaço e emboscadas)</button>');
+  $("#tCamp").onclick=function(){o.hidden=true;sleepDay()};
+  $("#tNight").onclick=function(){
+    o.hidden=true;var lf=L(),k=Math.min(tp.left,31-S.h);advanceTime(k);tp.left-=k;
+    if(tp.left<=0.01){lf.loc=tp.to;lf.trip=null;toast("Você chegou a "+PLBY[tp.to].n+" de madrugada ("+fmtH(S.h)+").")}
+    pfSave();save();renderHub();
+    if(!lf.trip&&Math.random()<0.3)setTimeout(nightAmbush,60);
+  };
+};
+/* o hub chama a viagem e o acampamento usando horas */
+renderHub=(function(prev){return function(){
+  if(S&&S.mode==="free"&&TRIP()&&S.h<22)tripStep();
+  prev();
+  if(S&&S.mode==="free"&&TRIP()&&S.h>=22&&S.h<31&&$("#overlay").hidden)campOverlay();
+}})(renderHub);
+/* ver estrelas: à noite (a partir das 19:00) */
+YACT.forEach(function(a){if(a.k==="estrelas")a.d="A partir das 19:00 · 1 vez por dia"});
+
+/* ---------- 3. Comércio entre cidades ---------- */
+var TG=[
+ {id:"ferro",n:"Minério de ferro",b:20,mk:["pedraferro"],want:["capital","vollachia"]},
+ {id:"peixe",n:"Peixe salgado",b:12,mk:["ribeirinha","pristella"],want:["torre","guaral","capital"]},
+ {id:"especia",n:"Especiarias do deserto",b:45,mk:["torre","caravana"],want:["vila","vale","vollachia"]},
+ {id:"vinho",n:"Vinho do vale",b:30,mk:["vale"],want:["capital","pristella","guaral"]},
+ {id:"seda",n:"Seda de Pristella",b:70,mk:["pristella"],want:["vollachia","capital"]},
+ {id:"la",n:"Lã de Irlam",b:18,mk:["vila"],want:["vollachia","guaral","torre"]},
+ {id:"armas",n:"Armas imperiais",b:90,mk:["vollachia","guaral"],want:["capital","caravana","liphas"]},
+ {id:"livros",n:"Livros raros",b:60,mk:["torre"],want:["capital","santuario"]},
+ {id:"ervas",n:"Ervas do Santuário",b:25,mk:["santuario"],want:["capital","pristella","guaral"]},
+ {id:"madeira",n:"Madeira da Flugel",b:22,mk:["liphas"],want:["pristella","torre","ribeirinha"]}
+];
+var TGBY={};TG.forEach(function(g){TGBY[g.id]=g});
+var TCITY=["vila","capital","caravana","vale","liphas","pedraferro","ribeirinha","pristella","santuario","torre","guaral","vollachia"];
+function TRD(){var t=PF.trd||(PF.trd={cargo:{},cost:{},mk:{},profit:0,day:-1});if(t.day!==S.day){t.day=S.day;t.mk={}}return t}
+function cargoN(){var c=TRD().cargo,n=0;for(var k in c)n+=c[k];return n}
+function cargoCap(){var m=mountNow();return 12+(m?{pony:10,cavalo:20,lagarto:35}[m.id]||0:0)}
+function basePrice(g,city){
+  if(g.mk.indexOf(city)>=0)return g.b*0.62;
+  var d=Math.min.apply(null,g.mk.map(function(p){return travelP(p,city)}));
+  return g.b*Math.min(1.75,0.85+0.11*d+(g.want.indexOf(city)>=0?0.28:0));
+}
+function priceOf(gid,city){
+  var g=TGBY[gid],p=basePrice(g,city)*(0.88+0.24*hh(S.day*97+sh2(gid+city)));
+  var net=(TRD().mk[city]||{})[gid]||0;p*=clamp(1+0.04*net,0.6,1.6);
+  return p;
+}
+function buyP(g,c){return Math.max(1,Math.round(priceOf(g,c)*1.05))}
+function sellP(g,c){return Math.max(1,Math.round(priceOf(g,c)*0.95))}
+function tradeOk(c){return TCITY.indexOf(c)>=0&&PLBY[c]&&PLBY[c].arc<=arcReach()}
+function trBuy(gid,n){
+  var t=TRD(),city=L().loc,got=0,spent=0;
+  for(var i=0;i<n;i++){var p=buyP(gid,city);if(S.coin<p||cargoN()>=cargoCap())break;S.coin-=p;spent+=p;
+    t.cost[gid]=((t.cost[gid]||0)*(t.cargo[gid]||0)+p)/((t.cargo[gid]||0)+1);t.cargo[gid]=(t.cargo[gid]||0)+1;(t.mk[city]=t.mk[city]||{})[gid]=((t.mk[city]||{})[gid]||0)+1;got++}
+  if(got){sfx("buy");pfSave();save()}return got;
+}
+function trSell(gid,n){
+  var t=TRD(),city=L().loc,have=t.cargo[gid]||0,earn=0,k=0;n=Math.min(n,have);
+  for(var i=0;i<n;i++){var p=sellP(gid,city);earn+=p;(t.mk[city]=t.mk[city]||{})[gid]=((t.mk[city]||{})[gid]||0)-1;k++}
+  if(!k)return 0;
+  var prof=earn-Math.round((t.cost[gid]||0)*k);S.coin+=earn;t.cargo[gid]=have-k;if(!t.cargo[gid]){delete t.cargo[gid];delete t.cost[gid]}
+  t.profit+=prof;if(t.profit>=1000)unlock("trade1k");if(t.profit>=10000)unlock("trade10k");
+  if(prof>0)L().rep=Math.min(100,L().rep+0.2*k);
+  sfx("buy");pfSave();save();toast("Vendeu "+k+" × "+TGBY[gid].n+": ¤ +"+earn+" (lucro "+(prof>=0?"+":"")+prof+")");
+  if(prof>0)dj("vida","Vendeu "+TGBY[gid].n+" em "+PLBY[city].n+" com lucro de ¤ "+prof+".");
+  return k;
+}
+ACH.trade1k=["Mascate","Lucre ¤ 1.000 com comércio entre cidades."];
+ACH.trade10k=["Rota de ouro","Lucre ¤ 10.000 com comércio entre cidades."];
+function rumors(){
+  var out=[],seen={};for(var i=0;i<3;i++){var g=TG[Math.floor(hh(S.day*13+i*7)*TG.length)];if(seen[g.id])continue;seen[g.id]=1;
+    var best=null;TCITY.forEach(function(c){if(!tradeOk(c))return;var p=sellP(g.id,c);if(!best||p>best.p)best={c:c,p:p}});
+    if(best)out.push(g.n+" vale ¤ "+best.p+" em "+(PLBY[best.c].s||PLBY[best.c].n))}
+  return out;
+}
+function tradeMenu(){
+  var city=L().loc,t=TRD(),pl=PLBY[city];if(!tradeOk(city))return;
+  var h='<p class="sec" style="margin:0">Comércio · '+esc(pl.n)+'</p><h2 style="margin:0">Comprar barato, vender caro</h2><p class="fine" style="margin:0">Cada cidade produz algumas mercadorias (barato) e procura outras (caro). Quanto mais longe da origem, maior o preço. Comprar sobe o preço do dia; vender derruba. Carga: <b>'+cargoN()+'/'+cargoCap()+'</b> (montarias aumentam). Lucro total: <b>¤ '+Math.round(t.profit)+'</b>. <b class="coin">¤ '+S.coin+'</b></p>';
+  var rm=rumors();if(rm.length)h+='<p class="fine" style="margin:0"><b>Boatos de hoje:</b> '+esc(rm.join(" · "))+'.</p>';
+  TG.forEach(function(g){
+    var b=buyP(g.id,city),s=sellP(g.id,city),have=t.cargo[g.id]||0,tag=g.mk.indexOf(city)>=0?'<em class="ttag cheap">barato: produzido aqui</em>':g.want.indexOf(city)>=0?'<em class="ttag dear">caro: muito procurado</em>':'';
+    h+='<div class="item trow"><div><b>'+esc(g.n)+'</b> '+tag+'<span>Compra ¤ '+b+' · venda ¤ '+s+(have?' · você tem '+have+' (custo médio ¤ '+Math.round(t.cost[g.id]||0)+(s>(t.cost[g.id]||0)?', <b style="color:#7ee2a0">lucro</b>':', <b style="color:#ff9bab">prejuízo</b>')+')':'')+'</span></div><div class="tbtn">'+
+      '<button class="btn small" data-tr="b1:'+g.id+'"'+((S.coin<b||cargoN()>=cargoCap())?" disabled":"")+'>+1</button><button class="btn small" data-tr="b5:'+g.id+'"'+((S.coin<b||cargoN()>=cargoCap())?" disabled":"")+'>+5</button>'+
+      (have?'<button class="btn small" data-tr="s1:'+g.id+'">−1</button><button class="btn small" data-tr="sa:'+g.id+'">Tudo</button>':'')+'</div></div>';
+  });
+  h+='<button class="btn small" id="trX">Voltar</button>';
+  var o=ovl(h),sc=o.scrollTop;
+  $("#trX").onclick=function(){o.hidden=true;try{updHead()}catch(_){}renderHub()};
+  o.querySelectorAll("[data-tr]").forEach(function(bt){bt.onclick=function(){var v=bt.getAttribute("data-tr").split(":"),k=v[0],g=v[1],y=o.scrollTop;
+    if(k==="b1")trBuy(g,1);else if(k==="b5")trBuy(g,5);else if(k==="s1")trSell(g,1);else trSell(g,9999);
+    tradeMenu();$("#overlay").scrollTop=y}});
+}
+PAX.push(function(lf){if(!tradeOk(lf.loc))return "";var n=cargoN();return '<button class="act" data-ac="trade"><b>Comércio</b><span>Mercadorias da região'+(n?" · carga "+n+"/"+cargoCap():"")+'. Compre aqui, venda longe</span></button>'});
+PAH.push(function(a){if(a==="trade"){tradeMenu();return true}return false});
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
