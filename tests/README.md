@@ -14,6 +14,8 @@ node tests/harness.js tests/v10.js   # família, sinergias, bestiário, missões
 node tests/harness.js tests/v11.js   # torneio, móveis, forja lendária
 node tests/harness.js tests/v12.js   # cônjuge em casa
 node tests/harness.js tests/v13.js   # relógio, viagens em horas, comércio
+node tests/harness.js tests/v20_pesca.js   # pesca: lançamento, fisgada, minijogo, diário
+node tests/fish_sim.js '{"s0":0.8,"s1":1.8,"dart":1.25,"up":0.37,"upd":0.1,"dn":0.23,"dnd":0.15}'   # taxa de captura por dificuldade e vara
 node tests/harness.js tests/v17.js   # grupo de batalha, caçada lendária, aliados canônicos
 ```
 

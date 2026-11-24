@@ -435,6 +435,21 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 #hub header .chtxt{overflow:visible}
 .rgleft{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
 .rgarc{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.fpow{height:16px;border-radius:8px;background:#0a0d1a;border:1px solid var(--line);overflow:hidden;margin:6px 0}
+.fpow>div{height:100%;background:linear-gradient(90deg,#58c58a,#e4b867 70%,#ff6b81)}
+.sv{display:flex;gap:10px;align-items:stretch;user-select:none;-webkit-user-select:none;touch-action:none}
+.svtrack{position:relative;width:64px;height:280px;border-radius:14px;border:2px solid #8a6a3a;background:linear-gradient(#1d3b5c,#0e2034);overflow:hidden;flex:none;touch-action:none}
+.svwater{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 10px,transparent 10px 22px)}
+.svbar{position:absolute;left:6px;right:6px;border-radius:8px;background:rgba(120,230,150,.35);border:2px solid #8ff0a4;transition:background .1s}
+.svbar.on{background:rgba(120,230,150,.6);box-shadow:0 0 12px rgba(120,230,150,.6)}
+.svfish{position:absolute;left:50%;transform:translateX(-50%);width:34px;height:20px;pointer-events:none}
+.svchest{position:absolute;right:4px;width:20px;height:20px;margin-bottom:-10px;font-size:16px;color:#ffd28a;text-align:center;line-height:20px;border-radius:4px;background:conic-gradient(#ffd28a calc(var(--cp,0)*360deg),rgba(0,0,0,.4) 0)}
+.svchest.got{display:none}
+.svprog{width:14px;height:280px;border-radius:7px;background:#0a0d1a;border:1px solid var(--line);position:relative;overflow:hidden;flex:none}
+.svprog>div{position:absolute;left:0;right:0;bottom:0;background:#e4b867}.svprog>div.low{background:#ff6b81}.svprog>div.high{background:#58c58a}
+.svside{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:flex-end}
+.svhold{min-height:120px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none}
+.fdex>summary{min-height:40px}
 </style>
 
 
@@ -4214,7 +4229,7 @@ function paneMarket(p){
 function bountyGen(day){
   var r=0;function R(){return hh(day*7919+(r++)*104729)}
   var reach=arcReach(),list=[];
-  var fishes=FISH.filter(function(f){return !f.junk&&f.r<=Math.min(3,1+Math.floor(reach/3))});
+  var fishes=FISH.filter(function(f){return !f.junk&&f.r<=Math.min(3,1+Math.floor(reach/3))&&(f.arc||1)<=reach});
   var kinds=["fish","hunt","train","bond","cons"];
   var used={};
   while(list.length<3){
@@ -7913,6 +7928,227 @@ rgShow=function(c,resume){
   mb.querySelector("small").textContent="Arco "+Math.min(RG.arc,8)+" · trocar";mb.title=first.textContent;
   box.appendChild(mb);top.replaceChild(box,first);
 };
+
+/* =====================================================================
+   ATUALIZAÇÃO 20: pesca nova.
+   - 13 pontos de pesca, um por lugar do mapa, cada um com suas espécies.
+   - Peixes com horário, estação e clima.
+   - Minijogo inspirado em Stardew Valley: segure para subir a barra,
+     mantenha o peixe dentro, encha a captura; baús de tesouro e captura perfeita.
+   ===================================================================== */
+/* pontos de pesca: [id, nome, lugar do mapa, cor, descrição] (o arco vem do lugar) */
+var FSPOT=[
+ ["capital","Canais da Capital","capital","#34507a","Canais de pedra cortando o mercado. Peixe de cidade é esperto."],
+ ["irlam","Lago de Irlam","floresta","#2f6f86","Água calma ao lado da floresta, cheia de sombras e raízes."],
+ ["mansao","Lago da Mansão","casa","#3a4f8a","Espelho escuro atrás do jardim. Alguém alimenta estes peixes."],
+ ["riacho","Riacho de Irlam","vila","#2f7d8a","Água rasa e rápida que passa atrás da taverna."],
+ ["vale","Lagoa do Vale","vale","#3d7a5c","Uma lagoa morna entre plantações e moinhos."],
+ ["mina","Lago subterrâneo","pedraferro","#2b3b56","Água negra no fundo de uma galeria abandonada. Só se pesca com lanterna."],
+ ["flugel","Poço da Flugel","liphas","#3b6b45","Um poço natural entre as raízes da grande árvore."],
+ ["santuario","Riacho do Santuário","santuario","#2f7a6a","Água fria correndo sob as árvores da barreira."],
+ ["pristella","Canais de Pristella","pristella","#2d86b8","Canais de uma cidade que parece de cristal."],
+ ["reino","Rio de Lugunica","ribeirinha","#4a7ab8","O grande rio do reino. Os pescadores daqui não mentem sobre tamanho. Quase nunca."],
+ ["oasis","Oásis da Torre","torre","#3a9a8a","Água limpa no meio do deserto, sem explicação de onde vem."],
+ ["vollachia","Rio gelado de Vollachia","vollachia","#4a5c7a","Gelo fino e água negra no império."],
+ ["fronteira","Rio da Fronteira","guaral","#5a6a7a","O rio que separa dois reinos e não obedece a nenhum."]
+];
+SPOTS.length=0;
+FSPOT.forEach(function(x){var pl=PLBY[x[2]];SPOTS.push({id:x[0],n:x[1],place:x[2],arc:pl?pl.arc:1,c:x[3],d:x[4]})});
+var SPOTBY={};SPOTS.forEach(function(s){SPOTBY[s.id]=s});
+function spotAt(loc){for(var i=0;i<SPOTS.length;i++)if(SPOTS[i].place===loc)return SPOTS[i];return null}
+/* comportamento do peixe no minijogo */
+var FBEH={mixed:"Misto",smooth:"Suave",dart:"Agitado",sinker:"Afundador",floater:"Flutuador"};
+var FTM={m:"de manhã",t:"à tarde",n:"à noite"};
+/* peixes antigos: novos lugares e comportamento */
+(function(){
+  var re={lambari:[["irlam","capital"],"dart"],carpa:[["irlam","mansao","capital","santuario"],"smooth"],bagre:[["irlam"],"sinker","n"],koi:[["mansao"],"floater"],
+   truta:[["santuario","vollachia"],"mixed","m"],barbo:[["santuario"],"sinker"],vidro:[["pristella"],"smooth"],enguia:[["pristella"],"dart","n"],
+   gelo:[["vollachia"],"sinker"],esturjao:[["vollachia","pristella"],"sinker"],cristal:[["pristella","vollachia"],"floater","n"],
+   espectro:[["irlam","mansao","santuario"],"dart","n"],perca:[["irlam","mansao","reino"],"mixed","t"],salmao:[["santuario","vollachia","reino"],"dart","m"],
+   areia:[["oasis"],"sinker"],arraia:[["oasis","pristella"],"smooth"],lampreia:[["vollachia","santuario"],"mixed","n"],dourado:[["reino","irlam"],"dart","t"],
+   serpente:[["reino","pristella","oasis"],"smooth","n"],lua:[["reino","oasis","vollachia"],"floater","n"]};
+  Object.keys(re).forEach(function(id){var f=FISHBY[id];if(!f)return;f.s=re[id][0];f.b=re[id][1];if(re[id][2])f.tm=re[id][2]});
+})();
+/* espécies novas: [id, nome, raridade, comportamento, horário, texto, extra] */
+var NEWFISH={
+ capital:[["tilapia","Tilápia do mercado",1,"mixed","","Cresce perto das barracas, engordando de restos de pão."],["sardinha","Sardinha de canal",1,"dart","m","Anda em cardume e foge em cardume."],["peixerei","Peixe-rei da capital",2,"smooth","t","Nada devagar, como quem sabe que é observado."],["bagrereal","Bagre-real",2,"sinker","n","Mora sob as pontes e só sai quando o mercado fecha."],["moeda","Peixe-moeda",3,"dart","","Brilha como as moedas que caem das pontes."],["enguiacap","Enguia dos esgotos reais",2,"mixed","n","Ninguém quer saber onde ela esteve."],["coroa","Carpa da coroa",4,"floater","","Tem uma mancha dourada no formato de uma coroa. Dizem que só aparece para quem não quer o trono."]],
+ irlam:[["tucunare","Tucunaré-sombra",2,"dart","t","Ataca a isca como se fosse pessoal."],["folha","Peixe-folha",1,"floater","","Parece uma folha caída até você tentar pegar."],["pirarucu","Pirarucu de Irlam",3,"sinker","","Enorme e antigo. Os moradores juram que ele tem nome."]],
+ mansao:[["vermelho","Peixe-vermelho do jardim",1,"floater","","Alguém deu nome a cada um. Ninguém lembra os nomes."],["cascudo","Cascudo de pedra",1,"sinker","","Gruda no fundo e fica ofendido quando é puxado."],["espelho","Peixe-espelho",2,"smooth","n","Reflete a lua tão bem que parece que há duas."],["chama","Carpa-chama",3,"dart","t","Escamas vermelhas que parecem quentes ao toque."]],
+ riacho:[["lprata","Lambari-prata",1,"dart","","Pequeno, rápido e sempre com fome."],["piaba","Piaba saltadora",1,"dart","m","Pula para fora d'água só para provocar."],["tpintada","Truta-pintada",2,"mixed","m","Cada pinta parece desenhada à mão."],["bagrinho","Bagrinho do riacho",1,"sinker","n","Bigodudo e desconfiado."],["pedra","Peixe-pedra",2,"sinker","","Imóvel até a hora em que não está mais."],["ruivo","Salmão-ruivo",3,"dart","","Sobe o riacho no outono, teimoso como ninguém.",{se:"out"}],["fita","Enguia-fita",2,"smooth","n","Fina como uma fita de cabelo, e tão escorregadia quanto."],["arcoiris","Truta arco-íris",4,"mixed","","Só aparece depois da chuva, quando o céu também tem cores.",{rain:1}]],
+ vale:[["tvale","Tilápia do vale",1,"mixed","","Gorda e tranquila, como a vida no vale."],["mel","Carpa-mel",2,"smooth","t","Tem cor de mel e o gênio de quem dorme depois do almoço."],["trigo","Peixe-trigo",1,"floater","m","Dourado como a plantação ao lado."],["traira","Traíra",2,"dart","n","Dentes demais para um peixe tão pequeno."],["lucio","Lúcio do vale",3,"mixed","","Paciente e rápido na hora certa."],["vagalume","Peixe-vaga-lume",3,"floater","n","Brilha de leve na água escura do verão.",{se:"ver"}],["ancia","Carpa-anciã",4,"sinker","","Dizem que ela já era velha quando o moinho foi construído."]],
+ mina:[["cego","Peixe-cego",1,"smooth","","Nunca viu a luz e não faz questão."],["bferro","Bagre-ferro",2,"sinker","","Pesado como minério e igualmente teimoso."],["lanterna","Peixe-lanterna",2,"floater","","Carrega a própria luz, e você agradece."],["carvao","Enguia de carvão",2,"dart","","Some na água negra num piscar."],["geodo","Peixe-geodo",3,"sinker","","Por fora, pedra. Por dentro, cristais."],["salam","Salamandra-d'água",3,"mixed","","Não é peixe, mas ninguém avisou a ela."],["mitril","Peixe-mitril",4,"dart","","Escamas que os ferreiros pagariam fortunas para ter."]],
+ flugel:[["raiz","Peixe-raiz",1,"sinker","","Cresce entre as raízes e tem gosto de terra boa."],["lverde","Lambari-verde",1,"dart","","Da cor do musgo, e tão comum quanto."],["musgo","Carpa-musgo",2,"smooth","","Tem musgo de verdade nas costas."],["folhaouro","Peixe-folha-de-ouro",3,"floater","","Aparece quando as folhas da Flugel caem.",{se:"out"}],["cipo","Enguia-cipó",2,"mixed","n","Enrola na linha como planta em muro."],["semente","Peixe-semente",2,"floater","m","Pequeno e cheio de promessa."],["guardiao","Guardião da Flugel",4,"sinker","","Um peixe imenso que dorme sob a árvore desde sempre."]],
+ santuario:[["barreira","Peixe-barreira",2,"smooth","","Nada em círculos, como se a barreira o prendesse também."],["tfantasma","Truta-fantasma",3,"dart","n","Pálida, rápida e silenciosa."],["pcoelho","Peixe-coelho",1,"dart","","Orelhas de nadadeira e uma fome que assusta."]],
+ pristella:[["gondola","Peixe-gôndola",1,"floater","","Segue os barcos esperando migalhas."],["linguado","Linguado dos canais",1,"sinker","","Achatado contra o fundo, de olho em tudo."],["ponte","Peixe-ponte",2,"mixed","t","Mora embaixo das pontes e conhece todas."]],
+ reino:[["corvina","Corvina",1,"mixed","","Faz um barulho estranho quando sai da água."],["surubim","Surubim",2,"sinker","n","Pintado, grande e paciente."],["pacu","Pacu de rio",1,"smooth","","Come frutas que caem na água. Gosto de quem tem bom gosto."],["piranha","Piranha-prata",2,"dart","","Pequena, mas não pense nisso perto dela."]],
+ oasis:[["miragem","Peixe-miragem",2,"dart","t","Às vezes você jura que pegou, e não pegou."],["cdeserto","Carpa do deserto",1,"smooth","","Vive na água mais preciosa do mundo e sabe disso."],["bescorp","Bagre-escorpião",2,"sinker","n","Tem um ferrão no rabo. Pegue com cuidado."],["cadente","Peixe-estrela-cadente",3,"floater","n","Só aparece quando o céu está limpo."],["escaravelho","Escaravelho-d'água",1,"mixed","","Não é peixe, mas morde a isca do mesmo jeito."]],
+ vollachia:[["geada","Peixe-geada",1,"smooth","","Nada devagar para não congelar."],["limperial","Lúcio imperial",2,"dart","","Ataca em linha reta, como um soldado."],["lanca","Bacalhau-lança",2,"mixed","m","Pontudo, frio e cheio de opinião."]],
+ fronteira:[["tguerra","Truta-de-guerra",1,"mixed","","Cheia de cicatrizes, como os moradores."],["escudo","Peixe-escudo",2,"sinker","","Uma carapaça grossa que entorta anzóis."],["lnegro","Lúcio-negro",2,"dart","n","Só aparece quando as tochas da muralha acendem."],["efronteira","Esturjão-da-fronteira",3,"sinker","","Atravessa o rio de um reino para o outro sem pedir licença."],["estandarte","Bagre-estandarte",1,"smooth","","Tem uma nadadeira que parece uma bandeira rasgada."],["sferro","Salmão de ferro",3,"dart","m","Mais duro que a armadura dos guardas."],["tregua","Peixe-trégua",4,"floater","","Dizem que só aparece na chuva, quando ninguém está lutando.",{rain:1}]]
+};
+(function(){
+  var junk=FISH.filter(function(f){return f.junk});FISH.length=FISH.length-junk.length;
+  var V={1:1,2:2,3:4,4:9},E={1:6,2:9,3:12,4:22},H={1:.18,2:.42,3:.63,4:.86},BH={dart:.08,smooth:-.05,mixed:0,sinker:.02,floater:-.02};
+  Object.keys(NEWFISH).forEach(function(sp){NEWFISH[sp].forEach(function(x,i){
+    if(FISHBY[x[0]])return;
+    var f={id:x[0],n:x[1],s:[sp],r:x[2],b:x[3],v:V[x[2]]+(i%2),m:(sh2(x[0])>>>0)%4,e:E[x[2]],h:clamp(H[x[2]]+(BH[x[3]]||0),.1,.95),t:x[5]};
+    if(x[4])f.tm=x[4];if(x[6])Object.assign(f,x[6]);
+    FISH.push(f);FISHBY[f.id]=f;
+  })});
+  junk.forEach(function(j){FISH.push(j)});
+  FISH.forEach(function(f){if(f.junk)return;if(!f.b)f.b="mixed";f.arc=Math.min.apply(null,f.s.map(function(s){return SPOTBY[s]?SPOTBY[s].arc:9}))});
+})();
+function fishCond(f){var c=[];if(f.tm)c.push(FTM[f.tm]);if(f.se){var se=SEAS.filter(function(x){return x.id===f.se})[0];if(se)c.push("no "+se.n.toLowerCase())}if(f.rain)c.push("com chuva");return c.join(", ")}
+function fishNowOk(f){
+  if(f.rain&&!/Chuva/.test(wxOf().n))return false;
+  if(f.se&&S.mode==="free"){try{if(seasonOf().id!==f.se)return false}catch(_){}}
+  if(f.tm&&S.mode==="free"&&typeof S.h==="number"){var h=((S.h%24)+24)%24,ok=f.tm==="m"?(h>=5&&h<12):f.tm==="t"?(h>=12&&h<18):(h>=18||h<5);if(!ok)return false}
+  return true;
+}
+pickFish=function(){
+  var rod=S.rod||0,pw=FS.power||0.5,pool=[],tot=0;
+  FISH.forEach(function(f){
+    if(!f.junk&&(f.s.indexOf(FS.spot)<0||!fishNowOk(f)))return;
+    var w=f.junk?Math.max(1.5,6-rod-pw*2):[60,26,10,2][f.r-1]*(f.r>=2?1+pw*0.8:1)+(f.r===2?rod*4:f.r===3?rod*3:f.r===4?rod*1.2:0);
+    pool.push([f,w]);tot+=w;
+  });
+  var x=Math.random()*tot;for(var i=0;i<pool.length;i++){x-=pool[i][1];if(x<=0)return pool[i][0]}
+  return pool[0][0];
+};
+/* no Modo Livre o limite é o relógio: cada lançamento gasta 30 min */
+var _fc20=fishChk;fishChk=function(){if(S&&S.mode==="free"){S.fcast=99;return}_fc20()};
+function fishSvg(col){return '<svg viewBox="0 0 40 24" width="34" height="20" aria-hidden="true"><path d="M4 12 Q14 1 27 6 L38 1 L35 12 L38 23 L27 18 Q14 23 4 12Z" fill="'+col+'" stroke="#0a0d1a" stroke-width="1.5"/><circle cx="11" cy="10" r="2" fill="#0a0d1a"/></svg>'}
+/* lançamento com força (barra que vai e volta) */
+fIdle=function(msg){
+  fishChk();FS.st="idle";cancelAnimationFrame(FS.raf);
+  var sp=spotOf(),left=S.fcast,free=S.mode==="free";
+  if(!fStage(sceneHTML()+'<p class="fmsg">'+esc(msg||sp.d)+'</p><button class="btn primary" id="fGo"'+(left<=0?" disabled":"")+'>'+(left>0?(free?"Preparar o lançamento · 30 min":"Preparar o lançamento ("+left+")"):"Sem fôlego por agora")+'</button>'+(left<=0?'<p class="rgnote">As tentativas voltam quando você retornar pela morte ou avançar de arco.</p>':'')))return;
+  var g=$("#fGo");if(g)g.onclick=fPower;
+  fInv();
+};
+function fPower(){
+  fishChk();if(S.fcast<=0)return;
+  FS.st="power";var t0=performance.now();
+  fStage(sceneHTML()+'<p class="fmsg">Toque para lançar quando a barra estiver cheia. Lançamentos fortes atraem peixes raros.</p><div class="fpow"><div id="fpw"></div></div><button class="btn primary" id="fThrow">Lançar!</button>');
+  (function loop(){if(FS.st!=="power"||!$("#fpw")){return}var ph=((performance.now()-t0)/900)%2,v=ph<1?ph:2-ph;FS.power=v;$("#fpw").style.width=(v*100)+"%";FS.raf=requestAnimationFrame(loop)})();
+  $("#fThrow").onpointerdown=function(){if(FS.st!=="power")return;cancelAnimationFrame(FS.raf);fCast2()};
+}
+function fCast2(){
+  S.fcast--;if(S.mode==="free"){advanceTime(0.5);var fh=$("#fHead");if(fh)fh.innerHTML="¤ "+S.coin+" · "+RODS[S.rod||0][0]+" · "+fmtH(S.h)}save();
+  FS.fish=pickFish();FS.st="wait";var pw=FS.power||0.5;
+  fStage(sceneHTML("wait")+'<p class="fmsg" id="fMsg">'+(pw>0.9?"Lançamento perfeito! ":pw>0.6?"Bom lançamento. ":"")+'A linha desce… espere o sinal.</p><button class="btn" id="fHook">Fisgar</button>');
+  $("#fHook").onpointerdown=function(){
+    if(FS.st==="wait"){clearTimeout(FS.t);sfx("bad");fIdle("Cedo demais. O peixe se assustou.")}
+    else if(FS.st==="bite")fHook();
+  };
+  FS.t=setTimeout(fBite,rndi(1200,3800)-Math.round(pw*700));
+}
+/* o minijogo de puxar */
+fHook=function(){
+  clearTimeout(FS.t);var f=FS.fish;
+  if(f.junk){fResult(f);return}
+  var rod=S.rod||0,diff=f.h;
+  var G={st:"reel",barH:clamp(0.2+rod*0.03+tr("g4")*0.02-(diff>0.8?0.02:0),0.16,0.42),bar:0.1,bv:0,fy:0.3,ft:0.5,fv:0,next:0,prog:0.28,perfect:true,hold:false,
+    chest:Math.random()<0.18+0.03*rod?{y:0.15+Math.random()*0.7,t:0,got:false,at:1+Math.random()*2}:null,t0:performance.now(),last:performance.now()};
+  FS.G=G;FS.st="reel";
+  fStage('<div class="sv"><div class="svtrack" id="svT"><div class="svwater"></div><div class="svbar" id="svB"></div><div class="svfish" id="svF">'+fishSvg(f.r>=4?"#ffcf70":f.r===3?"#c07bff":f.r===2?"#6fa8ff":"#cfe0ee")+'</div><div class="svchest" id="svC" hidden>▣</div></div><div class="svprog"><div id="svP"></div></div><div class="svside"><p class="fmsg" id="svMsg">Segure para subir a barra verde. Mantenha o peixe dentro dela.</p><p class="fine" style="margin:0">'+esc(FBEH[f.b]||"")+' · dificuldade '+Math.round(diff*100)+'</p><button class="btn primary svhold" id="svH">Segurar</button></div></div>');
+  var tr0=$("#svT"),hb=$("#svH");
+  function on(e){G.hold=true;if(e&&e.preventDefault)e.preventDefault()}function off(){G.hold=false}
+  [tr0,hb].forEach(function(el){if(!el)return;el.addEventListener("pointerdown",on);el.addEventListener("pointerup",off);el.addEventListener("pointercancel",off);el.addEventListener("pointerleave",off);el.addEventListener("contextmenu",function(e){e.preventDefault()})});
+  FS.kd=function(e){if(e.key===" "||e.key==="ArrowUp"){G.hold=true;e.preventDefault()}};FS.ku=function(e){if(e.key===" "||e.key==="ArrowUp")G.hold=false};
+  document.addEventListener("keydown",FS.kd);document.addEventListener("keyup",FS.ku);
+  function done(){document.removeEventListener("keydown",FS.kd);document.removeEventListener("keyup",FS.ku)}
+  (function loop(){
+    if(FS.st!=="reel"||!$("#svB")||$("#overlay").hidden){done();if(FS.st==="reel")fishStop();return}
+    var now=performance.now(),dt=Math.min(0.05,(now-G.last)/1000);G.last=now;var T=(now-G.t0)/1000;
+    /* barra: segurar sobe, soltar cai; quica no fundo */
+    G.bv+=(G.hold?2.6:-2.2)*dt;G.bv=clamp(G.bv,-1.6,1.6);G.bar+=G.bv*dt;
+    if(G.bar<0){G.bar=0;G.bv=-G.bv*0.35}if(G.bar>1-G.barH){G.bar=1-G.barH;G.bv=0}
+    /* peixe: escolhe alvos conforme o comportamento */
+    if(T>=G.next){
+      var b=f.b,r=Math.random();
+      if(b==="dart"){G.ft=clamp(G.fy+(r<0.5?-1:1)*(0.25+Math.random()*0.35),0.02,0.98);G.next=T+0.35+Math.random()*(1.1-diff*0.6)}
+      else if(b==="smooth"){G.ft=clamp(G.fy+(Math.random()-0.5)*0.5,0.02,0.98);G.next=T+1+Math.random()*1.2}
+      else if(b==="sinker"){G.ft=Math.random()<0.7?Math.random()*0.4:Math.random();G.next=T+0.5+Math.random()*1.2}
+      else if(b==="floater"){G.ft=Math.random()<0.7?0.6+Math.random()*0.4:Math.random();G.next=T+0.5+Math.random()*1.2}
+      else{G.ft=Math.random();G.next=T+0.4+Math.random()*(1.2-diff*0.5)}
+    }
+    var spd=(0.8+diff*1.8)*(f.b==="dart"?1.25:f.b==="smooth"?0.6:1);
+    G.fv+=((G.ft-G.fy)*spd*3-G.fv*2.2)*dt;G.fy=clamp(G.fy+G.fv*dt,0,1);
+    /* captura */
+    var inside=G.fy>=G.bar-0.01&&G.fy<=G.bar+G.barH+0.01;
+    if(inside)G.prog+=(0.37-diff*0.1+(S.rod||0)*0.02)*dt;else{G.prog-=(0.23+diff*0.15)*dt;if(T>0.6)G.perfect=false}
+    /* baú de tesouro */
+    var C=G.chest,ce=$("#svC");
+    if(C&&!C.got&&T>=C.at){if(ce)ce.hidden=false;var inC=C.y>=G.bar&&C.y<=G.bar+G.barH;if(inC){C.t+=dt;if(C.t>=1.3){C.got=true;sfx("bite");if(ce)ce.classList.add("got")}}}
+    if(ce&&C&&!C.got){ce.style.bottom=(C.y*100)+"%";ce.style.setProperty("--cp",Math.min(1,C.t/1.3))}
+    $("#svB").style.bottom=(G.bar*100)+"%";$("#svB").style.height=(G.barH*100)+"%";$("#svB").classList.toggle("on",inside);
+    $("#svF").style.bottom="calc("+(G.fy*100)+"% - 10px)";
+    $("#svP").style.height=(clamp(G.prog,0,1)*100)+"%";$("#svP").className=G.prog<0.25?"low":G.prog>0.75?"high":"";
+    if(G.prog>=1){done();FS.st="idle";cancelAnimationFrame(FS.raf);vib([20,30,60]);fResult(f,{perfect:G.perfect,chest:C&&C.got});return}
+    if(G.prog<=0){done();FS.st="idle";cancelAnimationFrame(FS.raf);sfx("bad");vib(60);fIdle("O peixe se soltou. "+(f.r>=3?"Era dos grandes…":"Fica para a próxima."));return}
+    FS.raf=requestAnimationFrame(loop);
+  })();
+};
+/* resultado: qualidade perfeita e tesouro */
+var _fr20=fResult;
+fResult=function(f,o){
+  o=o||{};
+  _fr20(f);
+  if(f.junk)return;
+  var extra=[];
+  if(o.perfect){var bonus=Math.round(fishPrice(f)*0.5)+2;S.coin+=bonus;gainXP(4,true);extra.push("Captura perfeita! ¤ +"+bonus);unlock("pperf")}
+  if(o.chest){var loc=S.mode==="free"?L().loc:null,lp=loc&&LP[loc],txt;
+    if(lp&&Math.random()<0.6){var t=rollTier(luck()*1.3,false);gotGood(lp[t-1],1);txt=GOODS[lp[t-1]].n+" ("+RAR[t-1]+")"}
+    else{var c=Math.round((20+Math.random()*50)*(1+0.2*arcReach()));S.coin+=c;txt="¤ +"+c}
+    extra.push("Baú do tesouro: "+txt);unlock("pbau")}
+  var all=FISH.filter(function(x){return !x.junk}).length,seen=Object.keys(META.dex||{}).length;if(seen>=30)unlock("pesca30");if(seen>=all)unlock("pescaall");
+  save();
+  if(extra.length){var card=document.querySelector("#fstage .fcard");if(card)card.insertAdjacentHTML("beforeend",'<p style="color:#ffd28a">'+esc(extra.join(" · "))+'</p>')}
+  var g=$("#fGo");if(g){g.textContent=S.mode==="free"?"Lançar de novo · 30 min":g.textContent;g.onclick=fPower}
+};
+ACH.pperf=["Mão firme","Faça uma captura perfeita na pesca."];
+ACH.pbau=["Tesouro no anzol","Pesque um baú de tesouro."];
+ACH.pesca30=["Pescador de mão cheia","Registre 30 espécies no diário de pesca."];
+ACH.pescaall=["Mestre dos rios","Registre todas as espécies de peixe."];
+/* diário agrupado por lugar */
+var _fi20=fInv;
+fInv=function(){
+  _fi20();
+  var el=$("#finv");if(!el)return;var det=el.querySelector("details");if(!det)return;
+  META.dex=META.dex||{};var seen=Object.keys(META.dex).length,tot=FISH.filter(function(f){return !f.junk}).length;
+  var h='<summary class="sec">Diário de pesca ('+seen+'/'+tot+')</summary><div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">';
+  SPOTS.forEach(function(sp){
+    var list=FISH.filter(function(f){return !f.junk&&f.s.indexOf(sp.id)>=0}),got=list.filter(function(f){return META.dex[f.id]}).length,lock=sp.arc>arcReach();
+    h+='<details class="fdex"><summary class="sec">'+esc(sp.n)+' · '+got+'/'+list.length+(lock?" · Arco "+sp.arc:"")+'</summary><div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">';
+    list.forEach(function(f){var k=META.dex[f.id],cd=fishCond(f);
+      h+='<div class="item'+(k?" got":"")+'"><div><b style="color:'+(k?RARC[f.r-1]:"inherit")+'">'+(k?esc(f.n):"???")+'</b><span>'+RAR[f.r-1]+' · '+esc(FBEH[f.b]||"")+(cd?" · "+esc(cd):"")+(k?" · "+esc(f.t):"")+'</span></div><span>'+(k?"×"+k:"")+'</span></div>'});
+    h+='</div></details>';
+  });
+  det.innerHTML=h+'</div>';
+};
+/* aba Pesca: no Modo Livre, pesca no lugar onde você está */
+var _pf20=paneFish;
+paneFish=function(p){
+  if(!S||S.mode!=="free"){
+    var reach=arcReach();if(!SPOTBY[FS.spot]||SPOTBY[FS.spot].arc>reach)FS.spot="capital";
+    _pf20(p);return;
+  }
+  fishStop();fishChk();
+  var sp=spotAt(L().loc);
+  var h='<h2>Pescaria</h2><p style="margin:4px 0 8px;color:var(--mute)" id="fHead">¤ '+S.coin+' · '+RODS[S.rod||0][0]+' · '+fmtH(S.h)+'</p>';
+  if(sp){FS.spot=sp.id;var n=FISH.filter(function(f){return !f.junk&&f.s.indexOf(sp.id)>=0}).length,now=FISH.filter(function(f){return !f.junk&&f.s.indexOf(sp.id)>=0&&fishNowOk(f)}).length;
+    h+='<p class="fine" style="margin:0 0 6px"><b>'+esc(sp.n)+'</b> · '+n+' espécies aqui, '+now+' ativas agora. Alguns peixes só aparecem em certos horários, estações ou com chuva.</p><div id="fstage"></div>'}
+  else h+='<p class="fine" style="margin:0 0 8px">Não há onde pescar aqui. Lugares com água no mapa: '+esc(SPOTS.filter(function(s){return s.arc<=arcReach()}).map(function(s){return (PLBY[s.place].s||PLBY[s.place].n)}).join(", "))+'.</p>';
+  h+='<div id="finv"></div>';
+  p.innerHTML=h;
+  if(sp)fIdle();else fInv();
+};
+/* botão "Pescar" no lugar */
+PAX.push(function(lf){var sp=spotAt(lf.loc);if(!sp||sp.arc>arcReach())return "";return '<button class="act" data-ac="fish"><b>Pescar: '+esc(sp.n)+'</b><span>'+FISH.filter(function(f){return !f.junk&&f.s.indexOf(sp.id)>=0&&fishNowOk(f)}).length+' espécies ativas agora · 30 min por lançamento</span></button>'});
+PAH.push(function(a){if(a==="fish"){openMenu("Pesca");return true}return false});
+ACAT.splice(1,0,["pesca","Pesca",/^fish$/]);
+/* o botão antigo "Pescar no lago" também abre a pesca do lugar */
+var _mh20=mapHub;mapHub=function(){_mh20();var hf=$("#hFish");if(hf){hf.hidden=true}};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

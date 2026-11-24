@@ -37,5 +37,9 @@
 - **Bestiário**: registra cada inimigo (vitórias, derrotas, traços); 1ª vitória contra chefe ◆+1, super ◆+2.
 - Outros: pesca, mercado/forja de equipamento, pedidos, negócios, facções, pets/montarias, estações e festivais, rede de relações, diário.
 
+## Pesca
+- `SPOTS` (um por lugar do mapa) e `FISH` (`s` = pontos, `b` = comportamento, `tm`/`se`/`rain` = condições). `pickFish` sorteia entre as espécies ativas; a força do lançamento (`FS.power`) aumenta a chance de raros.
+- Minijogo em `fHook` (estado `FS.G`): barra `barH` cresce com a vara; progresso sobe dentro da barra e cai fora; baú (`chest`) e captura perfeita.
+
 ## Moedas
 ¤ moedas (comuns) · ◆ fragmentos (raros) · ☾ sanidade · ↺ mortes.

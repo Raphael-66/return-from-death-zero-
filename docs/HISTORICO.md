@@ -1,5 +1,12 @@
 # Histórico de versões
 
+## 2026-11-24 — Atualização 20: pesca nova
+- 13 pontos de pesca, um por lugar do mapa (`FSPOT`/`SPOTS` com `place`), 88 espécies (7 a 10 por lugar), com comportamento (`b`: mixed, smooth, dart, sinker, floater), horário (`tm`), estação (`se`) e chuva (`rain`).
+- Minijogo inspirado em Stardew Valley: barra de força no lançamento (lançamentos fortes atraem raros), fisgada, barra vertical com física (segurar sobe, soltar cai), medidor de captura, baú de tesouro e captura perfeita (bônus em moedas).
+- Modo Livre: pesca no lugar onde você está (ação "Pescar" no mapa, categoria Pesca), 30 min por lançamento, sem limite de tentativas. Retornos: escolhe o ponto pelos arcos alcançados, com tentativas limitadas.
+- Diário de pesca agrupado por lugar, com raridade, comportamento e condições. Conquistas novas.
+- Calibração em `tests/fish_sim.js` (jogador simulado com reação humana).
+
 ## 2026-11-24 — Troca rápida de modo
 - Botão "⇄" no lugar do título, no hub do Modo Livre e no topo do Retornos (`modeBtn`), trocando direto de modo (salva antes). Corrige o título "Modo Livre" cortado no topo.
 
