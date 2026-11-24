@@ -6967,7 +6967,7 @@ function decoMenu(){
   }});
 }
 ACH.deco8=["Lar, doce lar","Tenha 8 móveis espalhados pelas suas casas."];
-PAX.push(function(lf){if(!resAt(lf.loc))return "";var n=(FN()[lf.loc]||[]).length;return '<button class="act" data-ac="deco"><b>Decorar a casa</b><span>Móveis: '+n+'/'+fSlots(lf.loc)+'. Bônus ao dormir aqui</span></button>'});
+PAX.push(function(lf){if(!resAt(lf.loc)||!fSlots(lf.loc))return "";var n=(FN()[lf.loc]||[]).length;return '<button class="act" data-ac="deco"><b>Decorar a casa</b><span>Móveis: '+n+'/'+fSlots(lf.loc)+'. Bônus ao dormir aqui</span></button>'});
 PAH.push(function(a){if(a==="deco"){decoMenu();return true}return false});
 /* efeitos ao dormir */
 function HB(){return PF.hb||(PF.hb={day:-1})}
@@ -7531,6 +7531,83 @@ genCard=function(){
   if(arc>3&&fl.indexOf("alianca")<0)add("alianca");
   r.rg.flags=fl;gset(skey("rg"),r);pfSave();
 })();
+
+/* =====================================================================
+   ATUALIZAÇÃO 16: ninguém aparece antes da hora.
+   Personagens, lugares, aliados, cartas e eventos só surgem a partir do
+   arco em que entram na história (Retornos e Modo Livre).
+   ===================================================================== */
+/* arco em que cada personagem aparece pela primeira vez */
+var CHAR_ARC={emilia:1,puck:1,felt:1,rom:1,reinhard:1,elsa:1,rem:2,ram:2,beatrice:2,roswaal:2,petra:2,crusch:3,wilhelm:3,ferris:3,priscilla:3,anastasia:3,julius:3,otto:3,al:3,petelgeuse:3,garfiel:4,frederica:4,echidna:4,ryuzu:4,shaula:6,reid:6,vincent:7,spica:8};
+var CHAR_RE=[[/\bRem\b/,2],[/\bRam\b/,2],[/Beatrice|Betty/,2],[/Roswaal/,2],[/Petra/,2],[/Crusch/,3],[/Wilhelm/,3],[/Ferris|Felix/,3],[/Priscilla/,3],[/Anastasia/,3],[/Julius/,3],[/\bOtto\b/,3],[/\bAl\b/,3],[/Petelgeuse/,3],[/Garfiel/,4],[/Frederica/,4],[/Echidna/,4],[/Ryuzu/,4],[/Shaula/,6],[/\bReid\b/,6],[/Vincent/,7],[/Spica/,8]];
+function nowArc(){return (S&&S.mode==="rg"&&RG)?Math.min(8,RG.arc):storyArc()}
+function textArc(s){s=String(s||"");var a=1;CHAR_RE.forEach(function(x){if(x[1]>a&&x[0].test(s))a=x[1]});return a}
+function charOk(id){return (CHAR_ARC[id]||1)<=nowArc()}
+
+/* Modo Livre acompanha a história: sem o mínimo de Arco 2 */
+arcReach=function(){var a=META.maxArc||1;if(S&&S.mode==="rg"&&S.rg)a=Math.max(a,S.rg.arc);return Math.min(Math.max(a,1),8)};
+/* a Capital é o cenário do Arco 1; Mansão, Irlam e a floresta chegam no Arco 2 */
+(function(){
+  var set={capital:1,casa:2,vila:2,floresta:2,caverna:2};
+  Object.keys(set).forEach(function(k){if(PLBY[k])PLBY[k].arc=set[k]});
+  DUN.forEach(function(d){d.arc=PLBY[d.id].arc});
+  REL_C.rem.arc=2;REL_C.ram.arc=2;REL_C.beatrice.arc=2;
+  PLBY.capital.d="Mercado de frutas, becos, o bairro pobre e, mais tarde, o palácio e o salão da Seleção. Tudo começou aqui.";
+})();
+/* no Arco 1 ainda não existe quarto na mansão: Rom empresta um canto do depósito */
+var _resAt16=resAt;
+resAt=function(id){
+  if(id==="casa"&&arcReach()<2)return null;
+  var r=_resAt16(id);
+  if(!r&&id==="capital"&&arcReach()<2)return {loc:"capital",t:0,n:"Canto no depósito do velho Rom",b:2,rent:0,tmp:true};
+  return r;
+};
+var _fs16=fSlots;fSlots=function(loc){var h=resAt(loc);if(h&&h.tmp)return 0;return _fs16(loc)};
+nearHome=function(){var best=resAt("casa"),v=resAt("vila");if(v&&(!best||v.b>=best.b))best=v;return best||resAt("capital")||{loc:L().loc,b:0,n:"um canto qualquer"}};
+var _sp16=sleepPlace;
+sleepPlace=function(){var lf=L();if(lf.loc==="capital"&&arcReach()<2&&!TRIP()){var h=resAt("capital");return {loc:"capital",b:h.b,n:h.n,home:true}}return _sp16()};
+/* quem ainda não entrou na história não aparece no mapa */
+var _po16=placeOf;
+placeOf=function(id,d,t){
+  if(S&&S.mode==="free"){
+    if(!charOk(id))return null;
+    if(arcReach()<2&&(id==="emilia"||id==="felt"))return hh(d*11+t*5+id.length)<0.75?"capital":null;
+  }
+  return _po16(id,d,t);
+};
+/* se o lugar atual ainda não existe na história, Subaru está na Capital */
+var _rh16=renderHub;
+renderHub=function(){
+  if(S&&S.mode==="free"){var lf=L(),pl=PLBY[lf.loc];if(pl&&pl.arc>arcReach()&&!TRIP()){lf.loc="capital";pfSave()}}
+  _rh16();
+};
+/* aliados de batalha só depois de aparecerem */
+function allyOk(a){return charOk(a.charAt(0)==="?"?a.slice(1):a)}
+var _pd16=previewDeck;previewDeck=function(cfg){var c=Object.assign({},cfg,{allies:(cfg.allies||[]).filter(allyOk)});return _pd16(c)};
+var _sb16=startBattle;startBattle=function(cfg){if(cfg&&cfg.allies)cfg=Object.assign({},cfg,{allies:cfg.allies.filter(allyOk)});_sb16(cfg)};
+/* cartas extras de personagens futuros ficam guardadas até eles aparecerem */
+var _xa16=xActive;xActive=function(){return _xa16().filter(function(i){var c=CARDS[i];return !c||!CHAR_ARC[c.o]||charOk(c.o)})};
+/* atividades e eventos que citam alguém do futuro ficam trancados */
+var _aa16=allActs;
+allActs=function(){return _aa16().map(function(a){var ta=textArc(a.n+" "+(a.d||""));if(ta>(a.arc||1)){a=Object.assign({},a,{arc:ta})}return a})};
+var _ae16=allEvents;
+allEvents=function(){return _ae16().filter(function(e){return textArc(JSON.stringify(e))<=nowArc()})};
+[LEV,CEV].forEach(function(list){list.forEach(function(e){var w0=e.w,ta=textArc(JSON.stringify([e.t,e.x,e.ch]));if(ta<=1)return;e.w=function(ps){return nowArc()>=ta&&(!w0||w0(ps))}})});
+/* Retornos: cartas comuns e globais não citam quem ainda não apareceu */
+var _okc16=okc;
+okc=function(c){
+  if(!_okc16(c))return false;
+  if(!RG)return true;var beats=arcOf().beats||[];if(beats.indexOf(c.id)>=0)return true;
+  return textArc((c.w||"")+" "+c.t+" "+(c.L&&c.L.t)+" "+(c.R&&c.R.t))<=Math.min(8,RG.arc);
+};
+GT.forEach(function(t){var a=Math.max(CHAR_ARC[t[0]]||1,textArc(t[3]+" "+t[4]+" "+t[6]));if(t[1]<a)t[1]=a});
+/* no Arco 1, as atividades da casa que não citam ninguém do futuro acontecem na Capital */
+var _al16=actLoc;actLoc=function(a){var l=_al16(a);if(arcReach()<2&&(l==="casa"||l==="vila"||l==="floresta")&&textArc(a.n+" "+(a.d||""))<=1&&!/floresta|lago|vilarejo|Irlam|mans/i.test(a.n+" "+(a.d||"")))return "capital";return l};
+/* torneio só depois da Seleção Real (os finalistas chegam no Arco 3) */
+(function(){for(var i=0;i<PAX.length;i++){var f=PAX[i];if(/Torneio da Capital/.test(String(f))){PAX[i]=function(lf){return arcReach()>=3?f(lf):""}}}})();
+var _tm16=tourMenu;tourMenu=function(){if(arcReach()<3){toast("O torneio começa quando a Seleção Real chegar (Arco 3).");return}_tm16()};
+/* Salão dos Ecos: só ecos de quem você já enfrentou na história */
+ECHO.forEach(function(x){if(x.arc<1)x.arc=1});
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

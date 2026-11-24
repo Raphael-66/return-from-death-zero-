@@ -1,5 +1,10 @@
 # Histórico de versões
 
+## 2026-11-24 — Atualização 16: ninguém aparece antes da hora
+- `CHAR_ARC` / `CHAR_RE`: cada personagem só aparece a partir do arco em que entra na história (Retornos e Modo Livre): pessoas no mapa, aliados nas lutas, cartas comuns e globais do Retornos, atividades, eventos e eventos de vida.
+- Modo Livre segue a história: `arcReach` não tem mais mínimo de Arco 2. No Arco 1 o cenário é a Capital (Mansão, Irlam, floresta e caverna passam para o Arco 2); Subaru dorme num canto do depósito de Rom; Emilia e Felt aparecem na Capital; atividades neutras da casa acontecem na Capital.
+- Rem, Ram e Beatrice passam a ser do Arco 2; torneio só a partir do Arco 3.
+
 ## 2026-11-24 — Atualização 15: marcos canônicos, reinício completo e Retornos mais longo
 - Romance depende de momentos canônicos vividos no Retornos (`CREQ`, `PF.canon`): Emilia (promessa no Arco 3 + beijo no Santuário no Arco 4), Rem (recomeçar do zero no Arco 3; adormecida do fim do Arco 3 até despertar no Arco 7), Ram (dizer que ela pode escolher a própria vida, Arco 4), Beatrice (contrato, Arco 4), Crusch (aliança na caçada, Arco 3), Anastasia (Arco 5), Priscilla (Arco 7).
 - Cartas novas: `a4_ram`, `a4_kiss`, `a7_rem`. Saves antigos que já passaram desses arcos recebem os marcos implícitos.

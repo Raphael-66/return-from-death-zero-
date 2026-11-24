@@ -31,6 +31,7 @@ Leia também: `docs/ARQUITETURA.md`, `docs/SISTEMAS.md`, `docs/BALANCEAMENTO.md`
 7. Commit em português, push na `main`. O GitHub Pages publica sozinho em ~1 minuto.
 
 ## Armadilhas conhecidas
+- **Coerência com a história:** nenhum personagem ou lugar pode aparecer antes do arco em que entra no cânone. Ao criar conteúdo novo com personagens, confira `CHAR_ARC`/`CHAR_RE` (Atualização 16); textos que citam nomes são filtrados automaticamente por `textArc`.
 - `S.t` no Modo Livre é um **getter** calculado de `S.h` (horas). Nunca retorna 3; use `S.h` para horário. `advanceTime(h)` aceita horas (padrão 2h).
 - Overlays (`#overlay`) são reaproveitados: sempre conferir `$("#overlay").hidden` antes de abrir outro automaticamente.
 - `renderBattle` recria o DOM da batalha: animações flutuantes vão para a camada fixa `#fxl`.
