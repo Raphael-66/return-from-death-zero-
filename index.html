@@ -352,6 +352,27 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .trc{font-size:11.5px;border:1px solid #ff9bab;color:#ffc2cc;border-radius:99px;padding:2px 9px}
 .trd{margin:6px 0 0!important;max-width:none!important;font-size:12.5px}
 .arm{color:#9fd3ff}
+.me{position:relative}
+#fxl{position:fixed;inset:0;pointer-events:none;z-index:15;overflow:hidden}
+.fx-float{position:absolute;transform:translateX(-50%);font-weight:700;font-size:22px;pointer-events:none;animation:fxUp .95s ease-out forwards;text-shadow:0 2px 6px #000;z-index:5;white-space:nowrap}
+.fx-dmg{color:#ff6b81}.fx-heal{color:#7ee2a0}.fx-blk{color:#9fd3ff;font-size:17px}.fx-arm{color:#c9d6e8;font-size:15px}.fx-san{color:#a9b4ff;font-size:16px}
+@keyframes fxUp{0%{opacity:0;transform:translate(-50%,8px) scale(.7)}15%{opacity:1;transform:translate(-50%,-4px) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50px) scale(1)}}
+.foe.hit{animation:fxShake .36s}
+@keyframes fxShake{0%,100%{transform:none}20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.foe.lunge{animation:fxLunge .46s}
+@keyframes fxLunge{0%{transform:none}35%{transform:translateY(16px) scale(1.03)}100%{transform:none}}
+.me.hurt{animation:fxHurt .52s}
+@keyframes fxHurt{0%{box-shadow:none}30%{box-shadow:0 0 0 3px rgba(255,60,90,.85),0 0 26px rgba(255,60,90,.5);transform:translateX(-6px)}60%{transform:translateX(5px)}100%{box-shadow:none;transform:none}}
+#battle{position:relative}
+#battle.p2flash::after{content:"";position:fixed;inset:0;background:radial-gradient(circle,rgba(255,80,110,.45),transparent 70%);animation:fxFade 1s forwards;pointer-events:none;z-index:20}
+@keyframes fxFade{from{opacity:1}to{opacity:0}}
+.fx-banner{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);font-family:var(--display);font-size:30px;color:#ffd28a;animation:fxBanner 1.25s forwards;pointer-events:none;z-index:21;white-space:nowrap;text-shadow:0 3px 12px #000}
+@keyframes fxBanner{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%) scale(1)}}
+.card{transition:transform .12s}.card:not(:disabled):active{transform:scale(.94)}
+.syn{display:flex;flex-wrap:wrap;gap:5px;cursor:pointer}
+.sync{font-size:11.5px;border:1px solid #e4b867;color:#f3d79a;border-radius:99px;padding:2px 9px}.sync.more{border-style:dashed;color:var(--mute);border-color:var(--line)}
+.relbar{width:100%;display:flex;flex-direction:column;gap:4px}
+.yacts{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}
 </style>
 
 
@@ -690,7 +711,7 @@ function openMenu(tab){
   var o=$("#overlay");o.className="";o.hidden=false;
   var ingame=!!S&&$("#title").hidden;
   fishStop();
-  var tabs=ingame?(S.mode==="rg"?["Metas","Vínculos","Romance","Perfil","Loja","Equipamento","Habilidades","Relíquias","Pesca","Mercado","Diário","Códice","Conquistas","Galeria","Oficina","Ajustes"]:["Vínculos","Romance","Perfil","Loja","Equipamento","Pesca","Mercado","Pedidos","Negócios","Mundo","Vida","Diário","Conquistas","Galeria","Oficina","Ajustes"]):["Perfil","Conquistas","Galeria","Oficina","Ajustes"];
+  var tabs=ingame?(S.mode==="rg"?["Metas","Vínculos","Romance","Perfil","Loja","Equipamento","Habilidades","Relíquias","Pesca","Mercado","Diário","Códice","Bestiário","Conquistas","Galeria","Oficina","Ajustes"]:["Vínculos","Romance","Família","Perfil","Loja","Equipamento","Pesca","Mercado","Pedidos","Missões","Negócios","Mundo","Vida","Diário","Bestiário","Conquistas","Galeria","Oficina","Ajustes"]):["Perfil","Conquistas","Galeria","Oficina","Ajustes"];
   if(tabs.indexOf(tab)<0)tab=tabs[0];
   var h='<div class="in"><div class="tabs" role="tablist">';
   tabs.forEach(function(t){h+='<button class="tab" role="tab" aria-selected="'+(t===tab)+'" data-t="'+t+'">'+t+'</button>'});
@@ -700,7 +721,7 @@ function openMenu(tab){
   $("#bClose").onclick=function(){fishStop();o.hidden=true;if(S&&S.mode==="rg"&&!$("#rg").hidden&&RG&&RG.cur)rgShow(RG.cur)};
   if($("#bQuit"))$("#bQuit").onclick=function(){o.hidden=true;toTitle()};
   var pane=$("#pane");
-  if(tab==="Vínculos")(S&&S.mode==="rg"?paneRGBonds:paneBonds)(pane);else if(tab==="Relíquias")paneRelics(pane);else if(tab==="Códice")paneCodex(pane);else if(tab==="Perfil")paneProfile(pane);else if(tab==="Equipamento")paneEquip(pane);else if(tab==="Metas")paneGoals(pane);else if(tab==="Romance")paneRomance(pane);else if(tab==="Loja")paneStore(pane);else if(tab==="Mercado")paneMarket(pane);else if(tab==="Diário")paneDiary(pane);else if(tab==="Negócios")paneBiz(pane);else if(tab==="Mundo")paneWorld(pane);else if(tab==="Vida")paneLife(pane);else if(tab==="Pedidos")paneBoard(pane);else if(tab==="Habilidades")paneSkills(pane);else if(tab==="Pesca")paneFish(pane);else if(tab==="Ajustes")paneSet(pane);else if(tab==="Conquistas")paneAch(pane);else if(tab==="Galeria")paneGal(pane);else paneLab(pane);
+  if(tab==="Vínculos")(S&&S.mode==="rg"?paneRGBonds:paneBonds)(pane);else if(tab==="Relíquias")paneRelics(pane);else if(tab==="Códice")paneCodex(pane);else if(tab==="Perfil")paneProfile(pane);else if(tab==="Equipamento")paneEquip(pane);else if(tab==="Metas")paneGoals(pane);else if(tab==="Romance")paneRomance(pane);else if(tab==="Loja")paneStore(pane);else if(tab==="Mercado")paneMarket(pane);else if(tab==="Diário")paneDiary(pane);else if(tab==="Negócios")paneBiz(pane);else if(tab==="Mundo")paneWorld(pane);else if(tab==="Vida")paneLife(pane);else if(tab==="Pedidos")paneBoard(pane);else if(tab==="Habilidades")paneSkills(pane);else if(tab==="Pesca")paneFish(pane);else if(tab==="Ajustes")paneSet(pane);else if(tab==="Conquistas")paneAch(pane);else if(tab==="Galeria")paneGal(pane);else if(tab==="Bestiário")paneBest(pane);else if(tab==="Missões")paneQuests(pane);else if(tab==="Família")paneFamily(pane);else paneLab(pane);
 }
 function paneBonds(p){
   var h='<h2>Vínculos</h2><div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">';
@@ -5003,7 +5024,7 @@ function explore(){
   advanceTime();
   var ar=Math.max(1,arcReach());
   if(x<0.5){
-    var t=rollTier(Lk,false),id=LP[pl][t-1],q=t===1?1+Math.floor(Math.random()*2):1;
+    var t=rollTier(Lk,false),id=(LP[pl]||LP.floresta)[t-1],q=t===1?1+Math.floor(Math.random()*2):1;
     gotGood(id,q);txt=["Entre as pedras e raízes, algo reflete a luz.","Você revira com cuidado e acha algo que vale a pena.","Num canto esquecido, escondido há tempos, há algo útil."][Math.floor(Math.random()*3)];fxt=GOODS[id].n+" ×"+q+" ("+RAR[t-1]+")";
   }else if(x<0.62){
     var c=Math.round((15+Math.random()*30)*(1+0.25*ar)*(1+eq("coin")/100));S.coin+=c;txt="Uma bolsa pequena, meio enterrada, com moedas que ninguém reclamou.";fxt="¤ +"+c;
@@ -6342,6 +6363,474 @@ renderHub=function(){
 };
 var _spTrip=sleepPlace;
 sleepPlace=function(){var tp=TRIP();if(tp)return {loc:L().loc,far:true,road:true};return _spTrip()};
+
+/* =====================================================================
+   ATUALIZAÇÃO 10: animações de batalha, bestiário, missões secundárias,
+   sinergias de relacionamento, mais ações a dois e filhos.
+   ===================================================================== */
+
+/* ---------- 2. Sinergias com os relacionamentos do Modo Livre ---------- */
+var PAIRS=[
+ {a:"rem",b:"ram",n:"Gêmeas oni",d:"+6 de dano extra",fx:function(){var r=hitFoe(6,1);return "Rem e Ram atacam juntas: +"+r.t+" de dano."}},
+ {a:"emilia",b:"beatrice",n:"Espíritos aliados",d:"+7 de escudo",fx:function(){B.pblk+=7;return "Emilia e Beatrice erguem uma barreira dupla: +7 de escudo."}},
+ {a:"emilia",b:"rem",n:"Gelo e corrente",d:"enfraquece o próximo ataque",fx:function(){B.weak=true;return "Gelo e corrente prendem o inimigo: o próximo ataque fica mais fraco."}},
+ {a:"ram",b:"beatrice",n:"Vento arcano",d:"compra 1 carta",fx:function(){draw(1);return "Vento e magia se misturam: você compra 1 carta."}},
+ {a:"crusch",b:"wilhelm",n:"Lâmina e bandeira",d:"+8 de dano extra",fx:function(){var r=hitFoe(8,1);return "Crusch dá a ordem e Wilhelm corta: +"+r.t+" de dano."}},
+ {a:"julius",b:"reinhard",n:"Cavaleiros do reino",d:"+5 dano e +5 escudo",fx:function(){var r=hitFoe(5,1);B.pblk+=5;return "Dois cavaleiros em sincronia: +"+r.t+" de dano e +5 de escudo."}},
+ {a:"anastasia",b:"priscilla",n:"Rivalidade útil",d:"+1 energia",fx:function(){B.en++;return "Anastasia e Priscilla competem para ajudar mais: +1 de energia."}},
+ {a:"garfiel",b:"otto",n:"Amigos de verdade",d:"cura 6",fx:function(){B.php=Math.min(maxHp(),B.php+6);return "Garfiel protege, Otto remenda: +6 de vida."}}
+];
+function stg(id){return REL_C[id]?stageOf(relOf(id).rp):0}
+function lacoOf(o){
+  if(!REL_C[o])return 0;var s=stg(o),v=s>=5?3:s>=4?2:s>=3?1:0;
+  var par=PF.rel&&PF.rel.partner;if(par===o){v+=1;var r=rsOf(o);if(r.s==="casado")v+=1}
+  return v;
+}
+function pairOf(x,y){for(var i=0;i<PAIRS.length;i++){var p=PAIRS[i];if((p.a===x&&p.b===y)||(p.a===y&&p.b===x))return p}return null}
+function pairOk(p){return [p.a,p.b].every(function(k){return !REL_C[k]||stg(k)>=2})}
+function partnerIn(){var par=PF.rel&&PF.rel.partner;if(!par||!B)return null;var all=B.pile.concat(B.hand,B.disc);for(var i=0;i<all.length;i++){var c=CARDS[all[i]];if(c&&c.o===par)return par}return null}
+function synStrip(){
+  if(!B)return "";var own={},chips=[],det=[];B.pile.concat(B.hand,B.disc).forEach(function(id){var c=CARDS[id];if(c)own[c.o]=1});
+  var lz=[];Object.keys(own).forEach(function(o){var v=lacoOf(o);if(v){lz.push(REL_C[o].n+" +"+v);det.push(["Laço "+REL_C[o].n+" +"+v,"Carta de "+REL_C[o].n+" logo depois de uma de Subaru ganha +"+v+" (sintonia)."])}});
+  if(lz.length)chips.push("♥ Laços: "+lz.join(" · "));
+  var pz=[];PAIRS.forEach(function(p){if(own[p.a]&&own[p.b]&&pairOk(p)){pz.push(p.n);det.push([p.n,"Jogue "+(REL_C[p.a]?REL_C[p.a].n:ONAME[p.a]||p.a)+" e "+(REL_C[p.b]?REL_C[p.b].n:ONAME[p.b]||p.b)+" em seguida: "+p.d+"."])}});
+  if(pz.length)chips.push("✦ Duplas: "+pz.length);
+  var pa=partnerIn();if(pa){var r=rsOf(pa);chips.push("Par: "+REL_C[pa].n);det.push(["Par: "+REL_C[pa].n,(r.s==="casado"?"Uma vez por luta, "+REL_C[pa].n+" impede um golpe fatal. ":"")+"Depois de uma carta de "+REL_C[pa].n+", a próxima de Subaru cura "+(r.s==="casado"?5:3)+"."])}
+  (B.kids||[]).forEach(function(k){chips.push("Família: "+k);det.push(["Família: "+k,"Seu filho luta ao seu lado com uma carta própria."])});
+  if(!chips.length)return "";
+  return '<div class="syn">'+chips.map(function(x){return '<span class="sync">'+esc(x)+'</span>'}).join("")+'<span class="sync more">'+(B.showSyn?"fechar":"ver")+'</span></div>'+(B.showSyn?'<p class="fine trd">'+det.map(function(x){return '<b>'+esc(x[0])+':</b> '+esc(x[1])}).join("<br>")+'</p>':'');
+}
+var _bonusSyn=bonus;
+bonus=function(o){var b=_bonusSyn(o);if(B&&B.synNext&&B.synNext.o===o)b+=B.synNext.v;return b};
+var _pcSyn=playCard;
+playCard=function(i){
+  if(!B||B.done)return;
+  var id=B.hand[i],c=CARDS[id];if(!c||c.c>B.en)return;
+  var last=B.lastO||null,extra=[];
+  B.synNext=null;
+  if(REL_C[c.o]&&last==="subaru"){var v=lacoOf(c.o);if(v){B.synNext={o:c.o,v:v};extra.push("Sintonia com "+REL_C[c.o].n+": +"+v+".")}}
+  var par=PF.rel&&PF.rel.partner,healPar=(c.o==="subaru"&&last===par&&REL_C[par])?(rsOf(par).s==="casado"?5:3):0;
+  _pcSyn(i);
+  B&&(B.synNext=null);
+  if(!B||B.done){return}
+  var p=last&&last!==c.o?pairOf(last,c.o):null;
+  if(p&&pairOk(p)){extra.push("✦ "+p.n+"! "+p.fx());if(B.ehp<=0){B.log+=" "+extra.join(" ");endBattle(true);return}}
+  if(healPar){B.php=Math.min(maxHp(),B.php+healPar);extra.push("Juntos com "+REL_C[par].n+": +"+healPar+" de vida.")}
+  B.lastO=c.o;
+  if(extra.length){B.log+=" "+extra.join(" ");renderBattle()}
+};
+var _etSyn=endTurn;
+endTurn=function(){if(B)B.lastO=null;_etSyn()};
+/* golpe fatal: o par casado se joga na frente uma vez por luta */
+var _ebSave=endBattle;
+endBattle=function(win){
+  if(!win&&B&&!B.done&&B.php<=0&&S.san>0&&!B.saved){
+    var pa=partnerIn();
+    if(pa&&rsOf(pa).s==="casado"){B.saved=true;B.php=Math.max(1,Math.round(maxHp()*0.2));B.log+=" ♥ "+REL_C[pa].n+" se joga na sua frente e segura o golpe. Você continua de pé!";
+      if(!B.hand.length){B.turn++;if(B.cfg.hold&&B.turn>B.cfg.hold){_ebSave(true);return}B.en=enMax();draw(handSize())}
+      renderBattle();setTimeout(function(){fxBanner(REL_C[pa].n+" protege você")},30);return}
+  }
+  _ebSave(win);
+};
+
+/* ---------- 3. Filhos: cartas de batalha para os mais velhos ---------- */
+function KIDS(){return PF.kids||(PF.kids=[])}
+function kidAge(k){return Math.floor((S.day-k.born)/7)}
+function kidStage(k){var a=kidAge(k);return a<2?"Bebê":a<10?"Criança":"Jovem"}
+var KTR={emilia:{n:"Gelo",dmg:6,weak:1},rem:{n:"Força oni",dmg:9},ram:{n:"Vento",dmg:5,draw:1},crusch:{n:"Escudo",blk:9},priscilla:{n:"Sorte",en:1,dmg:3},anastasia:{n:"Esperteza",draw:2}};
+function kidCard(k,i){
+  var t=KTR[k.par]||{n:"Coragem",dmg:6},sk=Math.min(6,k.sk||0),id="kid_"+i;
+  var c={id:id,n:"Ajuda de "+k.n,c:1,o:"subaru"};
+  ["dmg","blk"].forEach(function(x){if(t[x])c[x]=t[x]+sk});if(t.weak)c.weak=1;if(t.draw)c.draw=t.draw;if(t.en)c.en=t.en;
+  CARDS[id]=c;return id;
+}
+var _rdKids=relDuo;
+relDuo=function(){
+  var out=_rdKids().slice();
+  KIDS().forEach(function(k,i){if(kidAge(k)>=10&&(k.b||0)>=40)out.push(kidCard(k,i))});
+  return out;
+};
+var _sbKids=startBattle;
+startBattle=function(cfg){_sbKids(cfg);if(B){B.kids=KIDS().filter(function(k){return kidAge(k)>=10&&(k.b||0)>=40}).map(function(k){return k.n});if(B.kids.length)renderBattle()}};
+
+/* synergy strip dentro da tela de batalha */
+var _rbSyn=renderBattle;
+renderBattle=function(){
+  _rbSyn();
+  var me=document.querySelector("#battle .me"),st=synStrip();
+  if(me&&st){me.insertAdjacentHTML("afterbegin",st);var sy=me.querySelector(".syn");if(sy)sy.onclick=function(){B.showSyn=!B.showSyn;renderBattle()}}
+};
+
+/* ---------- 4. Bestiário ---------- */
+function BEST(){return PF.best||(PF.best={})}
+function bName(cfg){var n=String(cfg.enemy||"").replace(/^(Elite|Alfa): /,"").replace(/ do andar \d+$/,"");if(cfg.affix)n=n.replace(new RegExp(" "+cfg.affix.toLowerCase()+"$"),"");return n}
+function bAll(){
+  var m={};
+  Object.keys(ENV).forEach(function(e){ENV[e].forEach(function(x){if(!m[x[0]])m[x[0]]={t:"mob",w:e}})});
+  DUN.forEach(function(d){m[d.boss]={t:"boss",w:d.id};if(DMID[d.id]&&d.id!=="torreeco")m[DMID[d.id]]={t:"boss",w:d.id}});
+  CANON.forEach(function(c){m[c.n]={t:"super",w:"canon"}});
+  return m;
+}
+var ENVN={floresta:"Florestas",estrada:"Estradas",caverna:"Caverna das Raízes",mina:"Mina abandonada",cripta:"Catacumbas",camaras:"Santuário",aqueduto:"Aqueduto",biblioteca:"Subsolo da Biblioteca",deserto:"Dunas de Augria",fortaleza:"Fortaleza Gelada",imperio:"Vollachia",agua:"Rios e canais",canon:"História canônica"};
+function bKey(cfg){var n=bName(cfg);if(cfg.canon)n=cfg.canon;return n}
+var _sbBest=startBattle;
+startBattle=function(cfg){
+  _sbBest(cfg);
+  if(!B)return;var c=B.cfg,k=bKey(c),e=BEST()[k]||(BEST()[k]={seen:0,win:0,loss:0,lv:0,tr:{},day:S.day});
+  e.seen++;e.arch=c.archn||e.arch;e.tier=c.tier||e.tier;e.lv=Math.max(e.lv,c.lv||0);
+  [c.tr,c.tr2].forEach(function(t){if(t)Object.keys(t).forEach(function(x){if(t[x])e.tr[x]=1})});if(c.drain)e.tr.drain=1;
+  pfSave();
+};
+var _ebBest=endBattle;
+endBattle=function(win){
+  var cfg=B&&B.cfg,was=B&&B.done;
+  _ebBest(win);
+  if(was||!cfg||!B||!B.done)return;
+  var k=bKey(cfg),e=BEST()[k];if(!e)return;
+  if(win){e.win++;if(e.win===1&&(cfg.tier==="boss"||cfg.tier==="super")){var fr=cfg.tier==="super"?2:1;S.frags+=fr;save();var ov=$("#overlay"),p0=ov&&ov.querySelector(".in p");if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0">Bestiário: nova vitória registrada · ◆ +'+fr+'</p>')}}
+  else e.loss++;
+  var n=Object.keys(BEST()).filter(function(x){return BEST()[x].win>0}).length;
+  if(n>=15)unlock("best15");if(n>=40)unlock("best40");
+  if(CANON.every(function(c){return BEST()[c.n]&&BEST()[c.n].win>0}))unlock("bestsup");
+  pfSave();
+};
+ACH.best15=["Caderno de campo","Vença 15 tipos de inimigo diferentes."];
+ACH.best40=["Naturalista de Lugunica","Vença 40 tipos de inimigo diferentes."];
+ACH.bestsup=["Nenhum pesadelo a mais","Vença todos os super chefes canônicos."];
+var BV={f:"todos"};
+var TRN={multi:"Golpes múltiplos",armor:"Armadura",ward:"Proteção",enrage:"Fúria",regen:"Regeneração",drain:"Abala a mente"};
+function paneBest(p){
+  var all=bAll(),b=BEST(),keys=Object.keys(all);Object.keys(b).forEach(function(k){if(!all[k])all[k]={t:b[k].tier||"mob",w:"?"}});keys=Object.keys(all);
+  var seen=keys.filter(function(k){return b[k]}).length,won=keys.filter(function(k){return b[k]&&b[k].win}).length;
+  var h='<h2>Bestiário</h2><p style="margin:4px 0 8px;color:var(--mute)">Registrados: <b>'+seen+'</b> de '+keys.length+' · vencidos: <b>'+won+'</b>. A primeira vitória sobre um chefe rende ◆ +1, e sobre um super chefe, ◆ +2.</p>';
+  h+='<div class="chips" style="margin-bottom:8px">'+[["todos","Todos"],["mob","Comuns"],["boss","Chefes"],["super","Super chefes"]].map(function(x){return '<button class="chipb" data-bf="'+x[0]+'"'+(BV.f===x[0]?' style="border-color:var(--gold);color:var(--gold)"':'')+'>'+x[1]+'</button>'}).join("")+'</div>';
+  var groups={};keys.forEach(function(k){var a=all[k];if(BV.f!=="todos"&&a.t!==BV.f&&!(BV.f==="mob"&&a.t==="elite"))return;(groups[a.w]=groups[a.w]||[]).push(k)});
+  Object.keys(groups).forEach(function(g){
+    h+='<p class="sec">'+esc(ENVN[g]||(PLBY[g]&&PLBY[g].n)||"Outros")+'</p>';
+    groups[g].sort().forEach(function(k){var e=b[k];
+      if(!e){h+='<div class="item locked"><div><b>???</b><span>'+(all[k].t==="super"?"Super chefe ainda não enfrentado.":"Ainda não encontrado.")+'</span></div></div>';return}
+      var trs=Object.keys(e.tr||{}).map(function(x){return TRN[x]||x}).join(", ");
+      h+='<div class="item'+(e.win?" got":"")+'"><div><b>'+esc(k)+(all[k].t==="super"?' <small style="color:#ff9bab">super chefe</small>':all[k].t==="boss"?' <small style="color:#ffd28a">chefe</small>':'')+'</b><span>'+esc((e.arch||"")+(e.lv?" · até Nv "+e.lv:""))+' · vitórias '+e.win+' · derrotas '+e.loss+(trs?' · '+esc(trs):'')+'</span></div></div>';
+    });
+  });
+  p.innerHTML=h;
+  p.onclick=function(ev){var t=ev.target.closest?ev.target.closest("[data-bf]"):null;if(t){BV.f=t.getAttribute("data-bf");paneBest(p)}};
+}
+
+/* ---------- 5. Missões secundárias nas vilas e cidades ---------- */
+/* passos: visit (ir e agir no local), fight (vencer lutas no local), explore (explorar no local),
+   pay (pagar no local), boss (luta especial no local), choice (decisão final no local) */
+var SQ=[
+ {id:"sino",at:"vila",arc:1,g:"Velho Muller, sineiro",t:"O sino rachado",x:"O sino da praça rachou no último festival. Muller quer consertá-lo antes que a vila esqueça como ele soava.",
+  st:[{k:"explore",at:"floresta",n:2,t:"Procure madeira de lei na floresta (explore 2 vezes)."},{k:"pay",at:"vila",c:80,t:"Pague ¤ 80 ao ferreiro pelo novo badalo."},
+      {k:"choice",at:"vila",t:"O sino está pronto. Quem deve tocá-lo pela primeira vez?",o:[["As crianças da vila","As crianças puxam a corda todas juntas e o som atravessa o vale.",{rep:6,san:6}],["Você mesmo","Você puxa a corda com força demais e quase vai junto. A praça inteira ri.",{rep:3,xp:30}]]}],
+  rw:{c:220,rep:4,xp:40}},
+ {id:"curral",at:"vila",arc:1,g:"Mila, fazendeira",t:"Lobos no curral",x:"Toda noite some uma ovelha. Mila jura que é um lobo grande demais para ser normal.",
+  st:[{k:"fight",at:"floresta",n:3,t:"Vença 3 lutas na floresta para afastar a matilha."},{k:"boss",at:"floresta",e:"Lobo-alfa de Irlam",a:"bruto",t:"Enfrente o lobo-alfa que lidera a matilha."}],
+  rw:{c:320,rep:6,xp:60,eq:0.5}},
+ {id:"veio",at:"pedraferro",arc:2,g:"Dorna, capataz",t:"O veio perdido",x:"Os mineiros abriram um veio novo e algo saiu de lá. Ninguém volta para trabalhar.",
+  st:[{k:"visit",at:"mina",t:"Vá até a mina abandonada e examine a entrada.",v:"Marcas de garras na pedra e um frio que não é do subsolo."},{k:"fight",at:"mina",n:2,t:"Vença 2 lutas dentro da mina."},
+      {k:"boss",at:"mina",e:"Mineiro-chefe possuído",a:"tanque",t:"Enfrente o mineiro-chefe que não sai mais do túnel."},
+      {k:"choice",at:"pedraferro",t:"Dorna pergunta o que fazer com o veio.",o:[["Reabrir com segurança","A aldeia volta ao trabalho, e Dorna manda um pacote de minério para você.",{c:200,rep:3}],["Selar o veio para sempre","Os mais velhos agradecem. Algumas coisas devem ficar enterradas.",{rep:7,san:5}]]}],
+  rw:{c:380,f:2,xp:80}},
+ {id:"saque",at:"caravana",arc:2,g:"Otto Suwen",t:"Mercadoria roubada",x:"Uma carroça de Otto sumiu na estrada. Ele promete metade do lucro, e fala por uns dez minutos sem parar.",
+  st:[{k:"fight",at:"caravana",n:2,t:"Vença 2 lutas nos arredores do posto."},{k:"boss",at:"caravana",e:"Chefe dos saqueadores",a:"agil",t:"Enfrente o chefe dos saqueadores."},
+      {k:"choice",at:"caravana",t:"Você recuperou as caixas. O que fazer?",o:[["Devolver tudo a Otto","Otto quase chora, e depois tenta te vender um seguro de carroça.",{c:250,rep:4}],["Ficar com uma caixa como pagamento","Dentro há especiarias raras. Otto finge que não viu.",{c:420,rep:-2}]]}],
+  rw:{c:200,xp:60}},
+ {id:"colheita",at:"vale",arc:2,g:"Vovó Hana",t:"A festa da colheita",x:"O vale quer uma festa de colheita como nos velhos tempos, mas falta quase tudo.",
+  st:[{k:"explore",at:"vale",n:2,t:"Junte frutas e flores pelo vale (explore 2 vezes)."},{k:"pay",at:"vale",c:60,t:"Pague ¤ 60 pela música da festa."},
+      {k:"choice",at:"vale",t:"A festa começa. Com quem você dança primeiro?",o:[["Com quem você ama","Vocês erram o passo e não se importam nem um pouco.",{rp:["P",8],san:6}],["Com Vovó Hana","Ela dança melhor que todo mundo e não deixa você esquecer disso.",{rep:6,xp:30}]]}],
+  rw:{c:160,xp:50}},
+ {id:"flugel",at:"liphas",arc:3,g:"Guarda Tomas",t:"Sombra da Flugel",x:"Viajantes contam que algo se mexe na copa da grande árvore à noite.",
+  st:[{k:"explore",at:"liphas",n:2,t:"Investigue a estrada perto da Flugel (explore 2 vezes)."},{k:"boss",at:"liphas",e:"Ent da Flugel corrompido",a:"tanque",t:"Enfrente a criatura presa nas raízes."},
+      {k:"visit",at:"capital",t:"Relate o que viu ao quartel da Capital.",v:"O capitão escuta, anota e manda patrulhas para a estrada."}],
+  rw:{c:450,f:2,rep:5,xp:90,eq:0.4}},
+ {id:"torneio",at:"capital",arc:3,g:"Arauto real",t:"Torneio dos escudeiros",x:"A Capital abre um torneio para quem não é cavaleiro. O prêmio é bom, a vergonha também.",
+  st:[{k:"pay",at:"capital",c:120,t:"Pague ¤ 120 de inscrição."},{k:"fight",at:"capital",n:3,t:"Vença 3 duelos (lutas na Capital)."},{k:"boss",at:"capital",e:"Campeão do torneio",a:"agil",t:"Enfrente o campeão na final."}],
+  rw:{c:500,f:3,rep:8,xp:110,eq:0.7}},
+ {id:"carta",at:"capital",arc:3,g:"Moça do correio",t:"A carta extraviada",x:"Uma carta para Liphas caiu atrás de um balcão há meses. O remetente já morreu.",
+  st:[{k:"visit",at:"liphas",t:"Leve a carta até Liphas e procure a destinatária.",v:"Uma senhora abre a porta. Reconhece a letra antes de abrir o envelope."},
+      {k:"choice",at:"liphas",t:"Ela pede que você leia a carta em voz alta.",o:[["Ler com calma","Ela chora e ri ao mesmo tempo. Depois oferece chá e uma torta inteira.",{san:8,rep:4}],["Deixar que ela leia sozinha","Você espera do lado de fora. Quando ela sai, abraça você sem dizer nada.",{san:5,xp:40}]]}],
+  rw:{c:180,xp:50}},
+ {id:"barreira",at:"santuario",arc:4,g:"Ryuzu Meyer",t:"Lembranças na barreira",x:"Ecos do passado escapam das câmaras e assustam os moradores do Santuário.",
+  st:[{k:"visit",at:"camaras",t:"Desça até a entrada das Câmaras.",v:"As paredes repetem vozes que você quase reconhece."},{k:"fight",at:"camaras",n:2,t:"Vença 2 lutas nas Câmaras."},
+      {k:"choice",at:"santuario",t:"Ryuzu pergunta se os ecos devem ser apagados.",o:[["Apagar os ecos","O Santuário fica em silêncio. Os moradores dormem bem pela primeira vez em anos.",{rep:6,san:6}],["Guardar os ecos num cristal","Ryuzu guarda o cristal com cuidado. Algumas memórias merecem ficar.",{f:2,xp:40}]]}],
+  rw:{c:420,f:2,xp:100}},
+ {id:"contrabando",at:"ribeirinha",arc:5,g:"Pescador Joran",t:"Rede de contrabando",x:"Barcos sem bandeira passam de madrugada levando algo para os túneis sob Pristella.",
+  st:[{k:"fight",at:"aqueduto",n:2,t:"Vença 2 lutas no Aqueduto Submerso."},{k:"boss",at:"pristella",e:"Contrabandista-mor",a:"padrao",t:"Encontre e enfrente o chefe do esquema em Pristella."},
+      {k:"visit",at:"ribeirinha",t:"Volte para contar a Joran.",v:"Joran solta um suspiro longo e oferece o melhor peixe do dia."}],
+  rw:{c:600,f:3,rep:6,xp:130,eq:0.5}},
+ {id:"livro",at:"torre",arc:6,g:"Shaula, a guardiã",t:"O livro que sussurra",x:"Um livro da biblioteca começou a sussurrar o seu nome. Shaula acha isso hilário. Você não.",
+  st:[{k:"explore",at:"torre",n:2,t:"Procure pistas pelas dunas (explore 2 vezes)."},{k:"fight",at:"biblioteca",n:3,t:"Vença 3 lutas no Subsolo da Biblioteca."},
+      {k:"choice",at:"torre",t:"Você encontra o livro. Ele oferece uma resposta sobre o seu futuro.",o:[["Ler a resposta","Você lê uma linha só. Ela não faz sentido agora, mas vai fazer.",{xp:120,san:-6,f:2}],["Fechar o livro","Shaula aplaude. 'Mestre é teimoso como sempre.'",{san:10,rep:5}]]}],
+  rw:{c:650,f:2,xp:140}},
+ {id:"desertores",at:"guaral",arc:7,g:"Sargento Volk",t:"Desertores da fronteira",x:"Soldados fugiram do Império e se esconderam perto de Guaral. O sargento quer todos de volta.",
+  st:[{k:"visit",at:"vollachia",t:"Busque informações na capital imperial.",v:"Um oficial cansado explica que os desertores fugiram de uma ordem cruel."},{k:"fight",at:"guaral",n:3,t:"Vença 3 lutas nos arredores de Guaral."},
+      {k:"choice",at:"guaral",t:"Você encontra os desertores, famintos e com medo.",o:[["Entregar ao sargento","Volk agradece e paga bem. Você não consegue olhar para trás.",{c:400,rep:2,san:-4}],["Ajudar a fugirem para Lugunica","Eles prometem lembrar do seu nome. Volk desconfia, mas não prova nada.",{rep:8,san:6,xp:60}]]}],
+  rw:{c:550,f:3,xp:150}},
+ {id:"inverno",at:"vollachia",arc:7,g:"Conselheira imperial",t:"O inverno do imperador",x:"Uma fortaleza esquecida está espalhando geada pela capital imperial.",
+  st:[{k:"fight",at:"fortaleza",n:3,t:"Vença 3 lutas na Fortaleza Gelada."},{k:"boss",at:"vollachia",e:"Comandante de geada",a:"bruto",t:"Enfrente o comandante que trouxe o inverno até a cidade."}],
+  rw:{c:800,f:4,rep:6,xp:180,eq:0.8}}
+];
+var SQBY={};SQ.forEach(function(q){SQBY[q.id]=q});
+function SQS(){var s=PF.sq||(PF.sq={act:{},done:{}});if(!s.act)s.act={};if(!s.done)s.done={};return s}
+function sqStep(id){var a=SQS().act[id];return a?SQBY[id].st[a.s]:null}
+function sqProg(id){var a=SQS().act[id],st=sqStep(id);return st&&st.n?" ("+(a.c||0)+"/"+st.n+")":""}
+function sqAdvance(id){
+  var s=SQS(),a=s.act[id],q=SQBY[id];if(!a)return;
+  a.s++;a.c=0;
+  if(a.s>=q.st.length){delete s.act[id];s.done[id]=S.day;pfSave();sqReward(q);return}
+  pfSave();toast("Missão: "+q.t+" · próximo passo");dj("vida","Avançou na missão "+q.t+".");
+}
+function sqReward(q,extra){
+  var rw=Object.assign({},q.rw),eqi=null,txt=[];
+  if(rw.f){S.frags+=rw.f;txt.push("◆ +"+rw.f)}
+  if(rw.eq&&Math.random()<rw.eq)eqi=eqFind(luck()*1.3);
+  var t=applyLF({c:rw.c,rep:rw.rep,xp:rw.xp});if(t)txt.unshift(t);
+  if(eqi)txt.push("Equipamento: "+eqi.n+" ("+RAR[eqi.r-1]+")");
+  unlock("sq1");if(Object.keys(SQS().done).length>=SQ.length)unlock("sqall");
+  sfx("catch");dj("vida","Concluiu a missão "+q.t+".");
+  var o=ovl('<p class="sec" style="margin:0">Missão concluída · '+esc(q.g)+'</p><h2 style="margin:0">'+esc(q.t)+'</h2><p style="margin:0;font-size:16px;line-height:1.5">'+(extra?esc(extra)+" ":"")+esc(q.g.split(",")[0])+' agradece. A notícia corre pela região.</p><p class="sec" style="margin:0">'+esc(txt.join(" · "))+'</p><button class="btn primary" id="sqOk">Continuar</button>');
+  $("#sqOk").onclick=function(){o.hidden=true;try{updHead()}catch(_){}renderHub()};
+}
+ACH.sq1=["Herói de vilarejo","Conclua uma missão secundária."];
+ACH.sqall=["Conhecido em todo o mapa","Conclua todas as missões secundárias."];
+function sqHere(loc){
+  var s=SQS(),reach=arcReach(),av=[],act=[];
+  SQ.forEach(function(q){if(q.at===loc&&!s.done[q.id]&&!s.act[q.id]&&q.arc<=reach)av.push(q)});
+  Object.keys(s.act).forEach(function(id){var st=sqStep(id);if(st&&st.at===loc)act.push(id)});
+  return {av:av,act:act};
+}
+function sqTick(kind){
+  if(!S||S.mode!=="free")return;var s=SQS(),loc=L().loc;
+  Object.keys(s.act).forEach(function(id){var st=sqStep(id),a=s.act[id];if(!st||st.k!==kind||st.at!==loc)return;
+    a.c=(a.c||0)+1;pfSave();if(a.c>=st.n){sqAdvance(id)}else toast("Missão: "+SQBY[id].t+sqProg(id))});
+}
+function sqMenu(){
+  var loc=L().loc,here=sqHere(loc),s=SQS(),night=S.t>=3,pl=PLBY[loc];
+  var h='<p class="sec" style="margin:0">Missões · '+esc(pl.n)+'</p><h2 style="margin:0">Quem precisa de ajuda</h2><p class="fine" style="margin:0">Até 3 missões ativas. Lutas e explorações contam sozinhas quando feitas no lugar certo. Ativas: '+Object.keys(s.act).length+'/3.</p>';
+  here.act.forEach(function(id){var q=SQBY[id],st=sqStep(id),dis=night&&st.k!=="pay"&&st.k!=="choice";
+    var lab={visit:"Fazer agora",pay:"Pagar ¤ "+st.c,boss:"Lutar agora",choice:"Decidir"}[st.k];
+    h+='<div class="item"><div><b>'+esc(q.t)+'</b><span>'+esc(st.t)+sqProg(id)+'</span></div>'+(lab?'<button class="btn small" data-q="do:'+id+'"'+((dis||(st.k==="pay"&&S.coin<st.c))?" disabled":"")+'>'+esc(lab)+'</button>':'')+'</div>'});
+  here.av.forEach(function(q){h+='<div class="item"><div><b>'+esc(q.t)+'</b><span>'+esc(q.g)+': '+esc(q.x)+' Recompensa: ¤ '+q.rw.c+(q.rw.f?' · ◆ '+q.rw.f:'')+(q.rw.eq?' · chance de equipamento':'')+'.</span></div><button class="btn small" data-q="acc:'+q.id+'"'+(Object.keys(s.act).length>=3?" disabled":"")+'>Aceitar</button></div>'});
+  if(!here.act.length&&!here.av.length)h+='<p class="fine" style="margin:0">Nada por aqui agora.</p>';
+  h+='<button class="btn small" id="sqX">Voltar</button>';
+  var o=ovl(h);$("#sqX").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-q]").forEach(function(b){b.onclick=function(){
+    var v=b.getAttribute("data-q").split(":"),id=v[1],q=SQBY[id];
+    if(v[0]==="acc"){if(Object.keys(s.act).length>=3)return;s.act[id]={s:0,c:0,day:S.day};pfSave();toast("Missão aceita: "+q.t);dj("vida","Aceitou a missão "+q.t+" ("+q.g+").");sqMenu();return}
+    sqDo(id);
+  }});
+}
+function sqDo(id){
+  var q=SQBY[id],st=sqStep(id);if(!st||st.at!==L().loc)return;
+  if(st.k==="pay"){if(S.coin<st.c)return;S.coin-=st.c;save();sfx("buy");sqAdvance(id);if(SQS().act[id])sqMenu();return}
+  if(st.k==="visit"){if(S.t>=3)return;advanceTime();var o=ovl('<p class="sec" style="margin:0">'+esc(q.t)+'</p><p style="margin:0;font-size:17px;line-height:1.55">'+esc(st.v)+'</p><button class="btn primary" id="sqV">Continuar</button>');$("#sqV").onclick=function(){o.hidden=true;sqAdvance(id);if(SQS().act[id])renderHub()};return}
+  if(st.k==="boss"){if(S.t>=3)return;advanceTime();$("#overlay").hidden=true;
+    var cfg=levelize({enemy:st.e,arch:st.a,lv:refLv()+2,tier:"boss",noadapt:true,sq:id,allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:5+q.arc,xp:20+q.arc*4});startBattle(cfg);return}
+  if(st.k==="choice"){
+    var h='<p class="sec" style="margin:0">'+esc(q.t)+'</p><p style="margin:0;font-size:17px;line-height:1.55">'+esc(st.t)+'</p>';
+    st.o.forEach(function(x,i){h+='<button class="btn" data-c="'+i+'">'+esc(x[0])+'</button>'});
+    var o2=ovl(h);
+    o2.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){var x=st.o[+b.getAttribute("data-c")],fx=Object.assign({},x[2]);
+      if(fx.rp&&fx.rp[0]==="P"&&!(PF.rel&&PF.rel.partner)){fx.san=(fx.san||0)+4;delete fx.rp}
+      if(fx.f){S.frags+=fx.f}var t=applyLF(fx);
+      var s=SQS();delete s.act[id];s.done[id]=S.day;pfSave();sqReward(q,x[1]+(t?" ("+t+(fx.f?" · ◆ +"+fx.f:"")+")":""));
+    }});
+  }
+}
+var _ebSq=endBattle;
+endBattle=function(win){
+  var cfg=(B&&B.cfg)||null,was=B&&B.done;
+  _ebSq(win);
+  if(was||!cfg||!win||cfg.win!=="_hub")return;
+  if(cfg.sq){var st=sqStep(cfg.sq);if(st&&st.k==="boss"){var nb=$("#bNext");if(nb){var f0=nb.onclick;nb.onclick=function(){f0&&f0.call(nb);sqAdvance(cfg.sq)}}}return}
+  sqTick("fight");
+};
+var _exSq=explore;
+explore=function(){var ok=S.t<3;_exSq();if(ok)sqTick("explore")};
+PAX.push(function(lf){
+  var h=sqHere(lf.loc),n=h.av.length+h.act.length;if(!n)return "";
+  return '<button class="act" data-ac="sq"><b>Missões'+(h.act.length?" · "+h.act.length+" passo"+(h.act.length>1?"s":"")+" aqui":"")+'</b><span>'+(h.av.length?h.av.length+" pedido"+(h.av.length>1?"s":"")+" novo"+(h.av.length>1?"s":"")+" de quem mora aqui":"Continue suas missões")+'</span></button>';
+});
+PAH.push(function(a){if(a==="sq"){sqMenu();return true}return false});
+function paneQuests(p){
+  var s=SQS(),h='<h2>Missões</h2><p style="margin:4px 0 8px;color:var(--mute)">Concluídas: '+Object.keys(s.done).length+' de '+SQ.length+'. Toque em "Missões" no mapa, dentro de cada vila ou cidade, para aceitar e avançar.</p><p class="sec">Ativas</p>';
+  var ids=Object.keys(s.act);
+  if(!ids.length)h+='<p class="fine" style="margin:0">Nenhuma missão ativa.</p>';
+  ids.forEach(function(id){var q=SQBY[id],st=sqStep(id);h+='<div class="item"><div><b>'+esc(q.t)+'</b><span>'+esc(st.t)+sqProg(id)+' · Local: '+esc(PLBY[st.at].n)+'</span></div></div>'});
+  h+='<p class="sec">Disponíveis</p>';
+  var reach=arcReach(),any=false;
+  SQ.forEach(function(q){if(s.done[q.id]||s.act[q.id])return;any=true;var lock=q.arc>reach;
+    h+='<div class="item'+(lock?" locked":"")+'"><div><b>'+esc(q.t)+'</b><span>'+(lock?"Chegue ao Arco "+q.arc+". ":"")+'Com '+esc(q.g)+', em '+esc(PLBY[q.at].n)+'.</span></div></div>'});
+  if(!any)h+='<p class="fine" style="margin:0">Você já ajudou todo mundo.</p>';
+  h+='<p class="sec">Concluídas</p>';
+  SQ.forEach(function(q){if(s.done[q.id])h+='<div class="item got"><div><b>'+esc(q.t)+' ✓</b><span>'+esc(PLBY[q.at].n)+' · dia '+s.done[q.id]+'</span></div></div>'});
+  p.innerHTML=h;
+}
+
+/* ---------- 6. Relacionamentos: mais ações e família ---------- */
+var YACT=[
+ {k:"elogio",n:"Elogiar",d:"Grátis, 1 vez por dia",min:1,p:0},
+ {k:"conselho",n:"Pedir um conselho",d:"Grátis, 1 vez por dia",min:2,p:0},
+ {k:"treino",n:"Treinar juntos",d:"1 período · Força ou Resistência",min:1,p:1},
+ {k:"cozinha",n:"Cozinhar juntos",d:"1 período · em casa",min:2,p:1,home:1},
+ {k:"passeio",n:"Passear por aqui",d:"1 período",min:2,p:1},
+ {k:"maos",n:"Dar as mãos",d:"Grátis, 1 vez por dia",min:3,p:0,love:1},
+ {k:"estrelas",n:"Ver as estrelas",d:"Só à noite · 1 vez por dia",min:3,p:0,love:1,night:1}
+];
+var PRAISE={emilia:["'Eu? Bonita? Você está brincando... não está?' As orelhas dela ficam vermelhas.","'Puck diria que você está tramando algo.' Mas ela sorri o resto do dia."],
+ rem:["Rem abaixa os olhos e sorri. 'Rem não merece tanto. Mas vai guardar isso.'","'Subaru-kun sempre sabe o que dizer.' Ela segura a bandeja com mais força."],
+ ram:["'Óbvio. Mas é bom ver que até Barusu percebe.'","Ram vira o rosto. 'Diga isso de novo e eu talvez esqueça de te xingar hoje.'"],
+ beatrice:["'Hmph. Betty já sabia disso, na verdade.' Ela balança as pernas, satisfeita.","'Elogios não compram contratos.' Mas ela não solta a sua manga."],
+ crusch:["Crusch assente, séria. 'Obrigada. Vindo de você, isso tem peso.'","'Sinto que está dizendo a verdade.' Ela sorri de leve, coisa rara."],
+ priscilla:["'Naturalmente. O mundo existe para me favorecer, inclusive você.'","Priscilla abre o leque. 'Você aprende rápido. Continue.'"],
+ anastasia:["'Elogio de graça? Que negócio estranho.' Mas ela anota no caderninho.","'Hmm, isso vale pelo menos um desconto.' Ela ri baixinho."]};
+var ADVICE=["Quando o inimigo tem Proteção, use cartas de dano alto ou queimaduras.","Missões das vilas dão equipamentos melhores que caçar à toa.","Durma em casa sempre que puder. A estrada cansa a mente.","Jogue uma carta de Subaru antes da carta de quem você confia: a sintonia aumenta o golpe.","Rem e Ram em sequência batem mais forte. Emilia e Beatrice protegem melhor juntas.","Montarias encurtam viagens longas. Vale o investimento.","O bestiário paga ◆ pela primeira vitória contra cada chefe."];
+function yDone(r,k){r.yd=r.yd||{};return r.yd[k]===S.day}
+function atHome(){var lf=L();return lf.loc==="casa"||!!resAt(lf.loc)}
+function yAct(id,k){
+  var C=REL_C[id],r=rsOf(id),a=YACT.filter(function(x){return x.k===k})[0],N=C.n;if(!a||yDone(r,k))return;
+  if(a.p&&S.t>=3)return;if(a.night&&S.t<3)return;if(a.home&&!atHome())return;
+  r.yd=r.yd||{};r.yd[k]=S.day;if(a.p)advanceTime();
+  var txt="",eff=[];
+  if(k==="elogio"){var g=1+Math.floor(Math.random()*3);relAdd(id,g);txt=rnd(PRAISE[id]||["'Obrigada.' Ela sorri."]);eff.push("Relação +"+g)}
+  else if(k==="conselho"){gainXP(5,true);txt=N+" pensa um pouco: '"+rnd(ADVICE)+"'";relAdd(id,1);eff.push("XP +5","Relação +1")}
+  else if(k==="treino"){var w=Math.random()<0.5?"pow":"res";PF[w]=(PF[w]||0)+0.6;relAdd(id,3);gainXP(8,true);txt="Vocês treinam até os braços tremerem. "+N+" corrige sua postura com paciência (ou nem tanta).";eff.push((w==="pow"?"Força":"Resistência")+" +0,6","Relação +3")}
+  else if(k==="cozinha"){relAdd(id,3);S.san=clamp(S.san+5,0,100);txt="A cozinha vira uma bagunça de farinha e risadas. O resultado é estranho, mas vocês comem tudo.";eff.push("Relação +3","Sanidade +5")}
+  else if(k==="passeio"){relAdd(id,4);L().rep=Math.min(100,L().rep+1);txt="Vocês andam por "+PLBY[L().loc].n+" sem pressa. "+N+" aponta coisas que você nunca tinha notado.";eff.push("Relação +4","Reputação +1")}
+  else if(k==="maos"){relAdd(id,2);S.san=clamp(S.san+3,0,100);txt="Os dedos se encontram no meio do caminho. Nenhum dos dois comenta.";eff.push("Relação +2","Sanidade +3")}
+  else if(k==="estrelas"){relAdd(id,5);S.san=clamp(S.san+4,0,100);txt="Deitados na grama, vocês inventam nomes para as constelações. "+N+" adormece primeiro.";eff.push("Relação +5","Sanidade +4")}
+  dj("amor",a.n+" com "+N+".");pfSave();save();sfx("ok");
+  var o=ovl('<p class="sec" style="margin:0;color:'+C.c+'">'+esc(N)+' · '+esc(a.n)+'</p><p style="margin:0;font-size:17px;line-height:1.55">'+esc(txt)+'</p><p class="sec" style="margin:0">'+esc(eff.join(" · "))+'</p><button class="btn primary" id="yOk">Continuar</button>');
+  $("#yOk").onclick=function(){personMenu(id)};
+}
+/* família */
+var KNAMES={f:["Lia","Rina","Aiko","Mira","Sora","Elsa","Nana","Yuki"],m:["Kaito","Ren","Haru","Felix","Tomo","Leo","Sei","Aki"]};
+function famOk(id){var r=rsOf(id);return REL_C[id]&&REL_C[id].rom&&PF.rel.partner===id&&r.s==="casado"&&r.live}
+function famHTML(id,night){
+  var r=rsOf(id),ks=KIDS().filter(function(k){return k.par===id}),h='<p class="sec" style="margin:6px 0 0">Família</p>';
+  if(!famOk(id)){h+='<p class="fine" style="margin:0">'+(rsOf(id).s==="casado"?"Para pensar em filhos, vocês precisam morar juntos.":"Depois do casamento, vocês podem formar uma família.")+'</p>';return h}
+  if(r.preg)h+='<p class="fine" style="margin:0">Vocês estão esperando um bebê. Ele chega '+(r.preg.due-S.day<=0?"amanhã de manhã":"em "+(r.preg.due-S.day)+" dias")+'.</p>';
+  else if(KIDS().length<3)h+='<button class="btn" data-m="y:filho"'+((night||(r.kidTalk===S.day))?" disabled":"")+'>Conversar sobre ter um filho</button>';
+  ks.forEach(function(k){h+=kidRow(k)});
+  return h;
+}
+function kidRow(k){
+  var i=KIDS().indexOf(k),night=S.t>=3,home=atHome(),kd=k.yd||{},st=kidStage(k);
+  return '<div class="item"><div><b>'+esc(k.n)+' · '+st+', '+kidAge(k)+' ano'+(kidAge(k)===1?"":"s")+'</b><span>Laço '+Math.round(k.b||0)+'/100 · talento: '+esc((KTR[k.par]||{n:"Coragem"}).n)+' '+(k.sk||0)+(kidAge(k)>=10?((k.b||0)>=40?" · luta ao seu lado":" · luta ao seu lado com laço 40"):"")+(home?"":" · fica em casa")+'</span></div><div class="stack" style="min-width:118px">'+
+   '<button class="btn small" data-k="'+i+':brincar"'+((night||!home||kd.brincar===S.day)?" disabled":"")+'>Brincar · 1p</button>'+
+   (st!=="Bebê"?'<button class="btn small" data-k="'+i+':ensinar"'+((night||!home||kd.ensinar===S.day)?" disabled":"")+'>Ensinar · 1p</button>':'')+
+   '<button class="btn small" data-k="'+i+':historia"'+((!home||kd.historia===S.day)?" disabled":"")+'>'+(st==="Bebê"?"Cantar para dormir":"Contar história")+'</button></div></div>';
+}
+function kidAct(i,k,back){
+  var kid=KIDS()[i];if(!kid)return;kid.yd=kid.yd||{};if(kid.yd[k]===S.day||!atHome())return;
+  if((k==="brincar"||k==="ensinar")&&S.t>=3)return;
+  kid.yd[k]=S.day;var txt,eff;
+  if(k==="brincar"){advanceTime();kid.b=Math.min(100,(kid.b||0)+5);S.san=clamp(S.san+5,0,100);txt=kidStage(kid)==="Bebê"?kid.n+" agarra o seu dedo e não solta mais. Você esquece do mundo por uma tarde.":kid.n+" inventa uma brincadeira com regras que mudam a cada minuto. Você perde todas as vezes.";eff="Laço +5 · Sanidade +5"}
+  else if(k==="ensinar"){advanceTime();kid.b=Math.min(100,(kid.b||0)+3);kid.sk=Math.min(6,(kid.sk||0)+(Math.random()<0.5?1:0));gainXP(10,true);txt="Você ensina o que sabe, e "+kid.n+" pergunta coisas que você nunca pensou em perguntar.";eff="Laço +3 · talento "+kid.sk+" · XP +10"}
+  else{kid.b=Math.min(100,(kid.b||0)+2);S.san=clamp(S.san+3,0,100);txt=kidStage(kid)==="Bebê"?"Você canta baixinho, desafinado. "+kid.n+" dorme antes do segundo verso.":"Você conta a história de um garoto que voltava no tempo. "+kid.n+" pede para ouvir de novo amanhã.";eff="Laço +2 · Sanidade +3"}
+  pfSave();save();sfx("ok");dj("amor","Momento com "+kid.n+".");
+  var o=ovl('<p class="sec" style="margin:0">Família · '+esc(kid.n)+'</p><p style="margin:0;font-size:17px;line-height:1.55">'+esc(txt)+'</p><p class="sec" style="margin:0">'+esc(eff)+'</p><button class="btn primary" id="kOk">Continuar</button>');
+  $("#kOk").onclick=function(){back()};
+}
+function talkKids(id){
+  var r=rsOf(id),N=REL_C[id].n;if(S.t>=3||r.kidTalk===S.day)return;r.kidTalk=S.day;
+  var o=ovl('<p class="sec" style="margin:0;color:'+REL_C[id].c+'">'+esc(N)+'</p><h2 style="margin:0">Aumentar a família?</h2><p style="margin:0;font-size:17px;line-height:1.55">À noite, depois do jantar, '+esc(N)+' segura a sua mão. \'Você já pensou em como seria ter uma criança correndo por aqui?\'</p><button class="btn primary" data-f="1">Dizer que sim, de coração</button><button class="btn" data-f="0">Dizer que ainda não é a hora</button>');
+  o.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){
+    if(b.getAttribute("data-f")==="1"){advanceTime();r.preg={due:S.day+10};relAdd(id,10);dj("amor","Subaru e "+N+" vão ter um bebê.");pfSave();save();sfx("catch");
+      var o2=ovl('<p style="margin:0;font-size:17px;line-height:1.55">'+esc(N)+' ri e chora ao mesmo tempo. Algumas semanas depois, a notícia se confirma: um bebê está a caminho.</p><p class="sec" style="margin:0">O bebê chega em 10 dias · Relação +10</p><button class="btn primary" id="fOk">Continuar</button>');$("#fOk").onclick=function(){personMenu(id)}}
+    else{relAdd(id,1);personMenu(id)}
+  }});
+}
+function birthScene(){
+  var par=PF.rel&&PF.rel.partner;if(!par||!REL_C[par])return false;var r=rsOf(par);if(!r.preg||S.day<r.preg.due)return false;
+  var N=REL_C[par].n,g=Math.random()<0.5?"f":"m",sug=rnd(KNAMES[g]);
+  var o=ovl('<p class="sec" style="margin:0;color:'+REL_C[par].c+'">Um novo dia</p><h2 style="margin:0">'+(g==="f"?"É uma menina!":"É um menino!")+'</h2><p style="margin:0;font-size:17px;line-height:1.55">Pela manhã, a casa inteira acorda com um choro forte. '+esc(N)+' segura o bebê e olha para você como quem diz: a gente conseguiu.</p><label class="fine" style="margin:0">Nome do bebê</label><input id="kName" maxlength="16" value="'+esc(sug)+'" style="padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--ink2);color:var(--paper);font-size:16px"><button class="btn primary" id="kGo">Dar este nome</button>');
+  $("#kGo").onclick=function(){
+    var nm=String($("#kName").value||"").replace(/[<>]/g,"").trim().slice(0,16)||sug;
+    KIDS().push({n:nm,g:g,par:par,born:S.day,b:15,sk:0});r.preg=null;relAdd(par,12);unlock("pais");if(KIDS().length>=3)unlock("pais3");
+    dj("amor","Nasceu "+nm+", filho de Subaru e "+N+".");pfSave();save();sfx("catch");vib([40,60,40]);o.hidden=true;renderHub();
+  };
+  return true;
+}
+ACH.pais=["Uma família de verdade","Tenha um filho no Modo Livre."];
+ACH.pais3=["Casa cheia","Tenha três filhos."];
+/* sono em casa com os filhos acalma */
+var _slKids=sleepDay;
+sleepDay=function(){
+  var n=KIDS().length;_slKids();
+  if(n&&atHome()&&!TRIP()){S.san=clamp(S.san+Math.min(6,2*n),0,100);save()}
+};
+var _rhBirth=renderHub;
+renderHub=function(){_rhBirth();if(S&&S.mode==="free"&&$("#overlay").hidden&&!TRIP())birthScene()};
+
+/* nova ficha de relacionamento: barra de progresso, ações a dois e família */
+var _pmY=personMenu;
+personMenu=function(id){
+  _pmY(id);
+  var C=REL_C[id];if(!C)return;
+  var o=$("#overlay"),box=o.querySelector(".stack");if(!box)return;
+  var c=relOf(id),s=stageOf(c.rp),nx=STG[s+1],r=rsOf(id),par=PF.rel.partner===id,night=S.t>=3,love=par&&C.rom&&r.s&&r.s!=="corte";
+  var head=o.querySelector(".relhead");
+  if(head)head.insertAdjacentHTML("afterend",'<div class="relbar"><div class="bar"><div style="width:'+(nx?Math.min(100,Math.round((c.rp-STG[s][1])/(nx[1]-STG[s][1])*100)):100)+'%;background:'+C.c+'"></div></div><span class="fine" style="margin:0">'+esc(STG[s][0])+' · '+Math.round(c.rp)+' pontos'+(nx?' · faltam '+Math.ceil(nx[1]-c.rp)+' para '+esc(nx[0]):' · laço máximo')+(lacoOf(id)?' · Laço em batalha +'+lacoOf(id):'')+'</span></div>');
+  var h='<p class="sec" style="margin:6px 0 0">Fazer juntos</p><div class="yacts">';
+  YACT.forEach(function(a){
+    if(a.love&&!love)return;
+    var lock=s<a.min,dis=lock||yDone(r,a.k)||(a.p&&night)||(a.night&&!night)||(a.home&&!atHome());
+    h+='<button class="act" data-m="y:'+a.k+'"'+(dis?" disabled":"")+'><b>'+esc(a.n)+'</b><span>'+(lock?"Requer "+esc(STG[a.min][0]):yDone(r,a.k)?"Já hoje":(a.home&&!atHome())?"Só em casa":(a.night&&!night)?"Só à noite":esc(a.d))+'</span></button>';
+  });
+  h+='</div>';
+  if(par&&C.rom)h+=famHTML(id,night);
+  var back=$("#mBack");if(back)back.insertAdjacentHTML("beforebegin",h);else box.insertAdjacentHTML("beforeend",h);
+  var f0=o.onclick;
+  o.onclick=function(e){
+    var b=e.target.closest?e.target.closest("button[data-m^='y:'],button[data-k]"):null;
+    if(b){if(b.disabled)return;
+      if(b.hasAttribute("data-k")){var v=b.getAttribute("data-k").split(":");kidAct(+v[0],v[1],function(){personMenu(id)});return}
+      var k=b.getAttribute("data-m").slice(2);if(k==="filho")talkKids(id);else yAct(id,k);return}
+    if(f0)f0.call(o,e);
+  };
+};
+/* aba Família no menu */
+function paneFamily(p){
+  var par=PF.rel&&PF.rel.partner,ks=KIDS(),h='<h2>Família</h2>';
+  if(!par)h+='<p style="margin:4px 0 8px;color:var(--mute)">Você ainda não tem um par. Conheça as pessoas pelo mapa, aproxime-se e declare-se.</p>';
+  else{var r=rsOf(par);h+='<p style="margin:4px 0 8px;color:var(--mute)">'+esc(REL_C[par].n)+': '+esc(statusText(par))+(r.live?" · moram juntos":"")+(r.preg?" · bebê a caminho ("+Math.max(0,r.preg.due-S.day)+" dias)":"")+'.</p>'}
+  if(!ks.length)h+='<p class="fine" style="margin:0">Depois de casar e morar juntos, vocês podem ter até 3 filhos. As crianças crescem um ano por semana. A partir dos 10 anos, com laço 40, lutam ao seu lado.</p>';
+  else{h+='<p class="fine" style="margin:0 0 6px">'+(atHome()?"Você está em casa.":"Você está longe de casa. Volte para estar com as crianças.")+' Dormir em casa com as crianças dá sanidade extra.</p>';ks.forEach(function(k){h+=kidRow(k)})}
+  p.innerHTML=h;
+  p.onclick=function(e){var b=e.target.closest?e.target.closest("button[data-k]"):null;if(!b||b.disabled)return;var v=b.getAttribute("data-k").split(":");kidAct(+v[0],v[1],function(){openMenu("Família")})};
+}
+
+/* ---------- 7. Animações de batalha ---------- */
+function bSnap(){return B?{e:B.ehp,p:B.php,b:B.pblk,a:B.eblk||0,p2:!!B.p2,s:S.san}:null}
+function fxFloat(sel,txt,cls){
+  var host=document.querySelector("#battle "+sel);if(!host)return;
+  var L0=document.getElementById("fxl");if(!L0){L0=document.createElement("div");L0.id="fxl";document.body.appendChild(L0)}
+  var r=host.getBoundingClientRect(),d=document.createElement("span");d.className="fx-float "+cls;d.textContent=txt;
+  d.style.left=(r.left+r.width*(0.3+Math.random()*0.4))+"px";var k=fxFloat.k=(fxFloat.k||0)+1;clearTimeout(fxFloat.t);fxFloat.t=setTimeout(function(){fxFloat.k=0},450);
+  d.style.top=(r.top+Math.min(r.height*0.35,120)+(k-1)*24)+"px";d.style.animationDelay=((k-1)*0.08)+"s";
+  L0.appendChild(d);setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d)},1000);
+}
+function fxClass(sel,cls,ms){var e=document.querySelector("#battle "+sel);if(!e)return;e.classList.remove(cls);void e.offsetWidth;e.classList.add(cls);setTimeout(function(){e.classList.remove(cls)},ms||500)}
+function fxBanner(txt){var b=$("#battle");if(!b)return;var d=document.createElement("div");d.className="fx-banner";d.textContent=txt;b.appendChild(d);b.classList.add("p2flash");setTimeout(function(){b.classList.remove("p2flash");if(d.parentNode)d.parentNode.removeChild(d)},1300)}
+function fxDiff(s0,enemyTurn){
+  var s1=bSnap();if(!s0||!s1)return;
+  var dE=s0.e-s1.e,dA=s0.a-s1.a,dP=s0.p-s1.p,dB=s1.b-s0.b;
+  if(dE>0){fxFloat(".foe","−"+dE,"fx-dmg");fxClass(".foe","hit",380);vib(18)}
+  if(dE<0)fxFloat(".foe","+"+(-dE),"fx-heal");
+  if(dA>0&&!enemyTurn)fxFloat(".foe","armadura −"+dA,"fx-arm");
+  if(dA<0)fxFloat(".foe","armadura +"+(-dA),"fx-arm");
+  if(enemyTurn){fxClass(".foe","lunge",460);if(dP>0){fxFloat(".me","−"+dP,"fx-dmg");fxClass(".me","hurt",520);vib([30,30,40])}else fxFloat(".me","bloqueado!","fx-blk")}
+  else{if(dP<0)fxFloat(".me","+"+(-dP),"fx-heal");if(dP>0){fxFloat(".me","−"+dP,"fx-dmg");fxClass(".me","hurt",520)}if(dB>0)fxFloat(".me","+"+dB+" escudo","fx-blk")}
+  if(s1.s<s0.s)fxFloat(".me","☾ −"+(s0.s-s1.s),"fx-san");
+  if(!s0.p2&&s1.p2){fxBanner("Fase 2");sfx("bad")}
+}
+var _pcFx=playCard,_etFx=endTurn;
+playCard=function(i){var s0=bSnap(),c=B&&!B.done&&CARDS[B.hand[i]],ok=c&&c.c<=B.en;_pcFx(i);if(ok){sfx(c.dmg?"ok":"swipe");fxDiff(s0,false)}};
+endTurn=function(){var s0=bSnap();_etFx();fxDiff(s0,true)};
+
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
