@@ -4324,7 +4324,7 @@ function mapHub(){
   ["hScene","hAI","hTea"].forEach(function(id){var e=$("#"+id);if(e&&lf.loc!=="casa")e.hidden=true});
   var mk=$("#hMk");if(mk){var cd=mk.closest(".hubcard");if(cd&&["vila","capital","pristella","vollachia","caravana","liphas","guaral","ribeirinha","pedraferro"].indexOf(lf.loc)<0)cd.hidden=true}
   hub.querySelectorAll(".hubcard").forEach(function(c){var ac=c.querySelector(".acts");if(!ac||c.id==="hMapCard")return;var any=false;ac.querySelectorAll("button").forEach(function(b){if(!b.hidden)any=true});if(!any)c.hidden=true});
-  var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Lugares distantes gastam um período. Para dormir neles, tenha uma moradia ou reserve a estalagem.</p>'+placeActions(lf);
+  var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Dentro da mesma região a viagem é rápida; entre regiões leva de 1 período (1p) a meio dia (½d), e as extremidades levam 1 a 2 dias (1d, 2d), dormindo na estrada. Montarias encurtam a viagem.</p>'+placeActions(lf);
   var pp=peopleHere();
   if(pp.length){
     h+='<div class="sec" style="margin:6px 0 4px">Pessoas aqui agora</div><div style="display:flex;flex-direction:column;gap:6px">';
@@ -4410,7 +4410,8 @@ sleepDay=function(){
   var far=!!PLBY[lf.loc].far,sb;
   var par=PF.rel&&PF.rel.partner;
   var sp=sleepPlace();far=!!sp.far;
-  if(far){var inn=lf.inn&&lf.inn.loc===lf.loc&&lf.inn.day===S.day?lf.inn:null;sb=inn?inn.b:-8;lf.inn=null;dj("vida",inn?"Dormiu na estalagem de "+PLBY[lf.loc].n+".":"Dormiu ao relento em "+PLBY[lf.loc].n+".")}
+  if(sp.road){sb=-3;lf.inn=null;dj("vida","Acampou na estrada a caminho de "+PLBY[lf.trip.to].n+".")}
+  else if(far){var inn=lf.inn&&lf.inn.loc===lf.loc&&lf.inn.day===S.day?lf.inn:null;sb=inn?inn.b:-8;lf.inn=null;dj("vida",inn?"Dormiu na estalagem de "+PLBY[lf.loc].n+".":"Dormiu ao relento em "+PLBY[lf.loc].n+".")}
   else{sb=sp.b-(lf.debt>0?3:0);lf.loc=sp.loc;lf.inn=null;
   if(sp.walk)toast("Você voltou para dormir em: "+sp.n);
   if(par&&rsOf(par).s==="casado")sb+=4+(sp.b>=12?2:0);
@@ -5298,7 +5299,7 @@ mapSVG=function(lf){
     s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+12)+'" class="wlb">'+esc(p.s||p.n.replace("Floresta e lago","Floresta").replace("Vila de Irlam","Irlam").replace("Torre de Vigia","Torre").replace("Capital Real","Capital"))+'</text>';
     if(p.dg&&!lock&&rec[p.id])s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+22)+'" class="wrec">'+(p.inf?"Rec. andar ":"Andar ")+rec[p.id]+'</text>';
     if(lock)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">Arco '+p.arc+'</text>';
-    else if(p.far&&!cur&&!p.dg)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">1p</text>';
+    else if(!cur){var tv=tShort(travelP(lf.loc,p.id));if(tv)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">'+tv+'</text>'}
     ppl.slice(0,4).forEach(function(id,i){var col=REL_C[id]?REL_C[id].c:"#8f9abb";s+='<circle cx="'+(xy[0]-15+i*10)+'" cy="'+(xy[1]-R-8)+'" r="4.5" fill="'+col+'" class="wp"/>'});
     s+='</g>';
   });
@@ -6169,11 +6170,11 @@ mapSVG=function(lf){
     if(home&&!lock&&p.id!=="casa")s+='<text x="'+(xy[0]-R+1)+'" y="'+(xy[1]-R+5)+'" class="whome">⌂</text>';
     if(p.dg&&!lock&&rec[p.id])s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+24)+'" class="wrec">'+(p.inf?"Rec. andar ":"Andar ")+rec[p.id]+'</text>';
     if(lock)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">Arco '+p.arc+'</text>';
-    else if(p.far&&!cur&&!p.dg)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">1p</text>';
+    else if(!cur){var tv=tShort(travelP(lf.loc,p.id));if(tv)s+='<text x="'+(xy[0]+R-4)+'" y="'+(xy[1]-R+2)+'" class="wlk">'+tv+'</text>'}
     ppl.slice(0,4).forEach(function(id,i){var col=REL_C[id]?REL_C[id].c:"#8f9abb";s+='<circle cx="'+(xy[0]-15+i*10)+'" cy="'+(xy[1]-R-8)+'" r="4.5" fill="'+col+'" class="wp"/>'});
     s+='</g>';
   });
-  return s+'</svg></div><p class="fine" style="margin:4px 0 0">Arraste para ver o mapa inteiro. ⌂ marca lugares onde você tem moradia.</p>';
+  return s+'</svg></div><p class="fine" style="margin:4px 0 0">Arraste para ver o mapa inteiro. ⌂ marca suas moradias. Os números mostram o tempo de viagem daqui ('+esc(ZN[ZONE[lf.loc]]||"")+').</p>';
 };
 function centerMap(){
   try{var w=document.querySelector("#hub .mapwrap");if(!w)return;var xy=POS[L().loc]||POS.casa;
@@ -6214,6 +6215,7 @@ function buyRes(loc,t){
 }
 function resMenu(loc){
   var list=RES[loc],cur=RS()[loc]||0,pl=PLBY[loc],lf=L();
+  if(!list||!pl)return;
   var h='<p class="sec" style="margin:0">Moradias · '+esc(pl.n)+'</p><h2 style="margin:0">Onde dormir em '+esc(pl.s||pl.n)+'</h2><p class="fine" style="margin:0">Quem tem moradia aqui dorme aqui e acorda aqui, com o bônus de sono da casa. Sem moradia, nos lugares distantes você precisa de estalagem ou dorme ao relento. <b class="coin">¤ '+S.coin+'</b></p>';
   list.forEach(function(x,i){var t=i+1,own=cur>=t,next=t===cur+1;
     var dis=own||!next||S.coin<x[1]||(!x[3]&&lf.job<1);
@@ -6277,6 +6279,69 @@ endBattle=function(win){
   var ov=$("#overlay"),p0=ov&&ov.querySelector(".in p");
   if(p0)p0.insertAdjacentHTML("afterend",'<p class="sec" style="margin:0">Eco vencido: ◆ +'+(fr+(first?2:0))+(first?" (primeira vitória)":"")+(it?" · "+esc(it.n)+" ("+RAR[it.r-1]+")":"")+'</p>');
 };
+
+/* ---------- 6. Viagens por regiões ---------- */
+/* Mesma região: grátis (ou 1 período se for longe dentro dela). Entre regiões: 1 período,
+   meio dia (2 períodos) ou 1 a 2 dias para as extremidades, dormindo na estrada. */
+var ZONE={casa:"M",vila:"M",floresta:"M",caverna:"M",santuario:"M",camaras:"M",
+ capital:"C",cripta:"C",torreeco:"C",liphas:"C",pedraferro:"C",mina:"C",
+ vale:"O",ribeirinha:"O",pristella:"O",aqueduto:"O",
+ caravana:"A",torre:"A",biblioteca:"A",
+ guaral:"V",vollachia:"V",fortaleza:"V"};
+var ZN={M:"Terras de Mathers",C:"Centro do reino",O:"Oeste (Pristella)",A:"Dunas de Augria",V:"Vollachia"};
+var ZT={MC:1,MO:2,MA:2,MV:3,CO:1,CA:1,CV:2,OA:3,OV:2,AV:6};
+function travelP(a,b){
+  if(a===b)return 0;var za=ZONE[a],zb=ZONE[b];
+  if(!za||!zb)return 1;
+  if(za===zb){var p=POS[a],q=POS[b];return (p&&q&&Math.hypot(p[0]-q[0],p[1]-q[1])>120)?1:0}
+  return ZT[za+zb]||ZT[zb+za]||2;
+}
+function tLabel(n){return n<=0?"rápido":n===1?"1 período":n===2?"½ dia":n===3?"1 dia":n<=5?"1½ dia":"2 dias"}
+function tShort(n){return n<=0?"":n===1?"1p":n===2?"½d":n===3?"1d":n<=5?"1½d":"2d"}
+function mountCut(n){return n<=0?0:Math.max(1,Math.floor(n/3))}
+MOUNTS.forEach(function(m){m.d=(m.free===1?"1 viagem":m.free+" viagens")+" por dia mais rápida: −1 período, ou −1 por dia de estrada."+(m.st&&m.st.luck?" Sorte +"+m.st.luck+"%.":"")});
+function TRIP(){return L().trip||null}
+goPlace=function(id){
+  var lf=L(),pl=PLBY[id],cur=lf.loc;
+  if(!pl||pl.arc>arcReach()){toast("Chegue ao Arco "+(pl?pl.arc:"?")+" no Modo Retornos para viajar até lá.");return}
+  if(cur===id||TRIP())return;
+  var n=travelP(cur,id),m=mountNow(),cut=0;
+  if(n>0&&S.t>=3){toast("Já é noite. Durma e viaje amanhã.");return}
+  if(n>0&&m){var mt=MTR();if(mt.n<m.free){cut=mountCut(n);mt.n++}}
+  n=Math.max(0,n-cut);
+  if(DR()&&cur!==id)dgEnd("Você deixa a expedição.",false);
+  var left=3-S.t;
+  if(n<=left){
+    S.t+=n;lf.loc=id;pfSave();save();
+    toast(n?("Viagem até "+pl.n+": "+tLabel(n)+(cut?" ("+m.n+" poupou "+cut+")":"")):("Você vai até "+pl.n+"."));
+    renderHub();return;
+  }
+  S.t=3;lf.trip={to:id,from:cur,left:n-left,tot:n};pfSave();save();
+  toast("Viagem longa até "+pl.n+": "+tLabel(n)+(cut?" ("+m.n+" poupou "+cut+")":""));
+  dj("vida","Partiu de "+PLBY[cur].n+" rumo a "+pl.n+" ("+tLabel(n)+").");
+  renderHub();
+};
+function tripStep(){
+  var lf=L(),tp=lf.trip;if(!tp||S.t>=3)return;
+  var k=Math.min(tp.left,3-S.t);S.t+=k;tp.left-=k;
+  if(tp.left<=0){lf.loc=tp.to;lf.trip=null;toast("Você chegou a "+PLBY[tp.to].n+".");dj("vida","Chegou a "+PLBY[tp.to].n+".")}
+  else S.t=3;
+  pfSave();save();
+}
+function campOverlay(){
+  var tp=TRIP();if(!tp)return;
+  var road=["A estrada some no escuro. Você monta um acampamento simples e escuta os grilos.","As carroças param para a noite. Alguém divide pão e histórias em volta da fogueira.","O vento muda. Você dorme encostado numa pedra, com a mochila de travesseiro."];
+  var o=ovl('<p class="sec" style="margin:0">Em viagem · '+esc(PLBY[tp.from].n)+' → '+esc(PLBY[tp.to].n)+'</p><h2 style="margin:0">Noite na estrada</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(road[(S.day+tp.left)%road.length])+'</p><p class="sec" style="margin:0">Faltam '+tLabel(tp.left)+' de viagem. Dormir na estrada rende pouco descanso.</p><button class="btn primary" id="tCamp">Acampar e seguir amanhã</button>');
+  $("#tCamp").onclick=function(){o.hidden=true;sleepDay()};
+}
+var _rhTrip=renderHub;
+renderHub=function(){
+  if(S&&S.mode==="free"&&TRIP()&&S.t<3)tripStep();
+  _rhTrip();
+  if(S&&S.mode==="free"&&TRIP()&&S.t>=3&&$("#overlay").hidden)campOverlay();
+};
+var _spTrip=sleepPlace;
+sleepPlace=function(){var tp=TRIP();if(tp)return {loc:L().loc,far:true,road:true};return _spTrip()};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
