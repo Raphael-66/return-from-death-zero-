@@ -58,3 +58,8 @@
 - `UACT[loc]`: atividade única do dia (`run()` devolve [texto, efeito] ou `ui` = race/auction/rebuild/duel). `PF.ua` (dia feito), `PF.uaN` (contagem com `multi`), `PF.uaSeen`. Categoria `uniq` em `ACAT` ("Especial daqui"), aberta por padrão.
 - `PEV[loc]`: eventos de chegada (formato dos eventos de vida, efeitos por `applyLF`). Disparam com 40% de chance na chegada, no máximo um por dia e lugar; a primeira visita mostra `arrivalCard`. `PF.lastLoc`, `PF.pvis` (lugares visitados).
 - Cidade das Cinzas: `PF.rb` (0–100). Em 50% cria `RES.cinzas`; em 75% libera o comércio (`tradeOk`).
+
+## Facções da história e guerra (Atualização 25)
+- `CAMP` (5 campos), `CRK` (postos), `PF.camp {id, inf{}, sw, task}`; `campPerk()` soma bônus no `eq()` do Modo Livre; `campJoin(id)` faz a troca com custo.
+- Mapa: `MOX/MOY` (140, 200) deslocam o mapa antigo; `mapArt` envolve o desenho antigo num `<g transform>` e acrescenta Gusteko, Kararagi e o sul. Lugares `post:1` têm arco 9 até `warEra()` (= `META.ends` não vazio); `postOpen()` libera.
+- Guerra: `PF.war {on, ter{id:{o,s}}, rel{vol,gus,kar}, atk[], mor{}, ban, log[], fr}`; `warTick()` roda ao dormir; `warBattle(kind, ter, nat, wave, ref)` monta a batalha (`cfg.war`); o `endBattle` troca o botão Continuar para a segunda onda ou para `warResult`. `placeOcc(loc)` bloqueia comércio e atividade única.

@@ -639,6 +639,19 @@ details.bzc>summary::before{content:none}
 .trk i{position:absolute;top:1px;left:0;font-style:normal;transform:scaleX(-1);font-size:19px;color:#c9d2ee;animation:run var(--d) cubic-bezier(.3,.1,.3,1) forwards}
 .lane.mine .trk i{color:var(--gold)}
 @keyframes run{from{left:0}to{left:calc(var(--f) - 24px)}}
+/* ===== Atualização 25: nações, campos e guerra ===== */
+.m2 .n-gus{fill:#1c2546;stroke:#33427a;stroke-width:2}.m2 .n-kar{fill:#1f2340;stroke:#33427a;stroke-width:2}.m2 .n-vol{fill:#18203c;stroke:#33427a;stroke-width:2}
+.m2 .sea2{fill:#2a5d93;opacity:.35}
+.m2 .nborder{fill:none;stroke:#e4b867;stroke-width:1.4;stroke-dasharray:3 7;opacity:.35}
+.m2 .wrg.nat{font-size:15px;opacity:.5;letter-spacing:.22em}
+.m2 .front{fill:none;stroke:#ff4d6d;stroke-width:3;stroke-dasharray:6 5;opacity:.85;animation:fdash 1.2s linear infinite}
+@keyframes fdash{to{stroke-dashoffset:-22}}
+.m2 .watk{font-size:18px;fill:#ff6b80;paint-order:stroke;stroke:#0a0d1a;stroke-width:3px}
+.campc{display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:12px;padding:10px 12px}
+.campc.on{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 14%,transparent),var(--ink2))}
+.campc div{display:flex;flex-direction:column;gap:3px;min-width:0}.campc b{color:var(--c)}.campc span{font-size:13px;line-height:1.35}
+.campc .fine{margin:0;font-size:12px}.campc .tag{flex:none;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c)}
+.item.warn{border-color:#ff4d6d}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -8995,7 +9008,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 24 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 25 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -9444,6 +9457,311 @@ function drNormalize(root){
 }
 var _rh25=renderHub;
 renderHub=function(){_rh25();try{drNormalize($("#hub"))}catch(e){}};
+
+/* ===== Atualização 25: Campos da Seleção, mapa das nações e guerra entre impérios (Modo Livre) ===== */
+
+/* ---------- 1. Campos da Seleção Real (a partir do Arco 3) ---------- */
+var CAMP={
+ emilia:{n:"Campo de Emilia",cand:"Emilia",hq:"casa",c:"#b8e6ff",lema:"Um reino onde ninguém seja julgado pela origem.",perk:[{neg:3},{luck:3},{hp:3},{xp:4}]},
+ crusch:{n:"Campo de Crusch",cand:"Crusch",hq:"karsten",c:"#7aa7ff",lema:"Honra, palavra dada e um reino sem mentiras.",perk:[{hp:3},{sdmg:1},{hp:3},{dmg:1}]},
+ priscilla:{n:"Campo de Priscilla",cand:"Priscilla",hq:"capital",c:"#ff6a4d",lema:"O mundo gira a favor de quem tem coragem de mandar nele.",perk:[{luck:4},{coin:4},{luck:4},{sdmg:1}]},
+ anastasia:{n:"Campo de Anastasia",cand:"Anastasia",hq:"capital",c:"#e9d28a",lema:"Prosperidade para todos, e lucro para quem souber ver.",perk:[{coin:4},{disc:3},{coin:4},{luck:3}]},
+ felt:{n:"Campo de Felt",cand:"Felt",hq:"bairro",c:"#f2c75c",lema:"Virar o reino de cabeça para baixo, a começar pelos de cima.",perk:[{luck:3},{xp:4},{coin:3},{luck:4}]}
+};
+var CRK=[["Simpatizante",0],["Apoiador",15],["Membro",40],["Conselheiro",80],["Braço direito",140]];
+function CP(){var c=PF.camp||(PF.camp={id:null,inf:{},sw:-99,task:-1});if(!c.inf)c.inf={};return c}
+function campOk(){return S&&S.mode==="free"&&arcReach()>=3}
+function campInf(id){return CP().inf[id||CP().id]||0}
+function campRank(id){var v=campInf(id),r=0;CRK.forEach(function(x,i){if(v>=x[1])r=i});return r}
+function campPerk(){var c=CP(),o={};if(!c.id||!campOk())return o;var r=campRank();CAMP[c.id].perk.forEach(function(p,i){if(r>=i+1)for(var k in p)o[k]=(o[k]||0)+p[k]});return o}
+var _eq25=eq;eq=function(k){var v=_eq25(k);try{if(S&&S.mode==="free"){var p=campPerk()[k];if(p)v+=p}}catch(e){}return v};
+function campAdd(n){var c=CP();if(!c.id)return;var r0=campRank();c.inf[c.id]=Math.max(0,(c.inf[c.id]||0)+n);var r1=campRank();pfSave();
+  if(r1>r0){toast(CAMP[c.id].n+": "+CRK[r1][0]+"!");sfx("catch");if(r1>=4)unlock("camp4")}}
+ACH.camp1=["Lado escolhido","Apoie um campo da Seleção Real."];
+ACH.camp4=["Braço direito","Chegue ao posto mais alto num campo da Seleção."];
+function campJoin(id){
+  var c=CP(),old=c.id;if(old===id)return;
+  if(old){var lost=Math.floor((c.inf[old]||0)/2);c.inf[old]=(c.inf[old]||0)-lost;var oc=CAMP[old];var rk=Object.keys(REL_C).filter(function(k){return REL_C[k].n===oc.cand})[0];if(rk)relAdd(rk,-12);
+    dj("vida","Deixou o "+oc.n+" (influência −"+lost+").")}
+  c.id=id;c.sw=S.day;c.inf[id]=c.inf[id]||0;var rk2=Object.keys(REL_C).filter(function(k){return REL_C[k].n===CAMP[id].cand})[0];if(rk2)relAdd(rk2,old?4:8);
+  unlock("camp1");dj("vida","Passou a apoiar o "+CAMP[id].n+".");pfSave();save();
+}
+var CTASK=[
+ ["Levar recados entre aliados","2h. Influência +5, XP +8",2,{inf:5,xp:8}],
+ ["Discursar na praça","1h. Influência +4, reputação +2 (exige sanidade 30)",1,{inf:4,rep:2,need:"san"}],
+ ["Financiar a causa","¤ 120. Influência +8",0,{inf:8,c:-120}],
+ ["Proteger uma reunião","Uma luta contra encrenqueiros. Influência +7",0,{inf:7,fight:1}],
+ ["Juntar assinaturas","3h. Influência +6, sanidade −3",3,{inf:6,san:-3}]
+];
+function campTasks(){var d=S.day,a=CTASK[d%CTASK.length],b=CTASK[(d*3+1)%CTASK.length];if(a===b)b=CTASK[(d+2)%CTASK.length];return [a,b]}
+function campMenu(){
+  if(!campOk())return;
+  var c=CP(),h='<p class="sec" style="margin:0">Seleção Real</p><h2 style="margin:0">Campos da Seleção</h2><p style="margin:0;color:var(--mute)">Cinco candidatas disputam o trono de Lugunica. Apoie um campo por vez: a influência dá postos e bônus. Trocar é possível, mas você perde metade da influência do campo antigo e a candidata fica magoada.</p>';
+  Object.keys(CAMP).forEach(function(id){var k=CAMP[id],me=c.id===id,v=c.inf[id]||0,r=0;CRK.forEach(function(x,i){if(v>=x[1])r=i});
+    h+='<div class="campc'+(me?" on":"")+'" style="--c:'+k.c+'"><div><b>'+esc(k.n)+'</b><span>“'+esc(k.lema)+'”</span><span class="fine">Sede: '+esc(PLBY[k.hq].n)+' · '+CRK[r][0]+' ('+v+')</span></div>'+(me?'<span class="tag">seu campo</span>':'<button class="btn small" data-cj="'+id+'"'+((c.id&&S.day-c.sw<7)?" disabled":"")+'>'+(c.id?"Trocar":"Apoiar")+'</button>')+'</div>'});
+  if(c.id&&S.day-c.sw<7)h+='<p class="fine" style="margin:0">Trocar de campo só daqui a '+(7-(S.day-c.sw))+' dia(s).</p>';
+  h+='<button class="btn primary" id="cmOk">Fechar</button>';
+  var o=ovl(h);$("#cmOk").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-cj]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-cj");
+    if(c.id&&b.getAttribute("data-arm")!=="1"){b.setAttribute("data-arm","1");b.textContent="Confirmar troca";return}
+    campJoin(id);sfx("ok");toast("Agora você apoia o "+CAMP[id].n);campMenu()}});
+}
+function campTaskMenu(){
+  var c=CP();if(!c.id)return;var k=CAMP[c.id],ts=campTasks(),done=c.task===S.day;
+  var h='<p class="sec" style="margin:0">'+esc(k.n)+' · '+CRK[campRank()][0]+'</p><h2 style="margin:0">Tarefa do campo</h2><p style="margin:0;color:var(--mute)">Uma tarefa por dia na sede. Influência atual: '+campInf()+'.</p>';
+  ts.forEach(function(t,i){var bad=done||(t[3].c&&S.coin<-t[3].c)||(t[3].need==="san"&&S.san<30);h+='<button class="btn" data-ct="'+i+'"'+(bad?" disabled":"")+'><b>'+esc(t[0])+'</b><br><span class="fine" style="margin:0">'+esc(t[1])+'</span></button>'});
+  h+='<button class="btn" id="ctNo">Voltar</button>';
+  var o=ovl(h);$("#ctNo").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-ct]").forEach(function(b){b.onclick=function(){
+    var t=ts[+b.getAttribute("data-ct")],x=t[3];c.task=S.day;pfSave();
+    if(x.fight){o.hidden=true;campAdd(x.inf);startHunt({enemy:"Encrenqueiros contratados",arch:"padrao",lv:refLv()},1);return}
+    if(t[2])advanceTime(t[2]);var fx={};if(x.c)fx.c=x.c;if(x.rep)fx.rep=x.rep;if(x.san)fx.san=x.san;if(x.xp)fx.xp=x.xp;var e=applyLF(fx);campAdd(x.inf);
+    uaOv(k.n,t[0],rnd(["O pessoal do campo agradece. Cada voz conta, e hoje a sua contou.","Não é heroico, mas é assim que uma candidata chega ao trono: um dia de cada vez.","Você ouve seu nome entre os apoiadores. Parece que estão começando a confiar em você."]),"Influência +"+x.inf+(e?" · "+e:""));
+  }});
+}
+PAX.push(function(lf){
+  if(!campOk())return "";var h="",c=CP();
+  if(lf.loc==="capital")h+='<button class="act" data-ac="camp"><b>Salão da Seleção</b><span>'+(c.id?"Você apoia o "+esc(CAMP[c.id].n):"Escolha qual candidata apoiar")+'</span></button>';
+  if(c.id&&CAMP[c.id].hq===lf.loc)h+='<button class="act" data-ac="ctask"'+(c.task===S.day?" disabled":"")+'><b>Tarefa do campo</b><span>'+(c.task===S.day?"Já ajudou hoje":"Ganhe influência com o "+esc(CAMP[c.id].n))+'</span></button>';
+  return h;
+});
+PAH.push(function(a){if(a==="camp"){campMenu();return true}if(a==="ctask"){campTaskMenu();return true}return false});
+ACAT.splice(1,0,["polit","Política e guerra",/^(camp|ctask|war|warfront)$/]);
+WSEC.push({id:"camp",n:"Seleção",render:function(b){
+  if(!campOk()){b.innerHTML='<p class="fine" style="margin:0">A Seleção Real começa no Arco 3. Avance no Modo Retornos.</p>';return}
+  var c=CP(),h='';
+  if(!c.id)h+='<p class="fine" style="margin:0 0 8px">Você ainda não apoia nenhum campo. Vá ao Salão da Seleção, na Capital.</p>';
+  Object.keys(CAMP).forEach(function(id){var k=CAMP[id],v=c.inf[id]||0,r=0;CRK.forEach(function(x,i){if(v>=x[1])r=i});var nx=CRK[r+1];
+    h+='<div class="item'+(c.id===id?" got":"")+'"><div><b style="color:'+k.c+'">'+esc(k.n)+(c.id===id?" · seu campo":"")+'</b><span>'+CRK[r][0]+' · influência '+v+(nx?" (próximo posto em "+nx[1]+")":"")+'</span><span>Bônus por posto: '+k.perk.map(function(p){return Object.keys(p).map(function(x){return ({neg:"efeitos ruins −",luck:"sorte +",hp:"vida +",xp:"XP +",sdmg:"dano Subaru +",dmg:"dano +",coin:"moedas +",disc:"lojas −"})[x]+p[x]+(x==="hp"||x==="sdmg"||x==="dmg"?"":"%")}).join("")}).join(", ")+'</span></div></div>'});
+  b.innerHTML=h;
+}});
+
+/* ---------- 2. Mapa maior: as nações vizinhas ---------- */
+var MOX=140,MOY=200;
+Object.keys(POS).forEach(function(k){POS[k]=[POS[k][0]+MOX,POS[k][1]+MOY]});
+MAPW2=880;MAPH2=1120;
+[
+ {id:"gusteko",n:"Cidade Sagrada de Gusteko",s:"Gusteko",ic:"✙",arc:9,post:1,far:true,d:"Capital do reino sagrado do norte. Torres brancas, sinos o dia todo e uma fé que não aceita dúvidas."},
+ {id:"passo",n:"Passo Nevado",s:"Passo Nevado",ic:"⛰",arc:9,post:1,far:true,vil:1,d:"A única estrada entre Lugunica e Gusteko. Quem controla o passo controla o norte."},
+ {id:"mosteiro",n:"Mosteiro do Gelo",s:"Mosteiro",ic:"❄",arc:9,post:1,far:true,vil:1,d:"Monges que guardam arquivos antigos no alto das montanhas, e não gostam de visitas armadas."},
+ {id:"porto",n:"Porto das Velas",s:"Porto das Velas",ic:"⚓",arc:9,post:1,far:true,d:"O maior porto de Kararagi. Navios de todo lugar, contratos em todas as línguas."},
+ {id:"oasis",n:"Rota do Oásis",s:"Oásis",ic:"☼",arc:9,post:1,far:true,vil:1,d:"Parada das caravanas de Kararagi a caminho do norte. Água, sombra e espiões."}
+].forEach(function(p){if(!PLBY[p.id]){PLACES.push(p);PLBY[p.id]=p}});
+Object.assign(POS,{gusteko:[470,92],passo:[330,178],mosteiro:[700,150],porto:[58,780],oasis:[86,372]});
+ROADS.push(["passo","capital"],["passo","gusteko"],["gusteko","mosteiro"],["mosteiro","torre"],["porto","banok"],["oasis","banok"],["oasis","passo"]);
+Object.assign(ZONE,{gusteko:"G",passo:"G",mosteiro:"G",porto:"K",oasis:"K"});
+ZN.G="Gusteko";Object.assign(ZT,{GC:2,GM:3,GO:3,GA:2,GK:3,GV:4});
+Object.assign(ENVOF,{gusteko:"imperio",passo:"caverna",mosteiro:"camaras",porto:"agua",oasis:"deserto"});
+LP.gusteko=tierSet("ng",["Vela benta","Rosário de prata","Ícone antigo","Relíquia do norte"],1.4);LP.passo=LP.gusteko;LP.mosteiro=LP.gusteko;
+LP.porto=tierSet("nv",["Corda de navio","Bússola velha","Carta náutica","Pérola do mar"],1.4);LP.oasis=LP.banok;
+var _ma25=mapArt;
+mapArt=function(){
+  var real=POS,tmp={};Object.keys(real).forEach(function(k){tmp[k]=[real[k][0]-MOX,real[k][1]-MOY]});POS=tmp;var raw;try{raw=_ma25()}finally{POS=real}
+  var old=raw.replace(/<text[^>]*>GUSTEKO · ao norte<\/text>/,"").replace(/<text[^>]*>KARARAGI · a oeste<\/text>/,"");
+  var i=old.indexOf("</defs>")+7,defs=old.slice(0,i),rest=old.slice(i);rest=rest.replace(/<rect width="\d+" height="\d+" fill="url\(#mgSea\)"\/>/,"");rest=rest.replace(/<path d="[^"]*" class="rg-snow"\/>/,"").replace(/<path d="[^"]*" class="rg-sand2"\/>/,"");
+  var s=defs+'<rect width="'+MAPW2+'" height="'+MAPH2+'" fill="url(#mgSea)"/>';
+  /* Gusteko ao norte */
+  s+='<path d="M40 40 Q300 10 600 30 T860 50 L860 270 L40 270 Z" class="n-gus"/>';
+  var m='';[[120,120,18],[170,105,22],[230,128,16],[300,96,24],[380,120,18],[560,110,20],[620,90,24],[690,118,16],[770,100,22],[820,130,14],[260,200,14],[560,200,16],[790,210,12]].forEach(function(a){m+=mtn(a[0],a[1],a[2],true)});
+  s+='<g class="relief">'+m+'</g><text x="470" y="40" class="wrg big nat">REINO SAGRADO DE GUSTEKO</text>';
+  /* Kararagi a oeste */
+  s+='<path d="M0 270 L236 270 L236 860 Q160 900 120 960 L0 960 Z" class="n-kar"/>';
+  var d='';[[60,300,12],[150,330,10],[40,460,14],[120,520,11],[70,640,12],[170,700,10],[40,880,12]].forEach(function(a){d+=dune(a[0],a[1],a[2])});
+  s+='<g class="relief">'+d+'</g><text x="40" y="680" class="wrg big nat" transform="rotate(-90 40 680)">CIDADES-ESTADO DE KARARAGI</text>';
+  s+='<path d="M0 960 Q60 900 120 960 Q90 1040 0 1060 Z" class="sea2"/>';
+  /* Vollachia ao sul (mais terra) */
+  s+='<path d="M236 980 L880 980 L880 1120 L180 1120 Q200 1050 236 980 Z" class="n-vol"/>';
+  s+='<g transform="translate('+MOX+' '+MOY+')">'+rest+'</g>';
+  s+='<path d="M236 270 Q240 600 244 840" class="nborder"/><path d="M40 270 L860 270" class="nborder"/>';
+  return s;
+};
+/* lugares das nações vizinhas só existem depois do fim (Arco 8 concluído) */
+function warEra(){return !!(META.ends&&META.ends.length)||!!(PF.war&&PF.war.on)}
+function postOpen(){PLACES.forEach(function(p){if(p.post)p.arc=warEra()?8:9})}
+postOpen();
+
+/* ---------- 3. Territórios e nações ---------- */
+var NAT={
+ lug:{n:"Lugunica",c:"#6fa8ff",cap:"T_cen"},
+ vol:{n:"Vollachia",c:"#ff5a5a",cap:"V_cap",gen:"General do Império"},
+ gus:{n:"Gusteko",c:"#e8f1ff",cap:"G_cap",gen:"Comandante Sagrado de Gusteko"},
+ kar:{n:"Kararagi",c:"#e4b867",cap:"K_baz",gen:"Almirante de Kararagi"}
+};
+var TER=[
+ {id:"T_cen",n:"Centro do Reino",o:"lug",pl:["capital","bairro","cripta","torreeco","karsten"],adj:["T_mid","T_aug","T_oes","G_pas"]},
+ {id:"T_mid",n:"Planícies Centrais",o:"lug",pl:["liphas","pedraferro","mina","criadouro","vale"],adj:["T_cen","T_mat","T_oes","V_fro"]},
+ {id:"T_mat",n:"Terras de Mathers",o:"lug",pl:["casa","vila","floresta","caverna","moinho","santuario","camaras"],adj:["T_mid"]},
+ {id:"T_oes",n:"Oeste do Reino",o:"lug",pl:["pristella","aqueduto","ribeirinha","farol"],adj:["T_cen","T_mid","K_baz"]},
+ {id:"T_aug",n:"Dunas de Augria",o:"lug",pl:["caravana","torre","biblioteca"],adj:["T_cen","G_mos"]},
+ {id:"V_fro",n:"Fronteira Sul",o:"vol",pl:["guaral"],adj:["T_mid","V_cap","V_mat"]},
+ {id:"V_cap",n:"Coração do Império",o:"vol",pl:["vollachia","fortaleza"],adj:["V_fro","V_mat"]},
+ {id:"V_mat",n:"Mata e Cinzas",o:"vol",pl:["acampamento","cinzas"],adj:["V_fro","V_cap"]},
+ {id:"K_baz",n:"Bazar de Kararagi",o:"kar",pl:["banok"],adj:["T_oes","K_por","K_oas"]},
+ {id:"K_por",n:"Costa das Velas",o:"kar",pl:["porto"],adj:["K_baz","K_oas"]},
+ {id:"K_oas",n:"Rota do Oásis",o:"kar",pl:["oasis"],adj:["K_baz","K_por","G_pas"]},
+ {id:"G_pas",n:"Passo Nevado",o:"gus",pl:["passo"],adj:["T_cen","G_cap","K_oas"]},
+ {id:"G_cap",n:"Cidade Sagrada",o:"gus",pl:["gusteko"],adj:["G_pas","G_mos"]},
+ {id:"G_mos",n:"Planalto do Mosteiro",o:"gus",pl:["mosteiro"],adj:["G_cap","T_aug"]}
+];
+var TERBY={},TEROF={};TER.forEach(function(t){TERBY[t.id]=t;t.pl.forEach(function(p){TEROF[p]=t.id})});
+function WAR(){var w=PF.war;if(!w){w=PF.war={on:false,ter:{},rel:{vol:"guerra",gus:"guerra",kar:"neutro"},atk:[],mor:{vol:70,gus:70,kar:60},ban:0,log:[],fr:-1,won:0}}
+  TER.forEach(function(t){if(!w.ter[t.id])w.ter[t.id]={o:t.o,s:(NAT[t.o].cap===t.id?80:60)}});if(!w.atk)w.atk=[];if(!w.log)w.log=[];return w}
+function terOwn(id){return WAR().ter[id].o}
+function hostile(n){return n!=="lug"&&WAR().rel[n]==="guerra"}
+function wlog(t){var w=WAR();w.log.unshift({d:S.day,t:t});if(w.log.length>30)w.log.length=30}
+function placeOcc(loc){if(!S||S.mode!=="free"||!PF.war||!PF.war.on)return false;var t=TEROF[loc];if(!t)return false;var o=terOwn(t);return o!=="lug"&&hostile(o)&&TERBY[t].o==="lug"}
+/* lugares de Lugunica ocupados pelo inimigo: sem comércio e sem atividade única */
+var _to25=tradeOk;tradeOk=function(c){if(placeOcc(c))return false;return _to25(c)};
+ACH.war1=["Primeira vitória","Vença uma batalha decisiva."];
+ACH.war2=["Conquistador","Tome um território de outra nação."];
+ACH.warpaz=["Paz de Lugunica","Faça todas as nações em guerra se renderem."];
+ACH.warkar=["Aliança das velas","Feche a aliança com Kararagi."];
+function warStart(){var w=WAR();if(w.on)return;w.on=true;w.d0=S.day;postOpen();wlog("Começa a era das guerras.");pfSave();
+  var c=CP(),q=c.id?CAMP[c.id].cand:"a nova rainha";
+  var o=ovl('<p class="sec" style="margin:0">Depois do fim · uma história "e se..."</p><h2 style="margin:0">A era das guerras</h2><p style="margin:0;font-size:16.5px;line-height:1.55">A Seleção terminou, e '+esc(c.id?q+" ocupa o trono de Lugunica":"Lugunica tem uma rainha")+'. Mas a notícia viaja rápido: Vollachia ao sul e Gusteko ao norte enxergam um reino jovem e cansado. Kararagi, a oeste, só observa e faz contas.</p><p style="margin:0;color:var(--mute)">Abra a <b>Sala de guerra</b> na Capital. Defenda os territórios, lance ofensivas e vença as batalhas decisivas. Os lugares do norte e do oeste agora aparecem no mapa.</p><button class="btn primary" id="wsOk">Ao trabalho</button>');
+  sfx("bad");$("#wsOk").onclick=function(){o.hidden=true;renderHub()};
+}
+/* força das tropas de Lugunica: campo, posto e nível ajudam */
+function lugBonus(){var c=CP(),b=0;if(c.id)b+=campRank()*3;b+=Math.min(15,Math.floor((PF.lvl||1)/2));if(WAR().rel.kar==="alianca")b+=8;return b}
+function warTick(){
+  var w=WAR();if(!w.on)return;
+  /* ataques que chegaram */
+  var keep=[];w.atk.forEach(function(a){if(a.day>S.day){keep.push(a);return}
+    var t=w.ter[a.to];
+    if(a.def){wlog("O ataque de "+NAT[a.n].n+" a "+TERBY[a.to].n+" foi barrado na batalha decisiva.");return}
+    var def=t.s+lugBonus()+Math.random()*25,atk=a.p*(0.6+w.mor[a.n]/150)+Math.random()*25;
+    if(atk>def&&t.o==="lug"){t.o=a.n;t.s=30;wlog(NAT[a.n].n+" tomou "+TERBY[a.to].n+".");toast("⚔ "+NAT[a.n].n+" tomou "+TERBY[a.to].n+"!")}
+    else{t.s=Math.max(10,t.s-8);w.mor[a.n]=Math.max(10,w.mor[a.n]-5);wlog("Lugunica resistiu ao ataque de "+NAT[a.n].n+" em "+TERBY[a.to].n+".")}
+  });w.atk=keep;
+  /* novos ataques: cada nação em guerra pode atacar um vizinho de Lugunica */
+  ["vol","gus","kar"].forEach(function(n){if(!hostile(n)||w.mor[n]<=0)return;if(w.atk.some(function(a){return a.n===n}))return;if(Math.random()>0.35)return;
+    var opts=[];TER.forEach(function(t){if(w.ter[t.id].o!==n)return;t.adj.forEach(function(x){if(w.ter[x].o==="lug")opts.push(x)})});if(!opts.length)return;
+    var to=rnd(opts),p=40+Math.round(Math.random()*30)+Math.round((S.day-w.d0)/6);w.atk.push({n:n,to:to,day:S.day+2,p:p});wlog(NAT[n].n+" marcha contra "+TERBY[to].n+". Chega em 2 dias.");
+    setTimeout(function(){toast("⚔ "+NAT[n].n+" marcha contra "+TERBY[to].n+" (2 dias)")},1400);
+  });
+  /* tropas se recuperam devagar */
+  TER.forEach(function(t){var x=w.ter[t.id];x.s=Math.min(100,x.s+(x.o==="lug"?2:3))});
+  ["vol","gus","kar"].forEach(function(n){w.mor[n]=Math.min(100,w.mor[n]+1)});
+  warCheck();pfSave();
+}
+function warCheck(){
+  var w=WAR();
+  ["vol","gus","kar"].forEach(function(n){if(!hostile(n))return;if(w.ter[NAT[n].cap].o!==n){w.rel[n]="paz";var trib=Math.round(1500*arcMul());S.coin+=trib;wlog(NAT[n].n+" se rendeu e pagou ¤ "+trib+" de tributo.");
+    w.atk=w.atk.filter(function(a){return a.n!==n});setTimeout(function(){uaOv("Rendição",NAT[n].n+" se rende","Com a capital tomada, os enviados de "+NAT[n].n+" chegam com bandeiras brancas e baús de tributo. A guerra com eles acabou.","¤ +"+trib)},500)}});
+  if(["vol","gus","kar"].every(function(n){return !hostile(n)})&&!w.won){w.won=1;unlock("warpaz")}
+}
+var _sd25=sleepDay;
+sleepDay=function(){var d0=S&&S.day;var r=_sd25.apply(this,arguments);try{if(S&&S.mode==="free"&&S.day>d0&&PF.war&&PF.war.on)warTick()}catch(e){}return r};
+var _rh25b=renderHub;
+renderHub=function(){_rh25b();try{if(S&&S.mode==="free"&&warEra()&&!WAR().on&&$("#overlay").hidden)warStart()}catch(e){}};
+
+/* batalhas decisivas: vanguarda, depois o general (com fase 2) */
+function warBattle(kind,ter,nat,wave,ref){
+  var lv=refLv()+(wave===1?2:5)+Math.round((WAR().mor[nat]||50)/25);
+  var cfg=wave===1?{enemy:"Vanguarda de "+NAT[nat].n,arch:"bruto",lv:lv,tier:"elite"}:{enemy:NAT[nat].gen,arch:"chefe",lv:lv,tier:"boss"};
+  var c=levelize(Object.assign(cfg,{noadapt:true,allies:["?emilia","?rem","?ram","?beatrice"],win:"_hub",lose:"_hubl",reward:wave===1?4:8,xp:20+lv}));
+  if(wave===2){c.tr=Object.assign({},c.tr,{armor:4,enrage:5});c.tr2={enrage:3}}
+  c.war={k:kind,ter:ter,n:nat,wave:wave,ref:ref};
+  $("#overlay").hidden=true;startBattle(c);
+}
+var _eb25=endBattle;
+endBattle=function(win){
+  var cfg=B&&B.cfg,was=B&&B.done;_eb25(win);
+  if(was||!cfg||!cfg.war)return;
+  var x=cfg.war,w=WAR(),bn=$("#bNext");if(!bn)return;
+  bn.onclick=function(){
+    var o=$("#overlay");o.hidden=true;o.className="";B=null;
+    if(win&&x.wave===1){var o2=ovl('<p class="sec" style="margin:0">Batalha decisiva · '+esc(TERBY[x.ter].n)+'</p><h2 style="margin:0">A vanguarda recua</h2><p style="margin:0;font-size:17px;line-height:1.55">As primeiras fileiras quebram. Lá atrás, as tropas se abrem para o '+esc(NAT[x.n].gen)+' passar. É agora ou nunca.</p><button class="btn primary" id="w2Go">Enfrentar o general</button><button class="btn" id="w2No">Recuar (a batalha conta como perdida)</button>');
+      $("#w2Go").onclick=function(){o2.hidden=true;warBattle(x.k,x.ter,x.n,2,x.ref)};$("#w2No").onclick=function(){o2.hidden=true;warResult(x,false)};return}
+    warResult(x,win);
+  };
+};
+function warResult(x,win){
+  var w=WAR(),t=w.ter[x.ter],txt,eff;
+  if(x.k==="def"){
+    var a=w.atk[x.ref];
+    if(win){if(a)a.def=true;w.mor[x.n]=Math.max(0,w.mor[x.n]-15);t.s=Math.min(100,t.s+10);w.ban+=3;unlock("war1");txt="O general de "+NAT[x.n].n+" cai, e o exército inimigo recua antes de chegar a "+TERBY[x.ter].n+".";eff="Ataque barrado · moral inimiga −15 · Estandartes +3"}
+    else{t.s=Math.max(5,t.s-12);txt="Vocês perdem a batalha, mas atrasam o inimigo. As defesas de "+TERBY[x.ter].n+" ficam abaladas.";eff="Defesa −12"}
+  }else{
+    if(win){var dmg=45+campRank()*3;t.s-=dmg;w.mor[x.n]=Math.max(0,w.mor[x.n]-10);unlock("war1");
+      if(t.s<=0){t.o="lug";t.s=35;unlock("war2");txt=TERBY[x.ter].n+" cai! As bandeiras de Lugunica sobem nas muralhas.";eff="Território tomado";wlog("Lugunica tomou "+TERBY[x.ter].n+".");var loot=Math.round(400*arcMul());S.coin+=loot;eff+=" · ¤ +"+loot}
+      else{txt="Vitória! As defesas de "+TERBY[x.ter].n+" estão quase no chão.";eff="Defesa inimiga −"+dmg+" (resta "+t.s+")"}}
+    else{txt="A ofensiva falha. As tropas voltam cansadas, mas inteiras.";eff="Estandartes perdidos"}
+  }
+  warCheck();save();pfSave();dj("luta","Guerra: "+txt);
+  uaOv("Guerra · "+TERBY[x.ter].n,win?"Vitória":"Derrota",txt,eff);
+}
+/* sala de guerra */
+var WUI={tab:"mapa"};
+function warRoom(){
+  var w=WAR();if(!w.on)return;
+  var h='<p class="sec" style="margin:0">Capital · Sala de guerra</p><h2 style="margin:0">Guerra entre impérios</h2><p style="margin:0;color:var(--mute)">Estandartes: <b style="color:var(--gold)">⚑ '+w.ban+'</b> · força extra das tropas: +'+lugBonus()+(CP().id?" ("+esc(CAMP[CP().id].n)+")":"")+'</p>';
+  h+='<div class="chips">'+[["mapa","Territórios"],["front","Missões de front"],["dipl","Diplomacia"],["log","Crônica"]].map(function(x){return '<button class="chipb" data-wt="'+x[0]+'" aria-pressed="'+(WUI.tab===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
+  if(WUI.tab==="mapa"){
+    if(w.atk.length){h+='<p class="sec">Ataques a caminho</p>';w.atk.forEach(function(a,i){h+='<div class="item warn"><div><b>⚔ '+esc(NAT[a.n].n)+' → '+esc(TERBY[a.to].n)+'</b><span>Chega em '+Math.max(0,a.day-S.day)+' dia(s) · força ~'+a.p+(a.def?" · já barrado":"")+'</span></div>'+(a.def?"":'<button class="btn small" data-wd="'+i+'">Defender</button>')+'</div>'})}
+    ["lug","vol","gus","kar"].forEach(function(n){var ts=TER.filter(function(t){return w.ter[t.id].o===n});if(!ts.length)return;
+      h+='<p class="sec" style="color:'+NAT[n].c+'">'+esc(NAT[n].n)+(n==="lug"?"":" · "+({guerra:"em guerra",paz:"rendida",neutro:"neutra",alianca:"aliada"})[w.rel[n]]+" · moral "+w.mor[n])+'</p>';
+      ts.forEach(function(t){var x=w.ter[t.id],front=n!=="lug"&&hostile(n)&&t.adj.some(function(a){return w.ter[a].o==="lug"});
+        h+='<div class="item"><div><b>'+esc(t.n)+(NAT[n].cap===t.id?" ★":"")+'</b><span>Defesa '+x.s+'/100 · '+t.pl.map(function(p){return PLBY[p]?(PLBY[p].s||PLBY[p].n):p}).join(", ")+'</span><div class="bar" style="margin-top:5px"><div style="width:'+x.s+'%;background:'+NAT[n].c+'"></div></div></div>'+
+          (n==="lug"?'<button class="btn small" data-wr="'+t.id+'"'+(S.coin<300||x.s>=100?" disabled":"")+'>Reforçar ¤ 300</button>':front?'<button class="btn small" data-wo="'+t.id+'"'+(w.ban<3?" disabled":"")+'>Atacar ⚑3</button>':'')+'</div>'})});
+  }else if(WUI.tab==="front"){
+    var done=w.fr===S.day;
+    h+='<p class="fine" style="margin:6px 0">Uma missão de front por dia. Rende Estandartes (⚑), que pagam as ofensivas.</p>';
+    [["Patrulha na fronteira","Uma luta contra batedores inimigos. ⚑ +2","fight"],["Comboio de suprimentos","¤ 150 e 2h. ⚑ +2, defesa +8 no território mais fraco","sup"],["Espionagem","3h, sanidade −5. ⚑ +1 e moral de um inimigo −8","spy"]].forEach(function(m){
+      h+='<button class="btn" data-wf="'+m[2]+'"'+((done||(m[2]==="sup"&&S.coin<150))?" disabled":"")+'><b>'+m[0]+'</b><br><span class="fine" style="margin:0">'+m[1]+'</span></button>'});
+    if(done)h+='<p class="fine" style="margin:0">Você já cumpriu a missão de hoje.</p>';
+  }else if(WUI.tab==="dipl"){
+    ["vol","gus","kar"].forEach(function(n){var r=w.rel[n];h+='<div class="item"><div><b style="color:'+NAT[n].c+'">'+esc(NAT[n].n)+'</b><span>'+({guerra:"Em guerra com Lugunica.",paz:"Rendida. Paga tributo e não ataca mais.",neutro:"Neutra. Observa e negocia com os dois lados.",alianca:"Aliada: reforça suas tropas (+8)."})[r]+'</span></div>'+
+      (n==="kar"&&r==="neutro"?'<span style="display:flex;flex-direction:column;gap:6px"><button class="btn small" data-wa="1"'+(S.coin<2000?" disabled":"")+'>Aliança ¤ 2000</button><button class="btn small" data-wg="kar">Declarar guerra</button></span>':(r==="guerra"&&w.mor[n]<25?'<button class="btn small" data-wp="'+n+'">Propor trégua</button>':''))+'</div>'});
+    h+='<p class="fine" style="margin:6px 0 0">Uma nação se rende quando perde a capital (★). Com moral abaixo de 25, ela aceita uma trégua, sem tributo.</p>';
+  }else{
+    h+=w.log.length?w.log.map(function(l){return '<div class="item"><div><b>Dia '+l.d+'</b><span>'+esc(l.t)+'</span></div></div>'}).join(""):'<p class="fine">Nada ainda.</p>';
+  }
+  h+='<button class="btn primary" id="wrOk">Fechar</button>';
+  var o=ovl(h);$("#wrOk").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-wt]").forEach(function(b){b.onclick=function(){WUI.tab=b.getAttribute("data-wt");warRoom()}});
+  o.querySelectorAll("[data-wd]").forEach(function(b){b.onclick=function(){var i=+b.getAttribute("data-wd"),a=w.atk[i];if(!a)return;warBattle("def",a.to,a.n,1,i)}});
+  o.querySelectorAll("[data-wr]").forEach(function(b){b.onclick=function(){if(S.coin<300)return;S.coin-=300;var t=w.ter[b.getAttribute("data-wr")];t.s=Math.min(100,t.s+15);save();pfSave();sfx("buy");warRoom()}});
+  o.querySelectorAll("[data-wo]").forEach(function(b){b.onclick=function(){if(w.ban<3)return;w.ban-=3;pfSave();var id=b.getAttribute("data-wo");warBattle("atk",id,w.ter[id].o,1)}});
+  o.querySelectorAll("[data-wf]").forEach(function(b){b.onclick=function(){var k=b.getAttribute("data-wf");w.fr=S.day;
+    if(k==="fight"){w.ban+=2;pfSave();var en=["vol","gus","kar"].filter(hostile)[0]||"vol";startHunt({enemy:"Batedores de "+NAT[en].n,arch:"agil",lv:refLv()+1},2);return}
+    if(k==="sup"){S.coin-=150;advanceTime(2);w.ban+=2;var weak=TER.filter(function(t){return w.ter[t.id].o==="lug"}).sort(function(a,c){return w.ter[a.id].s-w.ter[c.id].s})[0];if(weak)w.ter[weak.id].s=Math.min(100,w.ter[weak.id].s+8);save();pfSave();uaOv("Missão de front","Comboio de suprimentos","As carroças chegam inteiras, e os soldados comem quente pela primeira vez em dias.","⚑ +2"+(weak?" · "+weak.n+" +8":""),warRoom);return}
+    if(k==="spy"){advanceTime(3);S.san=clamp(S.san-5,0,100);w.ban+=1;var en2=rnd(["vol","gus","kar"].filter(hostile))||"vol";w.mor[en2]=Math.max(0,w.mor[en2]-8);save();pfSave();uaOv("Missão de front","Espionagem","Você descobre onde ficam os depósitos de "+NAT[en2].n+". Um incêndio misterioso faz o resto.","⚑ +1 · moral de "+NAT[en2].n+" −8",warRoom)}
+  }});
+  var wa=o.querySelector("[data-wa]");if(wa)wa.onclick=function(){if(S.coin<2000)return;S.coin-=2000;w.rel.kar="alianca";unlock("warkar");wlog("Kararagi assinou aliança com Lugunica.");save();pfSave();sfx("win");warRoom()};
+  var wg=o.querySelector("[data-wg]");if(wg)wg.onclick=function(){if(wg.getAttribute("data-arm")!=="1"){wg.setAttribute("data-arm","1");wg.textContent="Confirmar guerra";return}w.rel.kar="guerra";wlog("Lugunica declarou guerra a Kararagi.");pfSave();warRoom()};
+  o.querySelectorAll("[data-wp]").forEach(function(b){b.onclick=function(){var n=b.getAttribute("data-wp");w.rel[n]="paz";w.atk=w.atk.filter(function(a){return a.n!==n});wlog("Trégua assinada com "+NAT[n].n+".");warCheck();pfSave();warRoom()}});
+}
+PAX.push(function(lf){
+  if(!S||S.mode!=="free"||!PF.war||!PF.war.on)return "";var h="";
+  if(lf.loc==="capital"){var w=WAR(),n=w.atk.filter(function(a){return !a.def}).length;h+='<button class="act" data-ac="war"><b>Sala de guerra</b><span>'+(n?"⚔ "+n+" ataque"+(n>1?"s":"")+" a caminho":"Territórios, front e diplomacia")+' · ⚑ '+w.ban+'</span></button>'}
+  if(placeOcc(lf.loc))h+='<button class="act" data-ac="warfront"><b>⚔ Território ocupado</b><span>'+esc(NAT[terOwn(TEROF[lf.loc])].n)+' controla este lugar. Libere pela Sala de guerra</span></button>';
+  return h;
+});
+PAH.push(function(a){if(a==="war"){WUI.tab="mapa";warRoom();return true}if(a==="warfront"){toast("Vá até a Capital e lance uma ofensiva pela Sala de guerra.");return true}return false});
+/* atividade única fica bloqueada em lugar ocupado */
+PAX.forEach(function(f,i){if(String(f).indexOf('data-ac="ua"')>=0)PAX[i]=function(lf){if(placeOcc(lf.loc))return "";return f(lf)}});
+/* emboscada ao chegar em lugar ocupado */
+var _rh25c=renderHub;
+renderHub=function(){var l0=PF.lastLoc;_rh25c();try{if(S&&S.mode==="free"&&placeOcc(L().loc)&&l0!==L().loc&&!TRIP()&&Math.random()<0.5)setTimeout(function(){if(!$("#overlay").hidden)return;var n=terOwn(TEROF[L().loc]);
+  var o=ovl('<p class="sec" style="margin:0">Território ocupado</p><h2 style="margin:0">Patrulha de '+esc(NAT[n].n)+'</h2><p style="margin:0;font-size:17px;line-height:1.55">Soldados inimigos reconhecem você no portão.</p><button class="btn primary" id="amGo">Lutar</button>');$("#amGo").onclick=function(){o.hidden=true;startHunt({enemy:"Patrulha de "+NAT[n].n,arch:"padrao",lv:refLv()},2)}},700)}catch(e){}};
+
+/* ---------- 4. Mapa: cores das nações e frentes de guerra ---------- */
+var _ms25=mapSVG;
+mapSVG=function(lf){
+  var s=_ms25(lf).replace(/>Arco 9</g,">Após o fim<");if(!PF.war||!PF.war.on)return s;
+  var w=WAR(),g='<g class="polit">';
+  TER.forEach(function(t){var o=w.ter[t.id].o,c=NAT[o].c;t.pl.forEach(function(p){var xy=POS[p];if(xy&&PLBY[p]&&PLBY[p].arc<=arcReach())g+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="34" fill="'+c+'" opacity=".13"/>'})});
+  ROADS.forEach(function(r){var a=POS[r[0]],b=POS[r[1]],ta=TEROF[r[0]],tb=TEROF[r[1]];if(!a||!b||!ta||!tb)return;var oa=w.ter[ta].o,ob=w.ter[tb].o;
+    if(oa!==ob&&((oa==="lug"&&hostile(ob))||(ob==="lug"&&hostile(oa))))g+='<path d="'+roadPath(a,b,r[0]+r[1])+'" class="front"/>'});
+  w.atk.forEach(function(a){if(a.def)return;var xy=POS[TERBY[a.to].pl[0]];if(xy)g+='<text x="'+(xy[0]+26)+'" y="'+(xy[1]+30)+'" class="watk">⚔</text>'});
+  g+='</g>';
+  return s.replace(/(<g class="wnode)/,g+"$1");
+};
+/* ficha do lugar mostra o dono */
+var _ps25=plSheetHTML;
+plSheetHTML=function(id){var h=_ps25(id);if(!PF.war||!PF.war.on||!TEROF[id])return h;var o=terOwn(TEROF[id]);
+  return h.replace('</p>','</p><p class="pp" style="color:'+NAT[o].c+'">Território: '+esc(TERBY[TEROF[id]].n)+' · '+esc(NAT[o].n)+(placeOcc(id)?" (ocupado)":"")+'</p>')};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

@@ -107,3 +107,10 @@
 ## Atualização 25 — gavetas em sanfona
 - No Modo Livre, abrir uma gaveta fecha as outras do mesmo grupo (ações do lugar, atividades, cartões do hub). A que abriu é trazida para a vista. Ao montar a tela, se houver várias abertas no mesmo grupo, só a primeira fica aberta.
 - Teste: `tests/v25_gavetas.js`.
+
+## Atualização 25 (parte 2) — Campos da Seleção, nações vizinhas e guerra entre impérios
+Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas decisivas; guerras são "e se..." e só abrem depois do fim do Arco 8; um campo por vez, troca com custo.
+- **Campos da Seleção** (a partir do Arco 3): Emilia, Crusch, Priscilla, Anastasia e Felt, escolhidos no Salão da Seleção (Capital). Influência, 5 postos com bônus, tarefa diária na sede do campo. Trocar custa metade da influência antiga e −12 de relação com a candidata, com 7 dias de espera. Aba Mundo › Seleção.
+- **Mapa maior (880×1120)**: Reino Sagrado de Gusteko ao norte, Cidades-Estado de Kararagi a oeste e mais terras de Vollachia ao sul. Lugares novos (Gusteko, Passo Nevado, Mosteiro do Gelo, Porto das Velas, Rota do Oásis) ficam como "Após o fim" até o Arco 8 terminar.
+- **Guerra entre impérios** (depois do fim): 14 territórios de 4 nações (`TER`, `NAT`). Vollachia e Gusteko atacam (aviso com 2 dias); defenda numa batalha decisiva ou reforce com moedas. Sala de guerra na Capital: territórios, missões de front (Estandartes ⚑), diplomacia (aliança ou guerra com Kararagi, trégua com moral baixa) e crônica. Ofensivas custam ⚑3 e são batalhas em duas ondas: vanguarda e depois o general (chefe com fase 2). Tomar a capital de uma nação faz ela se render e pagar tributo. Lugares ocupados não têm comércio nem atividade única, e podem ter patrulhas. No mapa: cor de cada nação, frentes de guerra em vermelho e ⚔ nos ataques a caminho.
+- Teste: `tests/v25_guerra.js`.
