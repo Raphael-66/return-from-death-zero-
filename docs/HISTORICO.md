@@ -92,3 +92,14 @@
 - **Visual**: tela inicial nova (cartões de modo, partículas, selo de perfeição), transições entre telas e abas, menu com cabeçalho fixo e botão Fechar sempre visível, emblema animado do inimigo e histórico curto na batalha, avisos com vidro fosco, nota da carta legível em qualquer fundo, "−0" dos negócios corrigido.
 - **Offline**: o service worker guarda as fontes na primeira visita.
 - Teste: `tests/v23_premium.js`.
+
+## Atualização 24 — mapa novo e cidades com vida própria
+- **Mapa redesenhado**: terra e mar, montanhas nevadas, florestas, dunas, rios, lagos, a grande árvore Flugel, estradas curvas, rosa dos ventos e escala. Névoa sobre o que ainda não chegou na história (nomes viram "???"). Pino e halo em "você está aqui", ✦ onde há atividade única hoje, ponto azul em lugares nunca visitados. Botões de zoom e de centralizar.
+- **Toque num lugar abre uma ficha** (o que há lá, quem está lá agora, tempo de viagem) com o botão "Viajar". Antes, tocar já viajava.
+- **8 cidades novas**: Bairro Pobre (Arco 1), Colinas do Moinho e Haras dos Dragões (Arco 2), Domínio Karsten (Arco 3), Ilha do Farol e Bazar de Kararagi (Arco 5), Acampamento da Mata (Arco 7) e Cidade das Cinzas (Arco 8). Cada uma tem espólios próprios, inimigos do ambiente e, quando faz sentido, moradia, mercado e comércio.
+- **Atividades únicas (✦), uma por dia em cada lugar**: Depósito do Rom (vende espólios +20%), colheita, corrida de dragões-terrestres com aposta, duelo com a guarda Karsten, noite no farol, leilão de Kararagi, caçada na mata, reconstrução da Cidade das Cinzas (com etapas que liberam moradia e comércio). Cidades antigas também ganharam a sua: histórias em Irlam, sombra da Flugel, turno na forja, fogão comunitário, boatos da caravana (mostra a melhor rota de comércio do dia), gôndola em Pristella, chá no Santuário, leitura na Torre, arena de Guaral e mesa de estratégia em Vollachia.
+- **Eventos de chegada**: cada lugar tem cenas próprias com escolhas. Na primeira visita aparece uma ficha de boas-vindas.
+- **Pesca**: Lago do Farol, com 5 espécies novas.
+- **Comércio**: tapetes de Kararagi, selas de dragão e farinha do moinho.
+- **Atlas** na aba Mundo, por região, e "Lugares visitados" no medidor de perfeição. Conquistas novas: Andarilho, Cartógrafo, Turista dedicado, corrida, leilão e reconstrução.
+- Teste: `tests/v24_mapa.js`.

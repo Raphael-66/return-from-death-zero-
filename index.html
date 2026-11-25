@@ -575,6 +575,70 @@ details.bzc>summary::before{content:none}
 .rgnote:empty{display:none}
 #overlay .in>.mhead{position:sticky;top:-20px;z-index:3;display:flex;flex-direction:column;gap:8px;margin:-8px -10px 0;padding:8px 10px 10px;background:linear-gradient(rgba(5,7,16,.97) 80%,rgba(5,7,16,0));}
 #overlay #bClose{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:3;box-shadow:0 -6px 24px rgba(5,7,16,.9),0 8px 20px rgba(0,0,0,.4)}
+/* ===== Atualização 24: mapa ===== */
+.mapwrap.m2{position:relative;max-height:min(66vh,520px);background:#070a17;border-color:#2c3764}
+.wmap.m2{max-width:none;display:block}
+.m2 .coast{stroke:#33427a;stroke-width:2}
+.m2 .rg-snow{fill:#dfeaff;opacity:.07}.m2 .rg-sand{fill:#c89b4a;opacity:.13}.m2 .rg-sand2{fill:#d9b36b;opacity:.08}
+.m2 .rg-green{fill:#5fae6a;opacity:.08}.m2 .rg-cold{fill:#9fc6e8;opacity:.07}
+.m2 .border{fill:none;stroke:#8f9abb;stroke-width:1.4;stroke-dasharray:2 6;opacity:.45}
+.m2 .mt{fill:#232d52;stroke:#3a4677;stroke-width:1}.m2 .mts{fill:#cfdcff;opacity:.55}
+.m2 .tr{fill:#2d5a3c;opacity:.7}.m2 .dn{fill:none;stroke:#c89b4a;stroke-width:1.4;opacity:.45}
+.m2 .flugel circle{fill:#2f6b3f;opacity:.85}.m2 .flugel rect{fill:#5a4030}
+.m2 .wrg.sm{font-size:9px;letter-spacing:.2em;opacity:.7}
+.m2 .lake{fill:#2a5d93;opacity:.45}.m2 .lake2{fill:none;stroke:#8fd3ff;stroke-width:1;opacity:.25;stroke-dasharray:1 5}
+.m2 .river{fill:none;stroke:url(#mgRiv);stroke-width:5;opacity:.55;stroke-linecap:round}.m2 .river.thin{stroke-width:3}
+.m2 .rd0{fill:none;stroke:#0a0d1a;stroke-width:5;opacity:.7;stroke-linecap:round}
+.m2 .rd1{fill:none;stroke:#c9b98a;stroke-width:1.8;stroke-dasharray:5 5;opacity:.7;stroke-linecap:round}
+.m2 .rd0.lock{opacity:.25}.m2 .rd1.lock{opacity:.15}
+.m2 .rose circle{fill:none;stroke:#8f9abb;opacity:.35}.m2 .rose path{fill:#8f9abb;opacity:.4}.m2 .rose path.n{fill:#e4b867;opacity:.9}
+.m2 .rose text{fill:#e4b867;font-size:11px;text-anchor:middle;font-weight:700}
+.m2 .scale path{stroke:#8f9abb;stroke-width:1.4;fill:none;opacity:.7}.m2 .scale text{fill:#8f9abb;font-size:10px;text-anchor:middle}
+.m2 .wnode .hit{fill:transparent;stroke:none}
+.m2 .wnode .wc{fill:#1d2545;stroke:#56628f;stroke-width:2}
+.m2 .wcity .wc{fill:#25305a;stroke:#e4b867;stroke-width:2}.m2 .wcity .wc2{fill:none;stroke:#e4b867;stroke-width:1;opacity:.45}
+.m2 .wvil .wc{fill:#1f2e26;stroke:#6fae7a}.m2 .wdg .wc{fill:#2a1c36;stroke:#a06cc0}
+.m2 .wnode.cur .wc{stroke:#ffe2a6;stroke-width:3}
+.m2 .wnode.sel .wc{stroke:#8fd3ff;stroke-width:3}
+.m2 .wnode.lock .wc{fill:#141a31;stroke:#3a4466;stroke-dasharray:3 3}.m2 .wnode.lock{opacity:.7}
+.m2 .wnode.lock .wic{fill:#5d678a}
+.m2 .lbg{fill:#0a0d1a;opacity:.78}.m2 .wlb{font-size:10.5px;font-weight:700;fill:#e9edf8}
+.m2 .wnode.lock .wlb{fill:#5d678a}
+.m2 .tbg{fill:#0a0d1a;stroke:#3a4677;stroke-width:1}.m2 .wtv{fill:#c9d2ee;font-size:9.5px;font-weight:700;text-anchor:middle}
+.m2 .wstar{fill:#ffd76a;font-size:13px;text-anchor:middle;paint-order:stroke;stroke:#0a0d1a;stroke-width:3px}
+.m2 .wnew{fill:#8fd3ff;stroke:#0a0d1a;stroke-width:1.5}
+.m2 .whome{fill:#e4b867;font-size:12px}
+.m2 .pulse{fill:none;stroke:#e4b867;stroke-width:2;opacity:.6;transform-box:fill-box;transform-origin:center;animation:mpulse 2.2s ease-out infinite}
+@keyframes mpulse{0%{transform:scale(.85);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.m2 .pin path{fill:#e4b867;stroke:#0a0d1a;stroke-width:1.5}.m2 .pin circle{fill:#0a0d1a}
+.m2 .pin{animation:mbob 2.4s ease-in-out infinite}
+@keyframes mbob{50%{translate:0 -3px}}
+.m2 .herehalo{pointer-events:none}.m2 .fog{pointer-events:none}
+.mapctl{position:sticky;left:calc(100% - 46px);bottom:8px;float:right;margin:-118px 8px 0 0;display:flex;flex-direction:column;gap:6px;z-index:2;width:36px}
+.mapctl button{width:36px;height:36px;border-radius:10px;border:1px solid #3a4677;background:rgba(10,13,26,.85);color:var(--paper);font-size:18px;line-height:1;display:grid;place-items:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.mapctl button:active{transform:scale(.94)}
+.psheet{margin-top:10px;background:linear-gradient(180deg,#1d2545,#161d39);border:1px solid #3a4677;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;animation:pnIn .22s ease-out}
+.psheet.cur{border-color:var(--gold)}.psheet.lock{opacity:.85}
+.psheet .ph{display:flex;align-items:center;gap:10px}
+.psheet .pic{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#0a0d1a;border:1px solid var(--gold);color:var(--gold);font-size:19px}
+.psheet .ph div{flex:1;min-width:0}.psheet .ph b{display:block;font-family:var(--display);font-weight:400;font-size:19px}.psheet .ph span{font-size:12.5px;color:var(--mute)}
+.psheet .px{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--mute);font-size:18px}
+.psheet p{margin:0;font-size:14.5px;line-height:1.45}.psheet .pp{font-size:13px;color:var(--ice)}.psheet .here{color:var(--gold);font-weight:700}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{font-size:12.5px;padding:3px 9px;border-radius:99px;background:#0a0d1a;border:1px solid var(--line);color:#c9d2ee}
+.fchip.sp{border-color:#ffd76a;color:#ffd76a}
+.arrv{display:flex;align-items:center;gap:12px}.arrv .aic{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:26px;border:1px solid var(--gold);color:var(--gold);background:#0a0d1a;flex:none}
+.act.uact{border-color:rgba(255,215,106,.55);background:linear-gradient(135deg,rgba(255,215,106,.1),var(--ink3) 60%)}
+.act.uact b{color:#ffe7a6}
+.racepick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.racepick .btn{text-align:center;display:flex;flex-direction:column;gap:2px}.racepick .btn span{font-size:12.5px;color:var(--gold)}
+.race{display:flex;flex-direction:column;gap:8px}
+.lane{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:8px;font-size:13px}
+.lane.mine span{color:var(--gold);font-weight:700}
+.trk{position:relative;height:26px;border-radius:13px;background:#0a0d1a;border:1px solid var(--line);overflow:hidden}
+.trk::after{content:"";position:absolute;right:6px;top:3px;bottom:3px;width:3px;background:repeating-linear-gradient(#fff 0 3px,#000 3px 6px);opacity:.6}
+.trk i{position:absolute;top:1px;left:0;font-style:normal;transform:scaleX(-1);font-size:19px;color:#c9d2ee;animation:run var(--d) cubic-bezier(.3,.1,.3,1) forwards}
+.lane.mine .trk i{color:var(--gold)}
+@keyframes run{from{left:0}to{left:calc(var(--f) - 24px)}}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -4548,7 +4612,7 @@ function mapHub(){
   var hg=$("#hFight");if(hg&&(lf.loc==="casa"||PLBY[lf.loc].dg))hg.hidden=true;
   if(hg&&!hg.hidden){var env=ENVOF[lf.loc]||"floresta";hg.querySelector("span").textContent="Os bichos daqui: "+envPool(env).slice(0,3).map(function(x){return x[0]}).join(", ")+"… Escolha o perigo"}
   ["hScene","hAI","hTea"].forEach(function(id){var e=$("#"+id);if(e&&lf.loc!=="casa")e.hidden=true});
-  var mk=$("#hMk");if(mk){var cd=mk.closest(".hubcard");if(cd&&["vila","capital","pristella","vollachia","caravana","liphas","guaral","ribeirinha","pedraferro"].indexOf(lf.loc)<0)cd.hidden=true}
+  var mk=$("#hMk");if(mk){var cd=mk.closest(".hubcard");if(cd&&["vila","capital","pristella","vollachia","caravana","liphas","guaral","ribeirinha","pedraferro","bairro","karsten","banok","moinho"].indexOf(lf.loc)<0)cd.hidden=true}
   hub.querySelectorAll(".hubcard").forEach(function(c){var ac=c.querySelector(".acts");if(!ac||c.id==="hMapCard")return;var any=false;ac.querySelectorAll("button").forEach(function(b){if(!b.hidden)any=true});if(!any)c.hidden=true});
   var h='<div class="sec" style="margin:0">Mapa · Você está em: '+here.ic+' '+esc(here.n)+'</div>'+mapSVG(lf)+'<p class="fine" style="margin:0 0 6px">'+esc(here.d)+' Toque num lugar do mapa para ir até lá. Dentro da mesma região a viagem leva de 30 min a 1h; entre regiões, de 3h a meio dia (6h), e as extremidades levam 1 a 2 dias, acampando na estrada. Viajar de noite cansa e atrai emboscadas. Montarias encurtam a viagem.</p>'+placeActions(lf);
   var pp=peopleHere();
@@ -7970,7 +8034,7 @@ function hubDrawers(){
       var wrap=document.createElement("div");wrap.className="placedrw";
       ACAT.forEach(function(c){var list=groups[c[0]].filter(function(b){return !b.hidden});if(!list.length)return;
         var box=document.createElement("div");box.className="acts";list.forEach(function(b){box.appendChild(b)});
-        wrap.appendChild(drawer("pl_"+c[0],c[1],list.length,[box],c[0]==="luta"||c[0]==="miss"))});
+        wrap.appendChild(drawer("pl_"+c[0],c[1],list.length,[box],c[0]==="luta"||c[0]==="miss"||c[0]==="uniq"))});
       if(other.length){var box2=document.createElement("div");box2.className="acts";other.forEach(function(b){box2.appendChild(b)});wrap.appendChild(drawer("pl_outros","Outros",other.length,[box2],false))}
       acts.parentNode.replaceChild(wrap,acts);
     }
@@ -8931,9 +8995,437 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 23 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 24 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
+
+/* ===== Atualização 24: mapa novo, cidades novas, eventos e ações únicas por lugar ===== */
+
+/* ---------- 1. Cidades novas ---------- */
+[
+ {id:"bairro",n:"Bairro Pobre",s:"Bairro Pobre",ic:"⌘",arc:1,far:true,vil:1,d:"Becos estreitos atrás da Capital, onde tudo tem preço e ninguém faz pergunta demais. O depósito do velho Rom fica aqui."},
+ {id:"moinho",n:"Colinas do Moinho",s:"Moinho",ic:"✤",arc:2,far:true,vil:1,d:"Campos dourados, um moinho que range ao vento e uma família que sempre precisa de mais braços na colheita."},
+ {id:"criadouro",n:"Haras dos Dragões",s:"Haras",ic:"♞",arc:2,far:true,vil:1,d:"Criadouro de dragões-terrestres, os lagartos que puxam as carruagens do reino. Toda tarde tem corrida e aposta."},
+ {id:"karsten",n:"Domínio Karsten",s:"Karsten",ic:"⚜",arc:3,far:true,d:"Terras de uma casa nobre de cavaleiros, com campos de treino, estábulos impecáveis e disciplina em tudo."},
+ {id:"farol",n:"Ilha do Farol",s:"Farol",ic:"✧",arc:5,far:true,vil:1,d:"Uma ilhota no grande lago a oeste de Pristella. O faroleiro é velho, a luz é antiga e o céu à noite é enorme."},
+ {id:"banok",n:"Bazar de Kararagi",s:"Kararagi",ic:"☸",arc:5,far:true,d:"Cidade-mercado além da fronteira oeste. Tapetes, especiarias, leilões e gente que negocia até o preço do bom-dia."},
+ {id:"acampamento",n:"Acampamento da Mata",s:"Mata Densa",ic:"⟁",arc:7,far:true,vil:1,d:"Clareira escondida na floresta densa do Império, onde caçadores vivem do jeito antigo e testam todo forasteiro."},
+ {id:"cinzas",n:"Cidade das Cinzas",s:"Cinzas",ic:"✺",arc:8,far:true,d:"Uma cidade do Império que a catástrofe deixou em ruínas. Quem ficou quer reconstruir, tijolo por tijolo."}
+].forEach(function(p){if(!PLBY[p.id]){PLACES.push(p);PLBY[p.id]=p}});
+/* mapa mais largo: Kararagi ganha espaço a oeste */
+Object.keys(POS).forEach(function(k){POS[k]=[POS[k][0]+80,POS[k][1]]});
+Object.assign(POS,{bairro:[336,292],karsten:[494,262],criadouro:[340,352],moinho:[680,392],farol:[150,182],banok:[58,282],acampamento:[566,652],cinzas:[654,722]});
+ROADS.push(["capital","bairro"],["capital","karsten"],["karsten","caravana"],["pedraferro","criadouro"],["criadouro","vale"],["vila","moinho"],["moinho","santuario"],
+ ["pristella","farol"],["pristella","banok"],["guaral","acampamento"],["vollachia","acampamento"],["acampamento","cinzas"],["vollachia","cinzas"]);
+Object.assign(ZONE,{bairro:"C",karsten:"C",criadouro:"C",moinho:"M",farol:"O",banok:"K",acampamento:"V",cinzas:"V"});
+ZN.K="Kararagi";Object.assign(ZT,{KO:1,KC:2,KM:3,KA:3,KV:3});
+Object.assign(ENVOF,{bairro:"estrada",karsten:"estrada",criadouro:"estrada",moinho:"floresta",farol:"agua",banok:"deserto",acampamento:"imperio",cinzas:"imperio"});
+LP.bairro=tierSet("nb",["Botão de latão","Chave sem porta","Relógio parado","Anel de penhor"],1.0);
+LP.moinho=tierSet("nm",["Saco de trigo","Pedra de moinho","Semente dourada","Espiga de ouro"],1.05);
+LP.criadouro=tierSet("nc",["Escama de lagarto","Ferradura de dragão","Sela antiga","Ovo de dragão-terrestre"],1.15);
+LP.karsten=tierSet("nk",["Ponta de flecha","Estribo polido","Brasão bordado","Espada cerimonial"],1.2);
+LP.farol=tierSet("nf",["Concha do lago","Vidro do farol","Lente antiga","Estrela caída"],1.2);
+LP.banok=tierSet("nz",["Fio de seda","Tapete pequeno","Lâmpada de latão","Tapete voador (dizem)"],1.25);
+LP.acampamento=tierSet("na",["Pena de caça","Colar de dentes","Arco de teixo","Totem antigo"],1.3);
+LP.cinzas=tierSet("nq",["Tijolo queimado","Sino rachado","Vitral salvo","Coroa de cinzas"],1.35);
+Object.assign(RES,{
+ bairro:[["Canto alugado no bairro",250,3,30,"Barato, barulhento e sempre com alguém batendo na porta. Aluguel de ¤ 30 por semana."]],
+ moinho:[["Casinha do moinho",950,8,0,"Cheiro de pão de manhã e vento nas janelas à noite."]],
+ farol:[["Casa do faroleiro",1600,10,0,"A luz gira lá em cima e o lago canta lá embaixo."]],
+ banok:[["Quarto no caravançará",700,6,55,"Tapetes no chão e mercadores no corredor. Aluguel de ¤ 55 por semana."]]
+});
+SCHED.anastasia.push("banok");SCHED.crusch.push("karsten");SCHED.wilhelm.push("karsten");SCHED.felt.push("bairro");
+/* mercadorias novas para o comércio entre cidades */
+TG.push({id:"tapete",n:"Tapetes de Kararagi",b:60,mk:["banok"],want:["capital","vollachia","pristella","karsten"]},
+ {id:"sela",n:"Selas de dragão",b:38,mk:["criadouro"],want:["capital","caravana","guaral","karsten"]},
+ {id:"trigo",n:"Farinha do moinho",b:14,mk:["moinho"],want:["capital","bairro","torre","guaral"]});
+TCITY.push("banok","karsten","criadouro","moinho","bairro","cinzas");
+TG.forEach(function(g){TGBY[g.id]=g});
+
+/* ---------- 2. Pesca na Ilha do Farol ---------- */
+(function(){
+  if(SPOTBY.farol)return;
+  var sp={id:"farol",n:"Lago do Farol",place:"farol",arc:5,c:"#2f5f9a",d:"Água funda e clara ao redor da ilhota. À noite, a luz do farol atrai coisas estranhas."};
+  SPOTS.push(sp);SPOTBY.farol=sp;
+  var V={1:1,2:2,3:4,4:9},E={1:6,2:9,3:12,4:22},H={1:.18,2:.42,3:.63,4:.86},BH={dart:.08,smooth:-.05,mixed:0,sinker:.02,floater:-.02};
+  var nf=[["farolim","Peixe-farolim",1,"floater","","Brilha um pouquinho quando a luz do farol passa."],["corvina","Corvina do lago",1,"mixed","t","Faz um ronco engraçado quando sai da água."],
+   ["prata2","Peixe-prata do farol",2,"dart","n","Só aparece quando a luz gira. Rápido como um reflexo."],["salmonete","Salmonete-estrela",2,"smooth","m","Tem pintinhas que lembram constelações."],
+   ["guardiao","Guardião do lago",3,"sinker","n","O faroleiro jura que é o mesmo peixe há quarenta anos."]];
+  var junk=FISH.filter(function(f){return f.junk});FISH.length=FISH.length-junk.length;
+  nf.forEach(function(x,i){if(FISHBY[x[0]])return;var f={id:x[0],n:x[1],s:["farol"],r:x[2],b:x[3],v:V[x[2]]+(i%2),m:(sh2(x[0])>>>0)%4,e:E[x[2]],h:clamp(H[x[2]]+(BH[x[3]]||0),.1,.95),t:x[5],arc:5};if(x[4])f.tm=x[4];FISH.push(f);FISHBY[f.id]=f});
+  junk.forEach(function(j){FISH.push(j)});
+  ["lua","serpente","esturjao"].forEach(function(id){var f=FISHBY[id];if(f&&f.s.indexOf("farol")<0)f.s.push("farol")});
+})();
+
+/* ---------- 3. Ações únicas de cada lugar (uma vez por dia) ---------- */
+function UAD(){return PF.ua||(PF.ua={})}
+function uaDone(loc){return UAD()[loc]===S.day}
+function uaMark(loc){UAD()[loc]=S.day;pfSave()}
+function hNow(){return ((S.h%24)+24)%24}
+function uaOv(tag,title,txt,eff,next){
+  var o=ovl('<p class="sec" style="margin:0">'+esc(tag)+'</p><h2 style="margin:0">'+esc(title)+'</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(txt)+'</p>'+(eff?'<p class="sec" style="margin:0">'+esc(eff)+'</p>':'')+'<button class="btn primary" id="uaOk">Continuar</button>');
+  $("#uaOk").onclick=function(){o.hidden=true;try{updHead()}catch(_){}if(next)next();else renderHub()};
+}
+function arcMul(){return 1+0.25*Math.max(0,arcReach()-1)}
+var UACT={
+ bairro:{n:"Depósito do Rom",d:"Vende espólios comuns e raros com 20% a mais. 1h",h:1,run:function(){
+   var t=LT(),sum=0,n=0;Object.keys(t).forEach(function(id){var g=GOODS[id];if(!g||g.r>2||!t[id])return;sum+=Math.round(gPrice(g)*1.2)*t[id];n+=t[id];t[id]=0});
+   if(!n)return ["O velho Rom olha sua mochila vazia e ri. 'Volta quando tiver alguma coisa, garoto. Eu tenho tempo.'","Nada para vender"];
+   S.coin+=sum;return ["Rom avalia cada peça com o olho bom, resmunga sobre a qualidade e paga melhor do que qualquer feira.","Vendeu "+n+" espólio"+(n>1?"s":"")+" · ¤ +"+sum]}},
+ moinho:{n:"Ajudar na colheita",d:"3h. Moedas, farinha e frutas da estação",h:3,day:true,run:function(){
+   var c=Math.round((30+Math.random()*25)*arcMul()),q=2+Math.floor(Math.random()*3),g=seasonOf().id==="out"?"fruta":"pao";S.coin+=c;gotGood(g,q);gainXP(10,true);S.san=clamp(S.san-3,0,100);
+   return [rnd(["O sol queima, a família canta e o trabalho rende. No fim, dividem o almoço com você na sombra do moinho.","Você aprende a amarrar feixes do jeito certo depois do décimo errado. Ninguém reclama."]),"¤ +"+c+" · "+GOODS[g].n+" ×"+q+" · XP +10 · Sanidade −3"]}},
+ criadouro:{n:"Corrida de dragões",d:"Aposte num dragão-terrestre. Até 3 corridas por dia",h:1,multi:3,ui:"race"},
+ karsten:{n:"Treino com a guarda",d:"Duelo de treino contra um cavaleiro da casa. Vence e ganha moedas e XP",h:2,day:true,ui:"duel",foe:"Cavaleiro da guarda Karsten",arch:"padrao",bonus:3},
+ farol:{n:"Noite no farol",d:"Só depois das 19h. Sanidade +10 e, às vezes, algo do céu",h:2,night:true,run:function(){
+   S.san=clamp(S.san+10,0,100);gainXP(10,true);var r=Math.random()<0.25*luck(),e="Sanidade +10 · XP +10";
+   if(r){var id=LP.farol[Math.random()<0.15?3:2];gotGood(id,1);e+=" · "+GOODS[id].n}
+   return [rnd(["O faroleiro conta histórias de barcos que nunca chegaram, enquanto a luz gira sobre o lago. Você esquece o relógio.","Lá de cima dá para ver Pristella brilhando. O faroleiro serve um chá forte e não diz nada, e é exatamente o que você precisava."])+(r?" Perto da madrugada, algo cai do céu e brilha na areia da ilha.":""),e]}},
+ banok:{n:"Leilão do bazar",d:"Dê lances em itens raros. Uma vez por dia",h:1,ui:"auction"},
+ acampamento:{n:"Caçada com os caçadores",d:"Uma presa forte da mata. Vitória rende troféus e respeito",h:3,day:true,ui:"duel",foe:"Fera da mata densa",arch:"bruto",bonus:4},
+ cinzas:{n:"Reconstruir a cidade",d:"Doe ¤ 100 e trabalhe 3h. A cidade cresce de verdade",h:3,day:true,ui:"rebuild"},
+ vila:{n:"Histórias para as crianças",d:"1h. Reputação e sanidade",h:1,run:function(){L().rep=Math.min(100,L().rep+3);S.san=clamp(S.san+4,0,100);gainXP(6,true);
+   return [rnd(["As crianças de Irlam sentam em roda. Você conta uma história do seu mundo, com carros e prédios. Elas acham tudo mentira, e adoram.","Você inventa um herói desastrado que sempre volta para tentar de novo. As crianças pedem a continuação para amanhã."]),"Reputação +3 · Sanidade +4 · XP +6"]}},
+ liphas:{n:"Sombra da Flugel",d:"1h. Descansar sob a grande árvore",h:1,run:function(){S.san=clamp(S.san+8,0,100);gainXP(4,true);
+   return [rnd(["A árvore é tão grande que o vento faz barulho de mar nas folhas. Você cochila sem querer e acorda leve.","Viajantes de todo o reino param aqui. Um deles divide uma maçã e uma história sobre a idade da Flugel."]),"Sanidade +8 · XP +4"]}},
+ pedraferro:{n:"Turno na forja",d:"3h. Moedas e chance de minério",h:3,day:true,run:function(){var c=Math.round((35+Math.random()*30)*arcMul());S.coin+=c;S.san=clamp(S.san-4,0,100);gainXP(12,true);var e="¤ +"+c+" · XP +12 · Sanidade −4";
+   if(Math.random()<0.35*luck()){var id=LP.pedraferro[Math.random()<0.2?2:1];gotGood(id,1);e+=" · "+GOODS[id].n}
+   return ["Martelo, fole, água fria. Os mineiros falam pouco e trabalham muito. No fim do turno, um deles bate no seu ombro: 'Volta amanhã.'",e]}},
+ vale:{n:"Fogão comunitário",d:"2h. Cozinhar para a aldeia",h:2,run:function(){L().rep=Math.min(100,L().rep+4);S.san=clamp(S.san+5,0,100);gotGood("pao",2);gainXP(8,true);
+   return ["Uma panela enorme, dez pessoas dando palpite e uma sopa que, por milagre, fica boa. Todos comem juntos na praça.","Reputação +4 · Sanidade +5 · Pães quentes ×2 · XP +8"]}},
+ caravana:{n:"Boatos da fogueira",d:"1h. Descubra a melhor rota de comércio de hoje",h:1,run:function(){
+   var best=null;TG.forEach(function(g){g.mk.forEach(function(a){if(!PLBY[a]||PLBY[a].arc>arcReach())return;g.want.forEach(function(b){if(!PLBY[b]||PLBY[b].arc>arcReach())return;try{var d=sellP(g.id,b)-buyP(g.id,a);if(!best||d>best.d)best={g:g,a:a,b:b,d:d}}catch(e){}})})});
+   gainXP(4,true);
+   if(!best)return ["Os mercadores falam de rotas que você ainda não pode alcançar. Fica a curiosidade.","XP +4"];
+   return ["Um velho condutor cospe no fogo e baixa a voz: compre "+best.g.n.toLowerCase()+" em "+PLBY[best.a].n+" e venda em "+PLBY[best.b].n+". 'Mas não diga que fui eu.'","Lucro estimado: ¤ "+Math.max(0,Math.round(best.d))+" por unidade · XP +4"]}},
+ pristella:{n:"Passeio de gôndola",d:"2h, ¤ 25. Sanidade +10 (e um momento a dois)",h:2,cost:25,run:function(){S.san=clamp(S.san+10,0,100);var par=PF.rel&&PF.rel.partner,e="Sanidade +10";
+   if(par&&REL_C[par]&&charOk(par)){relAdd(par,6);e+=" · "+REL_C[par].n+" +6";return ["A gôndola desliza entre pontes de pedra. "+REL_C[par].n+" segura sua mão para não cair, e depois esquece de soltar.",e]}
+   return ["O gondoleiro canta baixinho enquanto a cidade de cristal passa devagar. Pela primeira vez em dias, você não pensa em nada.",e]}},
+ santuario:{n:"Chá na clareira",d:"1h. Sanidade +12",h:1,run:function(){S.san=clamp(S.san+12,0,100);return ["Folhas que só crescem dentro da barreira, água do riacho e silêncio. O chá tem gosto de começo.","Sanidade +12"]}},
+ torre:{n:"Leitura na biblioteca",d:"3h. Muito XP, um pouco de cansaço",h:3,run:function(){gainXP(30,true);S.san=clamp(S.san-4,0,100);return ["Prateleiras que não terminam, livros sem título e uma sensação de que alguém lê junto com você. Você aprende mais do que esperava.","XP +30 · Sanidade −4"]}},
+ guaral:{n:"Arena da fortaleza",d:"Luta pública contra um soldado veterano",h:2,day:true,ui:"duel",foe:"Veterano de Guaral",arch:"tanque",bonus:4},
+ vollachia:{n:"Mesa de estratégia",d:"2h. Jogo de guerra com oficiais do Império",h:2,run:function(){var w=Math.random()<0.5+Math.min(0.3,(PF.lvl||1)/100);gainXP(w?28:14,true);if(w)S.coin+=Math.round(60*arcMul());
+   return [w?"Você ataca pelo flanco que ninguém vigiava. O oficial derruba as peças e, depois de um silêncio, ri alto. 'De novo.'":"Os oficiais desmontam seu plano em três jogadas. Ainda assim, você aprende como eles pensam.",w?"Vitória · XP +28 · ¤ +"+Math.round(60*arcMul()):"Derrota honrosa · XP +14"]}}
+};
+ACH.ua10=["Turista dedicado","Faça 10 atividades únicas de lugares diferentes."];
+ACH.race=["Na frente por um focinho","Ganhe uma corrida de dragões."];
+ACH.leilao=["Martelo batido","Arremate um item no leilão de Kararagi."];
+ACH.cinzas=["A cidade renasce","Reconstrua a Cidade das Cinzas por completo."];
+PAX.push(function(lf){
+  var u=UACT[lf.loc];if(!u||!PLBY[lf.loc]||PLBY[lf.loc].arc>arcReach())return "";
+  var h=hNow(),cnt=(PF.uaN&&PF.uaN[lf.loc+":"+S.day])||0,done=u.multi?cnt>=u.multi:uaDone(lf.loc);
+  var bad=done?"Já fez hoje":(u.night&&h<19&&h>=5)?"Só à noite (depois das 19h)":(u.day&&(h>=21||h<6))?"Só de dia":(u.cost&&S.coin<u.cost)?"Precisa de ¤ "+u.cost:"";
+  return '<button class="act uact" data-ac="ua"'+(bad?" disabled":"")+'><b>✦ '+esc(u.n)+'</b><span>'+esc(bad||u.d)+(u.multi&&!done?" · "+(u.multi-cnt)+" hoje":"")+'</span></button>';
+});
+PAH.push(function(a){
+  if(a!=="ua")return false;
+  var loc=L().loc,u=UACT[loc];if(!u)return true;
+  if(u.ui==="race"){raceMenu();return true}
+  if(u.ui==="auction"){auctionMenu();return true}
+  if(u.ui==="rebuild"){rebuildMenu();return true}
+  if(u.ui==="duel"){uaMark(loc);uaCount();advanceTime(u.h);var lv=refLv()+(u.bonus>3?3:1);$("#overlay").hidden=true;startHunt({enemy:u.foe,arch:u.arch,lv:lv},u.bonus);dj("vida",u.n+" em "+PLBY[loc].n+".");return true}
+  if(u.cost){if(S.coin<u.cost)return true;S.coin-=u.cost}
+  uaMark(loc);uaCount();advanceTime(u.h);
+  var r=u.run();dj("vida",u.n+" ("+PLBY[loc].n+"): "+r[1]+".");save();pfSave();sfx("ok");
+  uaOv(PLBY[loc].n,u.n,r[0],r[1]);return true;
+});
+function uaCount(){var loc=L().loc;PF.uaN=PF.uaN||{};var k=loc+":"+S.day;PF.uaN[k]=(PF.uaN[k]||0)+1;
+  var seen=PF.uaSeen||(PF.uaSeen={});seen[loc]=1;if(Object.keys(seen).length>=10)unlock("ua10");
+  Object.keys(PF.uaN).forEach(function(x){if(+x.split(":")[1]<S.day-3)delete PF.uaN[x]});pfSave()}
+ACAT.unshift(["uniq","Especial daqui",/^ua$/]);
+
+/* corrida de dragões-terrestres */
+var DRAG=[["Trovão Cinzento",2,.36],["Pata-Ligeira",3,.27],["Velha Brisa",5,.2],["Caçula Teimoso",8,.17]];
+function raceMenu(){
+  var loc=L().loc,u=UACT[loc],cnt=(PF.uaN&&PF.uaN[loc+":"+S.day])||0;if(cnt>=u.multi)return;
+  var stakes=[20,50,100].map(function(v){return Math.round(v*arcMul()/5)*5});
+  var h='<p class="sec" style="margin:0">Haras dos Dragões</p><h2 style="margin:0">Corrida da tarde</h2><p style="margin:0;color:var(--mute)">Escolha o dragão e o valor. O prêmio é o valor vezes o número ao lado do nome. Você tem ¤ '+S.coin+'.</p><div class="racepick">';
+  DRAG.forEach(function(d,i){h+='<button class="btn" data-dg="'+i+'"><b>'+esc(d[0])+'</b><span>paga ×'+d[1]+'</span></button>'});
+  h+='</div><div class="chips" id="rStake">'+stakes.map(function(v,i){return '<button class="chipb" data-st="'+v+'" aria-pressed="'+(i===0)+'"'+(S.coin<v?" disabled":"")+'>¤ '+v+'</button>'}).join("")+'</div><button class="btn" id="rNo">Só assistir</button>';
+  var o=ovl(h),stake=stakes[0];
+  o.querySelectorAll("[data-st]").forEach(function(b){b.onclick=function(){stake=+b.getAttribute("data-st");o.querySelectorAll("[data-st]").forEach(function(x){x.setAttribute("aria-pressed",x===b)})}});
+  $("#rNo").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-dg]").forEach(function(b){b.onclick=function(){if(S.coin<stake){toast("Moedas insuficientes");return}raceRun(+b.getAttribute("data-dg"),stake)}});
+}
+function raceRun(pick,stake){
+  var loc=L().loc;S.coin-=stake;uaCount();advanceTime(1);
+  var w=DRAG.map(function(d){return d[2]*(0.6+Math.random()*0.8)}),win=0;w.forEach(function(x,i){if(x>w[win])win=i});
+  var order=DRAG.map(function(d,i){return i}).sort(function(a,b){return w[b]-w[a]});
+  var h='<p class="sec" style="margin:0">Haras dos Dragões</p><h2 style="margin:0">Largaram!</h2><div class="race">';
+  DRAG.forEach(function(d,i){var pos=order.indexOf(i),fin=100-pos*9-Math.random()*4;h+='<div class="lane'+(i===pick?" mine":"")+'"><span>'+esc(d[0])+'</span><div class="trk"><i style="--f:'+fin.toFixed(1)+'%;--d:'+(2.2+pos*0.35).toFixed(2)+'s">♞</i></div></div>'});
+  h+='</div><p id="rRes" class="sec" style="margin:0;min-height:20px"></p><button class="btn primary" id="rOk" disabled>Continuar</button>';
+  var o=ovl(h);sfx("swipe");
+  setTimeout(function(){
+    var won=win===pick,gain=won?stake*DRAG[pick][1]:0;if(won){S.coin+=gain;unlock("race");sfx("win");vib([30,40,90])}else sfx("bad");
+    save();pfSave();dj("vida","Corrida de dragões: "+(won?"ganhou ¤ "+gain:"perdeu ¤ "+stake)+".");
+    var r=$("#rRes");if(r)r.textContent=(won?"Vitória de "+DRAG[win][0]+"! Você recebe ¤ "+gain+".":"Venceu "+DRAG[win][0]+". Você perdeu ¤ "+stake+".");
+    var b=$("#rOk");if(b){b.disabled=false;b.onclick=function(){o.hidden=true;try{updHead()}catch(_){}renderHub()}}
+  },3300);
+}
+/* leilão de Kararagi */
+function auctionLots(){
+  var a=PF.auc;if(a&&a.day===S.day)return a;
+  var sets=[LP.banok,LP.farol,LP.karsten,LA.bruto,LA.agil,LP.criadouro].filter(Boolean),lots=[];
+  for(var i=0;i<3;i++){var s=rnd(sets),t=Math.random()<0.18?4:3,id=s[t-1];lots.push({id:id,base:Math.round(GOODS[id].v*(t===4?0.55:0.75))})}
+  return PF.auc={day:S.day,lots:lots,done:false};
+}
+function auctionMenu(){
+  var a=auctionLots();if(a.done||uaDone("banok"))return;
+  var h='<p class="sec" style="margin:0">Bazar de Kararagi</p><h2 style="margin:0">Leilão do dia</h2><p style="margin:0;color:var(--mute)">Escolha um lote e o tamanho do lance. Lance alto ganha quase sempre, mas custa caro. Você tem ¤ '+S.coin+'.</p>';
+  a.lots.forEach(function(l,i){var g=GOODS[l.id];h+='<div class="item"><div><b style="color:'+RARC[g.r-1]+'">'+esc(g.n)+'</b><span>'+RAR[g.r-1]+' · vale cerca de ¤ '+gPrice(g)+' no Mercado</span></div></div><div class="chips" style="margin:-2px 0 6px">'+
+    [["Cauteloso",1,.35],["Firme",1.3,.65],["Tudo ou nada",1.7,.92]].map(function(x,j){var v=Math.round(l.base*x[1]);return '<button class="chipb" data-lot="'+i+'" data-bid="'+j+'"'+(S.coin<v?" disabled":"")+'>'+x[0]+' · ¤ '+v+'</button>'}).join("")+'</div>'});
+  h+='<button class="btn" id="aNo">Só olhar</button>';
+  var o=ovl(h);$("#aNo").onclick=function(){o.hidden=true;renderHub()};
+  o.querySelectorAll("[data-lot]").forEach(function(b){b.onclick=function(){
+    var l=a.lots[+b.getAttribute("data-lot")],x=[[1,.35],[1.3,.65],[1.7,.92]][+b.getAttribute("data-bid")],v=Math.round(l.base*x[0]);if(S.coin<v)return;
+    a.done=true;uaMark("banok");uaCount();advanceTime(1);var g=GOODS[l.id],won=Math.random()<x[1];
+    if(won){S.coin-=v;gotGood(l.id,1);unlock("leilao");sfx("win")}else{var fee=Math.round(v*0.05);S.coin-=fee;sfx("bad")}
+    save();pfSave();dj("vida","Leilão em Kararagi: "+(won?"arrematou "+g.n:"perdeu o lance")+".");
+    uaOv("Bazar de Kararagi",won?"Arrematado!":"Outro lance levou",won?"O leiloeiro bate o martelo e aponta para você com um sorriso de quem já está pensando no próximo lote.":"Alguém do fundo do salão cobre seu lance sem nem piscar. A taxa de participação fica com a casa.",won?g.n+" · ¤ −"+v:"Taxa ¤ −"+Math.round(v*0.05));
+  }});
+}
+/* reconstrução da Cidade das Cinzas */
+function RB(){return PF.rb||0}
+var RBM=[[25,"A praça é limpa e o poço volta a dar água. Mais famílias voltam.","Reputação +6"],[50,"As primeiras casas ficam de pé. Há uma à venda para quem ajudou.","Moradia liberada"],[75,"O mercado reabre, ainda pequeno, mas cheio de vozes.","Comércio liberado"],[100,"O sino rachado toca de novo, agora consertado. A cidade tem nome outra vez.","Conquista"]];
+function rbRes(){if(RB()>=50&&!RES.cinzas)RES.cinzas=[["Casa reconstruída",1400,9,0,"Você ajudou a levantar estas paredes. Elas lembram."]]}
+rbRes();
+function rebuildMenu(){
+  if(uaDone("cinzas"))return;
+  var h='<p class="sec" style="margin:0">Cidade das Cinzas</p><h2 style="margin:0">Reconstrução · '+RB()+'%</h2><div class="bar" style="margin:4px 0"><div style="width:'+RB()+'%;background:var(--gold)"></div></div><p style="margin:0;color:var(--mute)">Cada dia de ajuda (¤ 100 e 3h de trabalho) reconstrói 5%. Em 25%, 50%, 75% e 100% a cidade muda e você ganha algo.</p>';
+  h+='<button class="btn primary" id="rbGo"'+(S.coin<100||RB()>=100?" disabled":"")+'>Ajudar hoje · ¤ 100</button><button class="btn" id="rbNo">Agora não</button>';
+  var o=ovl(h);$("#rbNo").onclick=function(){o.hidden=true;renderHub()};
+  $("#rbGo").onclick=function(){
+    if(S.coin<100||RB()>=100)return;S.coin-=100;uaMark("cinzas");uaCount();advanceTime(3);
+    var b0=RB();PF.rb=Math.min(100,b0+5);gainXP(15,true);L().rep=Math.min(100,L().rep+1);var m=RBM.filter(function(x){return b0<x[0]&&PF.rb>=x[0]})[0],txt=rnd(["Você carrega tijolos até as mãos reclamarem. Uma senhora traz água e diz que o filho dela vai morar naquela casa.","Vigas, cordas e muita gente gritando 'cuidado'. No fim do dia, uma parede inteira está de pé."]),eff="Reconstrução "+PF.rb+"% · XP +15";
+    if(m){txt+=" "+m[1];eff+=" · "+m[2];if(m[0]===25)L().rep=Math.min(100,L().rep+6);if(m[0]===50)rbRes();if(m[0]===100)unlock("cinzas")}
+    save();pfSave();dj("vida","Ajudou a reconstruir a Cidade das Cinzas ("+PF.rb+"%).");sfx(m?"win":"ok");
+    uaOv("Cidade das Cinzas","Um dia de reconstrução",txt,eff);
+  };
+}
+var _to24=tradeOk;tradeOk=function(c){if(c==="cinzas"&&RB()<75)return false;return _to24(c)};
+
+/* ---------- 4. Eventos de chegada: cada lugar tem os seus ---------- */
+var PEV={
+ capital:[{t:"Moeda perdida",x:"Um menino tropeça na sua frente e uma moeda de prata rola até o seu pé. Ele olha para a moeda, depois para você.",ch:[{l:"Devolver a moeda",ok:["O menino sorri com a boca toda e some na multidão. Um guarda que viu tudo acena com a cabeça.",{rep:3,san:2}]},{l:"Perguntar se está tudo bem",ok:["Ele estava fugindo de um vendedor zangado. Você paga o pão que ele pegou e os dois saem rindo.",{c:-8,rep:4,san:3}]}]},
+  {t:"Desfile de cavaleiros",x:"Cavaleiros passam pela avenida principal e a multidão se aperta para ver. Alguém aproveita o empurra-empurra.",ch:[{l:"Segurar a bolsa e assistir",ok:["Você vê o desfile inteiro sem perder nada. As armaduras brilham como prata nova.",{san:3,xp:4}]},{l:"Ir para a feira, que está vazia",ok:["Feira vazia, vendedores entediados, descontos generosos.",{c:12}]}]}],
+ bairro:[{t:"Aposta no beco",x:"Três homens jogam dados num caixote. Um deles chama: 'Ei, forasteiro. Uma rodada?'",ch:[{l:"Apostar ¤ 15",need:15,p:.45,ok:["Os dados caem do seu lado. Eles resmungam e pagam.",{c:15,xp:3}],bad:["Os dados caem do lado deles. Claro que caem.",{c:-15}]},{l:"Recusar com educação",ok:["Eles dão de ombros. Um deles avisa baixinho para você não andar sozinho depois das dez.",{san:1}]}]},
+  {t:"Telhados",x:"Uma menina loira passa correndo pelos telhados e grita lá de cima: 'Se quiser chegar no mercado antes de todo mundo, vem por aqui!'",ch:[{l:"Subir atrás dela",p:.7,ok:["Você chega sem fôlego, mas chega primeiro. A menina ri e some de novo.",{xp:8,san:3}],bad:["Uma telha solta, um tombo feio e um balde de roupa na cabeça.",{san:-4,xp:4}]},{l:"Ir pelo chão mesmo",ok:["Mais lento, mas inteiro.",{san:1}]}]}],
+ vila:[{t:"Galinha fugida",x:"Uma galinha escapa do quintal da padeira e corre direto na sua direção, perseguida por duas crianças.",ch:[{l:"Tentar pegar",p:.5,ok:["Você pega! A padeira insiste em pagar com pão quente.",{rep:3,san:2}],bad:["A galinha passa por baixo das suas pernas. As crianças riem por dez minutos.",{san:2}]},{l:"Abrir caminho",ok:["A galinha escolhe a liberdade. Ninguém te culpa.",{}]}]}],
+ moinho:[{t:"Tempestade de verão",x:"O céu escurece e o vento começa a girar as pás do moinho rápido demais. O moleiro grita pedindo ajuda para travar o mecanismo.",ch:[{l:"Ajudar a travar",ok:["Com cordas e muito peso, vocês seguram o moinho. O moleiro te dá um abraço molhado.",{rep:5,xp:10,san:-2}]},{l:"Abrigar as crianças no celeiro",ok:["Você conta piadas ruins no escuro até a chuva passar. Ninguém chorou.",{rep:3,san:3}]}]},
+  {t:"Pão da primeira fornada",x:"A moleira tira do forno o primeiro pão feito com a farinha nova e oferece um pedaço para quem estiver perto.",ch:[{l:"Aceitar e elogiar",ok:["Quentinho, crocante, perfeito. Você elogia tanto que ela embrulha mais um para a viagem.",{san:4}]}]}],
+ criadouro:[{t:"Filhote fujão",x:"Um filhote de dragão-terrestre escapou do cercado e está mordendo a barra da sua calça com muita convicção.",ch:[{l:"Levar de volta no colo",ok:["Ele é mais pesado do que parece, e lambe sua orelha o caminho todo. O tratador agradece.",{rep:3,san:4}]},{l:"Oferecer uma fruta",need:0,ok:["Ele larga a calça na hora. Agora vocês são amigos para sempre.",{san:3}]}]},
+  {t:"Dica quente",x:"Um tratador cochicha: 'O Caçula Teimoso comeu bem hoje. Só estou dizendo.'",ch:[{l:"Agradecer a dica",ok:["Você guarda a informação. Se vale alguma coisa, só a pista vai dizer.",{xp:3}]}]}],
+ liphas:[{t:"Viajantes sob a árvore",x:"Uma família de viajantes descansa sob a Flugel. O pai pergunta se a estrada até a capital é segura.",ch:[{l:"Acompanhar até a estrada principal",ok:["Nada acontece no caminho, e é exatamente isso que eles queriam. Na despedida, deixam um pouco de comida com você.",{rep:3,san:2,xp:6}]},{l:"Explicar o caminho mais seguro",ok:["Você desenha um mapa na terra com um graveto. Eles agradecem de coração.",{rep:2}]}]}],
+ pedraferro:[{t:"Desabamento leve",x:"Um estalo na galeria e poeira saindo da entrada da mina. Um mineiro grita que o colega ficou preso atrás de pedras soltas.",ch:[{l:"Entrar para ajudar",p:.8,ok:["Vocês tiram as pedras uma a uma. O mineiro sai mancando, mas sai. A aldeia inteira fica sabendo.",{rep:6,xp:12,san:-3}],bad:["Você ajuda, mas leva uma pedrada no ombro. Valeu a pena, dói do mesmo jeito.",{rep:5,san:-7}]},{l:"Correr para chamar mais gente",ok:["Em minutos há dez pessoas cavando. Ninguém se machuca.",{rep:3}]}]}],
+ vale:[{t:"Casamento na aldeia",x:"A aldeia inteira está enfeitada: hoje tem casamento. A noiva te vê chegando e insiste para você ficar para a festa.",ch:[{l:"Ficar e dançar",ok:["Você dança mal, come bem e vai embora com um pedaço de bolo embrulhado num pano.",{san:6,rep:2}]},{l:"Desejar felicidades e seguir",ok:["Eles acenam até você sumir na curva.",{san:2}]}]}],
+ caravana:[{t:"Carroça quebrada",x:"Uma roda se soltou bem na entrada do posto e a fila de carroças só cresce. O dono está desesperado.",ch:[{l:"Ajudar a trocar a roda",ok:["Com quatro pessoas e muita força, a roda volta ao lugar. O dono paga em moedas e em promessas.",{c:20,rep:2,xp:6}]},{l:"Organizar a fila para outro lado",ok:["Você vira guarda de trânsito por meia hora. Funciona.",{rep:3}]}]}],
+ karsten:[{t:"Inspeção dos estábulos",x:"Um capitão da guarda passa por você e para. 'Você. Sabe escovar um cavalo? Estamos com falta de mãos hoje.'",ch:[{l:"Aceitar o serviço",ok:["Duas horas de escova, feno e coices evitados por pouco. O capitão paga direito e diz que você leva jeito.",{c:30,xp:8,san:-2}]},{l:"Dizer que está de passagem",ok:["Ele assente, sério. Disciplina também é saber dizer não.",{}]}]}],
+ santuario:[{t:"Eco na clareira",x:"Por um instante, a clareira fica em silêncio total, e você tem certeza de ouvir seu nome dito com outra voz.",ch:[{l:"Responder",ok:["Nada responde de volta. Mas a sensação de estar sendo observado some, e fica algo parecido com paz.",{san:4,xp:6}]},{l:"Seguir sem olhar para trás",ok:["Você anda mais rápido do que gostaria de admitir.",{san:-2}]}]}],
+ pristella:[{t:"Canal fechado",x:"Uma ponte levadiça emperrou e metade da cidade não consegue atravessar. Um engenheiro olha para a manivela e suspira.",ch:[{l:"Ajudar na manivela",ok:["Vocês dois, mais três barqueiros, e a ponte finalmente cede. Aplausos dos dois lados do canal.",{rep:4,xp:8}]},{l:"Pegar uma gôndola",need:10,ok:["Mais caro, mais bonito e sem suor.",{c:-10,san:4}]}]}],
+ farol:[{t:"Barco à deriva",x:"Ao entardecer, um barco pequeno aparece sem remador, batendo devagar nas pedras da ilha.",ch:[{l:"Puxar o barco",ok:["Dentro, só uma cesta de peixes e um bilhete de agradecimento a 'quem achar'. O lago tem senso de humor.",{c:15,san:3}]},{l:"Avisar o faroleiro",ok:["Ele olha o barco, sorri e diz que isso acontece todo ano no mesmo dia. Não explica mais nada.",{xp:6}]}]}],
+ banok:[{t:"Pechincha",x:"Um vendedor de tapetes jura que aquele é o último tapete de verdade de toda Kararagi, e que o preço é quase um presente.",ch:[{l:"Pechinchar até o fim",p:.55,ok:["Meia hora depois, ele vende pela metade e ainda te serve chá. Você ganhou o respeito do bazar.",{rep:3,xp:8,c:20}],bad:["Ele é melhor nisso do que você. Você sai sem tapete, sem desconto e com um chá que nem pediu.",{c:-5,xp:4}]},{l:"Só elogiar o tapete",ok:["Ele fica tão contente que te dá uma dica de quem compra caro na capital.",{xp:5}]}]},
+  {t:"Contador de histórias",x:"No meio da praça, um velho conta a história de uma caravana que atravessou o deserto guiada por uma estrela que piscava.",ch:[{l:"Sentar e ouvir até o fim",ok:["A história termina com uma moral que você não entende, mas não esquece.",{san:5,xp:4}]}]}],
+ torre:[{t:"Areia que canta",x:"O vento do deserto passa pelas dunas e faz um som parecido com música. Um guia diz que é sinal de boa viagem.",ch:[{l:"Acreditar no guia",ok:["Talvez seja verdade. Talvez não. A viagem fica mais leve de qualquer jeito.",{san:4}]}]}],
+ guaral:[{t:"Revista no portão",x:"Soldados revistam todos que entram. Um deles demora demais olhando suas coisas.",ch:[{l:"Ficar calmo e cooperar",ok:["Ele não acha nada, porque não há nada. Libera você com um aceno seco.",{san:-1}]},{l:"Puxar conversa",p:.5,ok:["Ele é de uma aldeia pequena e sente saudade de casa. Vocês conversam e ele te indica uma boa estalagem.",{san:3,xp:5}],bad:["Ele não gosta de conversa. A revista fica mais demorada.",{san:-3}]}]}],
+ vollachia:[{t:"Neve no mercado",x:"Começa a nevar no meio da feira. Os vendedores cobrem as bancas, mas uma senhora não consegue sozinha.",ch:[{l:"Ajudar a cobrir a banca",ok:["Ela agradece com um pão de especiarias ainda quente. No Império, isso vale muito.",{rep:3,san:4}]}]}],
+ acampamento:[{t:"Teste do forasteiro",x:"Uma caçadora bloqueia o caminho e aponta para um alvo distante. 'Acerte, e você pode ficar. Erre, e você pode ficar também, mas vamos rir.'",ch:[{l:"Arremessar a lança",p:.45,ok:["Acerta! Silêncio, depois gritos de aprovação. Agora você é um pouco deles.",{rep:5,xp:12}],bad:["Erra feio. Eles riem como prometido, e depois te ensinam a segurar direito.",{xp:8,san:2}]},{l:"Oferecer ajuda no acampamento",ok:["Ela aceita. Você carrega lenha o dia todo e ganha um lugar perto do fogo.",{rep:3,san:3}]}]}],
+ cinzas:[{t:"Sobrevivente",x:"Uma menina procura alguma coisa nos escombros. É uma caixinha de música, e ela ainda funciona.",ch:[{l:"Ajudar a procurar a chave",ok:["Vocês acham a chavinha embaixo de um tijolo. A música toca torta, mas toca. Ela sorri pela primeira vez em dias.",{san:5,rep:3}]}]}],
+ ribeirinha:[{t:"Rede rasgada",x:"Um pescador xinga baixinho: a rede rasgou bem no dia de mais peixe.",ch:[{l:"Ajudar a remendar",ok:["Duas horas de nós e agulha. Ele divide a pescaria do dia com você.",{c:15,xp:6,rep:2}]}]}]
+};
+function PVS(){return PF.pvis||(PF.pvis={})}
+ACH.viaja10=["Andarilho","Visite 15 lugares diferentes."];
+ACH.viajall=["Cartógrafo","Visite todos os lugares do mapa."];
+function pevShow(loc){
+  var list=(PEV[loc]||[]).filter(function(e){return textArc(e.t+" "+e.x)<=arcReach()});if(!list.length)return;
+  var ev=rnd(list),pl=PLBY[loc];
+  var h='<p class="sec" style="margin:0">'+esc(pl.n)+'</p><h2 style="margin:0">'+esc(ev.t)+'</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(ev.x)+'</p>';
+  ev.ch.forEach(function(c,i){h+='<button class="btn" data-c="'+i+'"'+((c.need&&S.coin<c.need)?" disabled":"")+'>'+esc(c.l)+'</button>'});
+  var o=ovl(h);
+  o.onclick=function(e){
+    var b=e.target.closest?e.target.closest("button[data-c]"):null;if(!b||b.disabled)return;
+    var c=ev.ch[+b.getAttribute("data-c")],r=(c.p===undefined||Math.random()<c.p*(luck()))?c.ok:c.bad;
+    var t=applyLF(JSON.parse(JSON.stringify(r[1])));dj("vida",pl.n+": "+ev.t+".");o.onclick=null;
+    o.innerHTML='<div class="in"><p style="margin:0;font-size:17px;line-height:1.55">'+esc(r[0])+'</p>'+(t?'<p class="sec" style="margin:0">'+esc(t)+'</p>':'')+'<button class="btn primary" id="bOk">Continuar</button></div>';
+    $("#bOk").onclick=function(){o.hidden=true;try{updHead()}catch(_){}renderHub()};
+  };
+}
+function arrivalCard(loc){
+  var pl=PLBY[loc],f=plFeat(loc);
+  var o=ovl('<p class="sec" style="margin:0">Primeira visita · '+esc(ZN[ZONE[loc]]||"")+'</p><div class="arrv"><span class="aic">'+pl.ic+'</span><h2 style="margin:0">'+esc(pl.n)+'</h2></div><p style="margin:0;font-size:16.5px;line-height:1.55">'+esc(pl.d)+'</p>'+
+   (f.length?'<div class="fchips">'+f.map(function(x){return '<span class="fchip'+(x[2]?" sp":"")+'">'+x[0]+' '+esc(x[1])+'</span>'}).join("")+'</div>':'')+'<button class="btn primary" id="arOk">Explorar</button>');
+  sfx("catch");$("#arOk").onclick=function(){o.hidden=true;renderHub()};
+}
+var _rh24=renderHub;
+renderHub=function(){
+  _rh24();
+  if(!S||S.mode!=="free")return;
+  var lf=L(),loc=lf.loc,v=PVS();
+  if(PF.lastLoc===undefined){PF.lastLoc=loc;v[loc]=v[loc]||S.day;pfSave();return}
+  if(PF.lastLoc===loc||TRIP())return;
+  PF.lastLoc=loc;var first=!v[loc];v[loc]=v[loc]||S.day;pfSave();
+  var n=Object.keys(v).filter(function(k){return PLBY[k]}).length;if(n>=15)unlock("viaja10");if(n>=PLACES.length)unlock("viajall");
+  setTimeout(function(){
+    if(!$("#overlay").hidden||!S||S.mode!=="free"||L().loc!==loc)return;
+    if(first&&loc!=="casa")arrivalCard(loc);
+    else if(PEV[loc]&&PF.pevD!==S.day+":"+loc&&Math.random()<0.4){PF.pevD=S.day+":"+loc;pfSave();pevShow(loc)}
+  },350);
+};
+
+/* ---------- 5. O que há em cada lugar ---------- */
+var MKT=["vila","capital","pristella","vollachia","caravana","liphas","guaral","ribeirinha","pedraferro","bairro","karsten","banok","moinho"];
+function plFeat(loc){
+  var pl=PLBY[loc],f=[];if(!pl)return f;
+  if(UACT[loc])f.push(["✦",UACT[loc].n,1]);
+  if(pl.dg)f.push(["◈",pl.inf?"Torre sem fim":"Masmorra"]);
+  if(spotAt(loc))f.push(["≈","Pesca"]);
+  try{if(tradeOk(loc)||TCITY.indexOf(loc)>=0)f.push(["⇄","Comércio"])}catch(e){}
+  if(MKT.indexOf(loc)>=0)f.push(["¤","Mercado"]);
+  if(RES[loc])f.push(["⌂","Moradia"]);else if(pl.far&&!pl.dg)f.push(["☾","Estalagem"]);
+  if(SQ.some(function(q){return q.at===loc}))f.push(["!","Missões"]);
+  if(BIZ.some(function(b){return b.loc===loc}))f.push(["▣","Negócios"]);
+  if(PEV[loc])f.push(["❖","Eventos"]);
+  return f;
+}
+
+/* ---------- 6. Mapa redesenhado ---------- */
+var MAPW2=720,MAPH2=780,MAPSEL=null,MAPZ=1;
+function mh(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h}
+function mtn(x,y,s,snow){return '<path d="M'+(x-s)+' '+y+' L'+x+' '+(y-s*1.25)+' L'+(x+s)+' '+y+' Z" class="mt"/>'+(snow?'<path d="M'+(x-s*.38)+' '+(y-s*.78)+' L'+x+' '+(y-s*1.25)+' L'+(x+s*.38)+' '+(y-s*.78)+' L'+(x+s*.12)+' '+(y-s*.68)+' L'+(x-s*.1)+' '+(y-s*.82)+' Z" class="mts"/>':'')}
+function tree(x,y,s){return '<path d="M'+x+' '+(y-s*1.6)+' L'+(x+s)+' '+y+' L'+(x-s)+' '+y+' Z" class="tr"/>'}
+function dune(x,y,w){return '<path d="M'+(x-w)+' '+y+' Q'+x+' '+(y-w*.45)+' '+(x+w)+' '+y+'" class="dn"/>'}
+function mapArt(){
+  var s='<defs><radialGradient id="mgSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#131b36"/><stop offset="1" stop-color="#070a17"/></radialGradient>'+
+   '<linearGradient id="mgLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2342"/><stop offset=".75" stop-color="#151d38"/><stop offset="1" stop-color="#121a33"/></linearGradient>'+
+   '<radialGradient id="mgFog"><stop offset="0" stop-color="#05070f" stop-opacity=".5"/><stop offset=".55" stop-color="#05070f" stop-opacity=".28"/><stop offset="1" stop-color="#05070f" stop-opacity="0"/></radialGradient>'+
+   '<radialGradient id="mgVig" cx="50%" cy="50%" r="72%"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>'+
+   '<radialGradient id="mgHere"><stop offset="0" stop-color="#e4b867" stop-opacity=".35"/><stop offset="1" stop-color="#e4b867" stop-opacity="0"/></radialGradient>'+
+   '<linearGradient id="mgRiv" x1="0" x2="1"><stop offset="0" stop-color="#3f7fc0"/><stop offset="1" stop-color="#2d5f96"/></linearGradient></defs>';
+  s+='<rect width="'+MAPW2+'" height="'+MAPH2+'" fill="url(#mgSea)"/>';
+  /* terra firme */
+  s+='<path d="M96 70 Q220 52 360 64 T640 58 Q706 70 712 140 L712 600 Q712 700 690 770 L120 770 Q100 720 104 640 Q110 520 96 430 Q88 300 96 200 Z" fill="url(#mgLand)" class="coast"/>';
+  /* regiões */
+  s+='<path d="M0 0 L720 0 L720 62 Q560 52 400 60 T96 66 L0 70 Z" class="rg-snow"/>';
+  s+='<path d="M0 70 L96 70 Q88 300 96 430 Q110 520 104 640 L0 640 Z" class="rg-sand2"/>';
+  s+='<path d="M580 60 Q640 50 712 70 L712 270 Q670 260 625 240 Q580 210 585 150 Z" class="rg-sand"/>';
+  s+='<ellipse cx="590" cy="485" rx="150" ry="128" class="rg-green"/>';
+  s+='<path d="M104 604 Q200 582 320 605 T560 599 T712 609 L712 780 L104 780 Z" class="rg-cold"/><path d="M104 604 Q200 582 320 605 T560 599 T712 609" class="border"/>';
+  s+='<path d="M96 70 Q88 300 96 430 Q110 520 104 640" class="border"/>';
+  /* relevo */
+  var m='';[[140,92,14],[176,86,18],[214,94,12],[260,88,16],[300,92,12],[456,86,15],[498,92,12],[540,84,17],[660,98,12]].forEach(function(a){m+=mtn(a[0],a[1],a[2],true)});
+  [[200,612,12],[236,620,9],[470,610,13],[506,618,10],[620,616,12],[180,700,10],[700,690,9]].forEach(function(a){m+=mtn(a[0],a[1],a[2],a[1]<650)});
+  [[330,470,10],[360,478,8],[300,488,9]].forEach(function(a){m+=mtn(a[0],a[1],a[2],false)});
+  var t='';for(var i=0;i<26;i++){var x=470+((mh("t"+i)>>>0)%250),y=400+((mh("u"+i)>>>0)%190);if(Math.hypot(x-590,y-485)<140&&!Object.keys(POS).some(function(k){return Math.hypot(POS[k][0]-x,POS[k][1]-y)<26}))t+=tree(x,y,5+(i%3))}
+  for(var j=0;j<14;j++){var x2=500+((mh("a"+j)>>>0)%200),y2=650+((mh("b"+j)>>>0)%110);if(!Object.keys(POS).some(function(k){return Math.hypot(POS[k][0]-x2,POS[k][1]-y2)<26}))t+=tree(x2,y2,5)}
+  var d='';[[620,110,14],[655,140,12],[600,170,10],[690,190,13],[640,215,9],[30,180,10],[50,360,12],[25,450,9],[60,520,11]].forEach(function(a){d+=dune(a[0],a[1],a[2])});
+  s+='<g class="relief">'+m+t+d+'</g>';
+  /* grande árvore Flugel */
+  if(arcReach()>=3)s+='<g class="flugel"><circle cx="432" cy="356" r="17"/><circle cx="420" cy="350" r="11"/><circle cx="446" cy="348" r="12"/><rect x="429" y="360" width="6" height="14" rx="2"/><text x="432" y="392" class="wrg sm">FLUGEL</text></g>';
+  /* águas */
+  s+='<ellipse cx="150" cy="186" rx="78" ry="42" class="lake"/><ellipse cx="150" cy="186" rx="78" ry="42" class="lake2"/>';
+  s+='<ellipse cx="550" cy="500" rx="28" ry="12" class="lake"/>';
+  s+='<path d="M380 250 Q330 300 295 330 Q260 345 230 320 T165 265 Q150 230 150 210" class="river"/><path d="M165 265 Q130 300 140 335" class="river thin"/>';
+  s+='<path d="M640 600 Q600 640 560 650 T470 720 T430 780" class="river thin"/>';
+  /* nomes das regiões */
+  s+='<text x="400" y="34" class="wrg">GUSTEKO · ao norte</text><text x="48" y="610" class="wrg" transform="rotate(-90 48 610)">KARARAGI · a oeste</text>'+
+   '<text x="650" y="258" class="wrg">DUNAS DE AUGRIA</text><text x="590" y="352" class="wrg">TERRAS DE MATHERS</text><text x="260" y="140" class="wrg big">REINO DE LUGUNICA</text>'+
+   '<text x="560" y="752" class="wrg big">IMPÉRIO DE VOLLACHIA</text>';
+  /* rosa dos ventos e escala */
+  s+='<g class="rose" transform="translate(668 124)"><circle r="20"/><path d="M0 -24 L5 0 L0 24 L-5 0 Z"/><path d="M0 -24 L5 0 L-5 0 Z" class="n"/><text y="-28">N</text></g>';
+  s+='<g class="scale" transform="translate(124 742)"><path d="M0 0 H80 M0 -4 V4 M40 -3 V3 M80 -4 V4"/><text x="40" y="-8">≈ meio dia de estrada</text></g>';
+  return s;
+}
+function roadPath(a,b,k){var mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],L2=Math.hypot(dx,dy)||1,o=(((mh(k)>>>0)%2)?1:-1)*Math.min(26,L2*0.12);
+  return 'M'+a[0]+' '+a[1]+' Q'+(mx-dy/L2*o).toFixed(1)+' '+(my+dx/L2*o).toFixed(1)+' '+b[0]+' '+b[1]}
+mapSVG=function(lf){
+  var reach=arcReach(),t=Math.min(S.t,2),rec=PF.dgrec||{},top="",vis=PVS();
+  MAPTOP.forEach(function(f){top+=f(lf)||""});
+  var W=Math.round(MAPW2*MAPZ),s=top+'<div class="mapwrap m2"><svg viewBox="0 0 '+MAPW2+' '+MAPH2+'" width="'+W+'" height="'+Math.round(MAPH2*MAPZ)+'" class="wmap wbig m2" role="group" aria-label="Mapa de Lugunica e arredores">'+mapArt();
+  ROADS.forEach(function(r){var a=POS[r[0]],b=POS[r[1]];if(!a||!b||!PLBY[r[0]]||!PLBY[r[1]])return;var lock=PLBY[r[0]].arc>reach||PLBY[r[1]].arc>reach,dp=roadPath(a,b,r[0]+r[1]);
+    s+='<path d="'+dp+'" class="rd0'+(lock?" lock":"")+'"/><path d="'+dp+'" class="rd1'+(lock?" lock":"")+'"/>'});
+  /* névoa sobre o que ainda não chegou na história */
+  PLACES.forEach(function(p){var xy=POS[p.id];if(xy&&p.arc>reach)s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="46" fill="url(#mgFog)" class="fog"/>'});
+  var here={};Object.keys(SCHED).forEach(function(id){var pl=placeOf(id,S.day,t);if(pl){(here[pl]=here[pl]||[]).push(id)}});
+  var cxy=POS[lf.loc];if(cxy)s+='<circle cx="'+cxy[0]+'" cy="'+cxy[1]+'" r="64" fill="url(#mgHere)" class="herehalo"/>';
+  PLACES.forEach(function(p){
+    var xy=POS[p.id];if(!xy)return;
+    var lock=p.arc>reach,cur=p.id===lf.loc,sel=p.id===MAPSEL,ppl=here[p.id]||[],R=p.dg?(p.inf?17:15):p.vil?16:21;if(cur)R+=3;
+    var home=resAt(p.id),u=UACT[p.id],uok=u&&!lock&&!uaDone(p.id),seen=!!vis[p.id];
+    s+='<g class="wnode'+(p.dg?" wdg":p.vil?" wvil":" wcity")+(lock?" lock":"")+(cur?" cur":"")+(sel?" sel":"")+'" data-pl="'+p.id+'" tabindex="0" role="button" aria-label="'+esc(p.n)+(lock?" (bloqueado)":"")+'">';
+    s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="'+(R+10)+'" class="hit"/>';
+    if(cur)s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="'+(R+7)+'" class="pulse"/>';
+    if(!p.dg&&!p.vil)s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="'+(R+4)+'" class="wc2"/>';
+    s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="'+R+'" class="wc"/><text x="'+xy[0]+'" y="'+(xy[1]+5)+'" class="wic">'+(lock?"?":p.ic)+'</text>';
+    var lb=lock?"???":(p.s||p.n.replace("Floresta e lago","Floresta").replace("Vila de Irlam","Irlam").replace("Capital Real","Capital"));
+    var lw=lb.length*5.6+12;
+    if(!lock)s+='<rect x="'+(xy[0]-lw/2).toFixed(1)+'" y="'+(xy[1]+R+3)+'" width="'+lw.toFixed(1)+'" height="15" rx="7.5" class="lbg"/><text x="'+xy[0]+'" y="'+(xy[1]+R+14)+'" class="wlb">'+esc(lb)+'</text>';
+    if(home&&!lock&&p.id!=="casa")s+='<text x="'+(xy[0]-R)+'" y="'+(xy[1]-R+6)+'" class="whome">⌂</text>';
+    if(uok)s+='<text x="'+(xy[0]+R-2)+'" y="'+(xy[1]+R-1)+'" class="wstar">✦</text>';
+    if(!lock&&!seen&&!cur)s+='<circle cx="'+(xy[0]-R+3)+'" cy="'+(xy[1]+R-3)+'" r="3.5" class="wnew"/>';
+    if(p.dg&&!lock&&rec[p.id])s+='<text x="'+xy[0]+'" y="'+(xy[1]+R+28)+'" class="wrec">'+(p.inf?"Rec. andar ":"Andar ")+rec[p.id]+'</text>';
+    if(lock)s+='<text x="'+(xy[0]+R+2)+'" y="'+(xy[1]-R+4)+'" class="wlk">Arco '+p.arc+'</text>';
+    else if(!cur){var tv=tShort(travelH(lf.loc,p.id));if(tv){var tw=tv.length*6+8;s+='<rect x="'+(xy[0]+R-6)+'" y="'+(xy[1]-R-8)+'" width="'+tw+'" height="13" rx="6.5" class="tbg"/><text x="'+(xy[0]+R-6+tw/2)+'" y="'+(xy[1]-R+2)+'" class="wtv">'+tv+'</text>'}}
+    ppl.slice(0,4).forEach(function(id,i){var col=REL_C[id]?REL_C[id].c:"#8f9abb";s+='<circle cx="'+(xy[0]-15+i*10)+'" cy="'+(xy[1]-R-9)+'" r="4.5" fill="'+col+'" class="wp"/>'});
+    if(cur)s+='<g class="pin" transform="translate('+xy[0]+' '+(xy[1]-R-14)+')"><path d="M0 0 C-7 -8 -9 -12 -9 -16 A9 9 0 1 1 9 -16 C9 -12 7 -8 0 0 Z"/><circle cy="-16" r="3.5"/></g>';
+    s+='</g>';
+  });
+  s+='<rect width="'+MAPW2+'" height="'+MAPH2+'" fill="url(#mgVig)" pointer-events="none"/></svg>';
+  s+='<div class="mapctl"><button type="button" data-mz="in" aria-label="Aproximar">+</button><button type="button" data-mz="out" aria-label="Afastar">−</button><button type="button" data-mz="me" aria-label="Centralizar em você">◎</button></div></div>';
+  s+='<div id="plSheet"></div><p class="fine" style="margin:4px 0 0">Toque num lugar para ver o que há lá. ✦ atividade única disponível hoje · ⌂ sua moradia · ● lugar ainda não visitado. Região atual: '+esc(ZN[ZONE[lf.loc]]||"")+'.</p>';
+  return s;
+};
+function plSheetHTML(id){
+  var p=PLBY[id];if(!p)return "";
+  var lf=L(),reach=arcReach(),lock=p.arc>reach,cur=id===lf.loc,vis=PVS()[id];
+  if(lock)return '<div class="psheet lock"><div class="ph"><span class="pic">?</span><div><b>Lugar desconhecido</b><span>'+esc(ZN[ZONE[id]]||"")+'</span></div></div><p>Chegue ao Arco '+p.arc+' no Modo Retornos para descobrir este lugar.</p></div>';
+  var f=plFeat(id),t=Math.min(S.t,2),ppl=Object.keys(SCHED).filter(function(k){return placeOf(k,S.day,t)===id});
+  var h='<div class="psheet'+(cur?" cur":"")+'"><div class="ph"><span class="pic">'+p.ic+'</span><div><b>'+esc(p.n)+'</b><span>'+esc(ZN[ZONE[id]]||"")+(vis?" · visitado":" · ainda não visitado")+'</span></div><button type="button" class="px" data-px="1" aria-label="Fechar">×</button></div><p>'+esc(p.d)+'</p>';
+  if(f.length)h+='<div class="fchips">'+f.map(function(x){return '<span class="fchip'+(x[2]?" sp":"")+'">'+x[0]+' '+esc(x[1])+'</span>'}).join("")+'</div>';
+  if(ppl.length)h+='<p class="pp">Agora lá: '+ppl.map(function(k){return esc(nameOf(k))}).join(", ")+'</p>';
+  if(cur)h+='<p class="here">Você está aqui.</p>';
+  else{var tv=travelH(lf.loc,id);h+='<button type="button" class="btn primary" data-go="'+id+'">Viajar · '+esc(tLabel(tv))+'</button>'}
+  return h+'</div>';
+}
+function mapBind(){
+  var card=$("#hMapCard");if(!card||card._m24)return;card._m24=true;
+  card.addEventListener("click",function(e){
+    var t=e.target;
+    var z=t.closest&&t.closest("[data-mz]");if(z){e.stopPropagation();var k=z.getAttribute("data-mz");if(k==="me"){centerMap();return}
+      MAPZ=Math.max(.7,Math.min(1.6,MAPZ+(k==="in"?.2:-.2)));var w=card.querySelector(".mapwrap"),sv=w&&w.querySelector("svg");if(sv){var cx=(w.scrollLeft+w.clientWidth/2)/sv.clientWidth,cy=(w.scrollTop+w.clientHeight/2)/sv.clientHeight;
+        sv.setAttribute("width",Math.round(MAPW2*MAPZ));sv.setAttribute("height",Math.round(MAPH2*MAPZ));w.scrollLeft=cx*sv.clientWidth-w.clientWidth/2;w.scrollTop=cy*sv.clientHeight-w.clientHeight/2}return}
+    var g=t.closest&&t.closest("[data-go]");if(g){e.stopPropagation();var id=g.getAttribute("data-go");MAPSEL=null;goPlace(id);return}
+    var x=t.closest&&t.closest("[data-px]");if(x){e.stopPropagation();MAPSEL=null;mapSheet();return}
+    var n=t.closest&&t.closest("[data-pl]");if(n){e.stopPropagation();MAPSEL=n.getAttribute("data-pl");sfx("swipe");
+      card.querySelectorAll(".wnode.sel").forEach(function(q){q.classList.remove("sel")});n.classList.add("sel");mapSheet(true)}
+  },true);
+  card.addEventListener("keydown",function(e){var n=e.target.closest&&e.target.closest("[data-pl]");if(n&&(e.key==="Enter"||e.key===" ")){e.preventDefault();n.dispatchEvent(new MouseEvent("click",{bubbles:true}))}});
+}
+function mapSheet(scroll){var sh=$("#plSheet");if(!sh)return;sh.innerHTML=MAPSEL?plSheetHTML(MAPSEL):"";if(scroll&&MAPSEL){var ps=sh.firstChild;if(ps&&ps.scrollIntoView)ps.scrollIntoView({block:"nearest",behavior:"smooth"})}}
+centerMap=function(){
+  try{var w=document.querySelector("#hub .mapwrap");if(!w)return;var xy=POS[L().loc]||POS.casa;
+    w.scrollLeft=Math.max(0,xy[0]*MAPZ-w.clientWidth/2);w.scrollTop=Math.max(0,xy[1]*MAPZ-w.clientHeight/2)}catch(_){}
+};
+var _rh24b=renderHub;
+renderHub=function(){
+  var w=document.querySelector("#hub .mapwrap"),sl=w?w.scrollLeft:null,st=w?w.scrollTop:null,loc0=PF.lastLoc;
+  _rh24b();
+  if(!S||S.mode!=="free")return;
+  mapBind();
+  if(MAPSEL&&MAPSEL===L().loc)MAPSEL=null;mapSheet();
+  var w2=document.querySelector("#hub .mapwrap");if(w2){if(sl!=null&&loc0===L().loc){w2.scrollLeft=sl;w2.scrollTop=st}else centerMap()}
+};
+
+/* ---------- 7. Atlas na aba Mundo ---------- */
+WSEC.push({id:"atlas",n:"Atlas",render:function(b){
+  var v=PVS(),reach=arcReach(),zs={};PLACES.forEach(function(p){(zs[ZONE[p.id]||"?"]=zs[ZONE[p.id]||"?"]||[]).push(p)});
+  var n=PLACES.filter(function(p){return v[p.id]}).length;
+  var h='<p class="fine" style="margin:0 0 8px">Lugares visitados: <b>'+n+'</b> de '+PLACES.length+'. Cada lugar tem eventos próprios na chegada, e muitos têm uma atividade única (✦) por dia.</p>';
+  ["C","M","O","K","A","V"].forEach(function(z){var L3=zs[z];if(!L3)return;h+='<p class="sec">'+esc(ZN[z]||z)+'</p>';
+    L3.forEach(function(p){var lock=p.arc>reach;h+='<div class="item'+(v[p.id]?" got":"")+(lock?" locked":"")+'"><div><b>'+(lock?"??? · Arco "+p.arc:p.ic+" "+esc(p.n))+'</b><span>'+(lock?"Ainda não descoberto.":plFeat(p.id).map(function(x){return x[1]}).join(" · ")||"—")+'</span></div><span>'+(v[p.id]?"✓":"")+'</span></div>'})});
+  b.innerHTML=h;
+}});
+/* perfeição: lugares visitados */
+var _pc24=perfCats;
+perfCats=function(){var c=_pc24();try{var v=PVS();c.push({k:"lug",n:"Lugares visitados",got:PLACES.filter(function(p){return v[p.id]}).length,tot:PLACES.length,w:5})}catch(e){}return c};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

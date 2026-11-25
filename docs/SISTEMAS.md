@@ -51,3 +51,10 @@
 - **Correio**: `PF.mail` (até 40 cartas `{d,f,w,t,x,g,got,rd}`), `MAILT` (cartas por remetente), `mailMorning()` roda ao acordar, `openMail()`. Botão `#hMail` no cartão do dia.
 - **Aniversários**: `BDAY` (estação, dia), `bdOn(day)`, bônus ×3 no `relAdd` quando o clique veio de um presente (`GIFTCLK`); `PF.bdg` evita repetir no mesmo ano.
 - **Som**: `aud()` monta compressor, reverberação e barramentos (`AUD.mus`, `AUD.fx`); `MOODS` define a trilha; `musMood()` escolhe pelo que está na tela. `SET.mus`, `SET.musv`, `SET.calm`.
+
+## Mapa e lugares (Atualização 24)
+- O mapa tem 720×780 (`MAPW2`, `MAPH2`); `POS` foi deslocado 80 px para a direita para abrir Kararagi (zona `K`). `mapArt()` desenha o terreno; `mapSVG` desenha estradas (`roadPath`), névoa, nós e controles. `MAPSEL` guarda o lugar tocado; `plSheetHTML(id)` monta a ficha; `mapBind()` intercepta os toques no cartão do mapa (fase de captura).
+- `plFeat(loc)` lista o que há num lugar (atividade única, masmorra, pesca, comércio, mercado, moradia, missões, negócios, eventos).
+- `UACT[loc]`: atividade única do dia (`run()` devolve [texto, efeito] ou `ui` = race/auction/rebuild/duel). `PF.ua` (dia feito), `PF.uaN` (contagem com `multi`), `PF.uaSeen`. Categoria `uniq` em `ACAT` ("Especial daqui"), aberta por padrão.
+- `PEV[loc]`: eventos de chegada (formato dos eventos de vida, efeitos por `applyLF`). Disparam com 40% de chance na chegada, no máximo um por dia e lugar; a primeira visita mostra `arrivalCard`. `PF.lastLoc`, `PF.pvis` (lugares visitados).
+- Cidade das Cinzas: `PF.rb` (0–100). Em 50% cria `RES.cinzas`; em 75% libera o comércio (`tradeOk`).
