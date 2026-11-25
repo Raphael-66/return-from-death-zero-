@@ -1,0 +1,38 @@
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const sh=async n=>{await p.waitForTimeout(400);await p.screenshot({path:'/tmp/shots/'+n+'.png'})};const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,400))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,300))}};
+ await ev(`SET.tips=false`);
+ await ev(`document.querySelector('#bFree').click()`);
+ await st('mail btn',`document.querySelector('#hMail')&&document.querySelector('#hMail').innerText`);
+ await sh('20_hub');
+ await st('sleep 5 days',`(function(){for(var i=0;i<5;i++){document.querySelector('#overlay').hidden=true;S.h=22;sleepDay()}document.querySelector('#overlay').hidden=true;renderHub();return MAIL().map(function(m){return m.d+' '+m.f+': '+m.t}).join(' | ')})()`);
+ await st('open mail',`(function(){openMail();return document.querySelectorAll('#overlay .letter').length})()`);
+ await sh('21_mail');
+ await st('collect',`(function(){var c0=S.coin;var b=document.querySelector('[data-ml]:not([disabled])');if(b)b.click();return [c0,S.coin,S.tea]})()`);
+ await st('bday',`(function(){document.querySelector('#overlay').hidden=true;S.day=86;renderHub();return [bdOn(86),bdOn(87),[].map.call(document.querySelectorAll('.bdayline'),function(e){return e.textContent}).join('/')]})()`);
+ await st('bday gift x3',`(function(){S.day=66;var b=bdOn(66);var id='emilia';var c=relOf(id),r0=c.rp;GIFTCLK=Date.now();relAdd(id,5);return [b,r0,c.rp,META.ach.indexOf('bday')>=0]})()`);
+ await st('perf',`(function(){return perfPct()+' '+perfCats().map(function(c){return c.k+':'+c.got+'/'+c.tot}).join(',')})()`);
+ await st('music',`(function(){musStart();return [!!AUD,MUS.timer!=null,musMood()]})()`);
+ await p.waitForTimeout(1500);
+ await st('music mood',`[MUS.mood,MUS.step,AC&&AC.state]`);
+ await st('ajustes',`(function(){openMenu("Ajustes");return [!!document.querySelector('#musTg'),!!document.querySelector('#calmTg'),!!document.querySelector('#musV')]})()`);
+ await sh('22_ajustes');
+ await st('calm',`(function(){document.querySelector('#calmTg').click();return document.documentElement.className})()`);
+ await st('calm off',`(function(){document.querySelector('#calmTg').click();return document.documentElement.className})()`);
+ await st('rg die timeline',`(function(){document.querySelector('#overlay').hidden=true;newRG();RG.turn=(RG.turn||0)+12;rgDie("m1_0");return [document.querySelector('#overlay .epit')&&document.querySelector('#overlay .epit').textContent,META.tl.length]})()`);
+ await sh('23_death');
+ await st('codex',`(function(){document.querySelector('#bBack').disabled=false;document.querySelector('#bBack').click();openMenu("Códice");return document.querySelector('.tline')&&document.querySelector('.tline').innerText.slice(0,120)})()`);
+ await sh('24_codex');
+ await st('title',`(function(){document.querySelector('#overlay').hidden=true;toTitle();return document.querySelector('#bPerf').innerText+' | '+document.querySelector('#bRG').innerText.replace(/\\n/g,' / ')})()`);
+ await sh('25_title');
+ console.log(o.join('\n'));};
+/* segunda parte: guarda de spoilers e humor da música */
+const first=module.exports;
+module.exports=async p=>{
+  await first(p);
+  const ev=s=>p.evaluate(s2=>__T(s2),s);
+  const r=await ev(`(function(){META.maxArc=1;toTitle();document.querySelector('#bFree').click();var out=[];
+    ["Vínculos","Romance","Loja","Mercado","Missões","Negócios","Conquistas","Galeria"].forEach(function(t){openMenu(t);var x=document.querySelector('#pane').innerText;CHAR_RE.forEach(function(c){if(c[1]>1&&c[0].test(x))out.push(t+':'+c[0])})});
+    S.h=21;document.querySelector('#overlay').hidden=true;renderHub();var night=musMood();S.h=9;renderHub();var day=musMood();
+    return {vazamentos:out,night:night,day:day}})()`);
+  console.log('spoilers/music: '+JSON.stringify(r));
+};

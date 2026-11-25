@@ -81,3 +81,14 @@
 - Aviso de versão nova: quando o service worker troca, aparece a barra "Nova versão do jogo instalada · tocar para atualizar". O registro checa atualização a cada 30 min.
 - Perfil em gavetas: Atributos (com resumo) e "Como evoluir"; título com pontos livres da árvore.
 - Teste: `tests/v22_refino.js`.
+
+## Atualização 23 — acabamento premium
+- **Guarda de spoilers**: nomes de personagens de arcos futuros viram "???" nos menus (Romance, Loja, Relíquias, Missões, Conquistas...). Barras de Vínculos de quem ainda não apareceu somem, itens do Mercado com esses nomes não são vendidos e a Galeria só lista quem já entrou. Corrigido: Vínculos do Modo Livre mostrava Rem, Ram e Beatrice no Arco 1.
+- **Medidor de perfeição**: porcentagem geral (história, conquistas, códice, bestiário, pesca, missões, vínculos, lendárias, negócios, cartas lidas), no topo de Conquistas e na tela inicial. Conquistas de 25%, 50% e 100%.
+- **Linha do tempo dos retornos**: cada morte nos Retornos ganha um apelido ("Subaru, o Exausto") e quantas cartas durou. Aparece na tela de morte e no Códice, com o retorno mais longo em destaque.
+- **Correio da manhã** (Modo Livre): cartas de amigos (por arco e relação), cônjuge, filhos, resumo semanal dos negócios, aviso de festival e aniversários. Algumas trazem moedas, chá, XP ou relação.
+- **Aniversários** no calendário do jogo: presente no dia vale o triplo (uma vez por ano). Aparecem no mapa e na aba Mundo › Calendário.
+- **Som**: trilha ambiente gerada no aparelho (Web Audio, sem arquivos), com humor para título, dia, noite, pesca, Retornos e batalha; efeitos sonoros refeitos. Ajustes: música, volume e "menos movimento".
+- **Visual**: tela inicial nova (cartões de modo, partículas, selo de perfeição), transições entre telas e abas, menu com cabeçalho fixo e botão Fechar sempre visível, emblema animado do inimigo e histórico curto na batalha, avisos com vidro fosco, nota da carta legível em qualquer fundo, "−0" dos negócios corrigido.
+- **Offline**: o service worker guarda as fontes na primeira visita.
+- Teste: `tests/v23_premium.js`.

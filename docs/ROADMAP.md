@@ -10,7 +10,7 @@ Rebalancear batalhas · super chefes canônicos · masmorras maiores · dormir o
 - **Hub com abas fixas** no rodapé (Mapa, Atividades, Pessoas, Vida, Menu): a tela do Modo Livre está muito longa.
 
 ### Vida a dois e família
-- Rotina do casal (café da manhã, pedidos de ajuda, brigas leves), aniversários, filhos com personalidade e profissão, pet da família.
+- Rotina do casal (café da manhã, pedidos de ajuda, brigas leves), ~~aniversários~~ (Atualização 23), filhos com personalidade e profissão, pet da família.
 
 ### Mundo
 - Encontros na estrada (além das emboscadas), eventos sazonais, reputação por cidade, neblina no mapa, eventos de comércio (escassez, caravanas roubadas, feiras).
@@ -21,5 +21,5 @@ Rebalancear batalhas · super chefes canônicos · masmorras maiores · dormir o
 ### Técnico
 - Dividir o `index.html` em módulos (dados, batalha, mapa, interface) e reduzir as camadas de "embrulho".
 - Rodar `tests/` automaticamente com GitHub Actions.
-- Aviso "nova versão disponível".
-- Acessibilidade: texto maior e alto contraste.
+- ~~Aviso "nova versão disponível"~~ (Atualização 22).
+- Acessibilidade: ~~texto maior~~ e ~~menos movimento~~ (Atualização 23); falta alto contraste.

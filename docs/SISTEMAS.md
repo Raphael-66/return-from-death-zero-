@@ -43,3 +43,11 @@
 
 ## Moedas
 ¤ moedas (comuns) · ◆ fragmentos (raros) · ☾ sanidade · ↺ mortes.
+
+## Acabamento (Atualização 23)
+- **Spoilers**: `MASKN` (regex por nome e arco) + `maskFuture(root)`, aplicado ao `#pane` por um `MutationObserver` no `#overlay` e no `openMenu`. Usa `nowArc()`.
+- **Perfeição**: `perfCats()` devolve categorias `{n,got,tot,w}`; `perfPct()` faz a média ponderada; `perfCheck()` libera `perf25/50/100`.
+- **Linha do tempo**: `META.tl` (até 60), `META.tlBest`, `epithet(id,n)`; `RG.tStart` marca a carta em que o retorno começou.
+- **Correio**: `PF.mail` (até 40 cartas `{d,f,w,t,x,g,got,rd}`), `MAILT` (cartas por remetente), `mailMorning()` roda ao acordar, `openMail()`. Botão `#hMail` no cartão do dia.
+- **Aniversários**: `BDAY` (estação, dia), `bdOn(day)`, bônus ×3 no `relAdd` quando o clique veio de um presente (`GIFTCLK`); `PF.bdg` evita repetir no mesmo ano.
+- **Som**: `aud()` monta compressor, reverberação e barramentos (`AUD.mus`, `AUD.fx`); `MOODS` define a trilha; `musMood()` escolhe pelo que está na tela. `SET.mus`, `SET.musv`, `SET.calm`.
