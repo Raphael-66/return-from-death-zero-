@@ -468,6 +468,10 @@ details.bzc>summary::before{content:none}
 .bkbox b{display:block}.bkbox span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
 .bkrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 #bkTxt{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--ink2);color:var(--paper);font-size:13px}
+#tipbox{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink3);border:1px solid var(--gold);border-radius:14px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:520px;margin:0 auto}
+#tipbox b{color:var(--gold);font-size:13px;letter-spacing:.04em}#tipbox p{margin:6px 0 10px;font-size:14.5px;line-height:1.45}
+#tipbox div{display:flex;gap:8px;justify-content:flex-end}
+#upbar{position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:50;background:var(--gold);color:var(--ink);border:none;border-radius:12px;padding:12px;font-weight:700;font-size:14px;max-width:520px;margin:0 auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 </style>
 
 
@@ -8345,6 +8349,90 @@ function bindBackup(){
 var bkArm=0;function confirmBk(){if(bkArm&&Date.now()-bkArm<5000){bkArm=0;return true}bkArm=Date.now();toast("Toque de novo para confirmar: o progresso atual será substituído pelo backup.");return false}
 var _ps21=paneSet;paneSet=function(p){_ps21(p);p.insertAdjacentHTML("beforeend",backupHTML());bindBackup()};
 
+/* =====================================================================
+   ATUALIZAÇÃO 22: refinamentos.
+   - Dicas de primeira vez (balão discreto, desligável).
+   - Backup automático: 3 últimas cópias, restauráveis em Ajustes.
+   - Perfil em gavetas.
+   ===================================================================== */
+/* ---------- dicas de primeira vez ---------- */
+var TIPS={
+ free:["Modo Livre","Aqui o tempo corre em horas: a maioria das ações gasta 2h. Toque num lugar do mapa para viajar. As gavetas abrem e fecham, e o botão ⇄ no topo leva ao Modo Retornos."],
+ rg:["Modo Retornos","Deslize a carta ou toque nos botões para escolher. Os quatro medidores não podem chegar a 0 nem a 100. Morrer não é o fim: você volta com memórias que ajudam na próxima vez."],
+ battle:["Batalha","Cada rodada você tem energia para jogar cartas (o custo fica no canto). Leia o próximo ataque do inimigo e use escudo quando ele for forte. Toque nos traços e nas sinergias para ver o que fazem."],
+ night:["Noite","Depois das 22:00 o cansaço tira sanidade. Dá para virar a noite, mas às 07:00 Subaru desaba. Dormir em casa rende mais."],
+ fish:["Pesca","Toque em Lançar com a barra cheia para atrair peixes raros. Quando fisgar, segure para subir a barra verde e mantenha o peixe dentro dela até encher o medidor."],
+ biz:["Negócios","Cada comércio produz toda noite. Contrate um vendedor para vender sozinho, escolha o foco e um gerente. De manhã chega o relatório."],
+ trade:["Comércio","Compre onde a mercadoria é produzida e venda longe dela. Os boatos mostram onde cada coisa vale mais hoje."],
+ dungeon:["Masmorra","Cada andar custa sanidade. O saque fica na mochila: saindo, você leva tudo; caindo, perde metade. A cada 5 andares há um guardião."],
+ party:["Grupo de batalha","Escolha até 3 parceiros para as lutas do Modo Livre. Quem é mais próximo de você luta melhor (Laço)."]
+};
+var TIPQ=[];
+function tipsOn(){return SET.tips!==false}
+function tip(k){
+  if(!tipsOn()||!TIPS[k])return;META.tips=META.tips||{};if(META.tips[k])return;
+  if(TIPQ.indexOf(k)<0)TIPQ.push(k);tipShow();
+}
+function tipShow(){
+  var el=$("#tipbox");if(el&&!el.hidden)return;var k=TIPQ.shift();if(!k)return;
+  if(!el){el=document.createElement("div");el.id="tipbox";document.body.appendChild(el)}
+  var t=TIPS[k];el.hidden=false;el.innerHTML='<b>Dica · '+esc(t[0])+'</b><p>'+esc(t[1])+'</p><div><button class="btn small" id="tipOff">Desligar dicas</button><button class="btn small primary" id="tipOk">Entendi</button></div>';
+  function close(){META.tips[k]=1;gset("rpm_meta",META);el.hidden=true;setTimeout(tipShow,250)}
+  $("#tipOk").onclick=close;$("#tipOff").onclick=function(){SET.tips=false;gset("rpm_set",SET);TIPQ.length=0;close()};
+}
+var _rh22=renderHub;renderHub=function(){_rh22();if(S&&S.mode==="free"){tip("free");if(S.h>=22)tip("night")}};
+var _rs22=rgShow;rgShow=function(c,r){_rs22(c,r);tip("rg")};
+var _sb22=startBattle;startBattle=function(cfg){_sb22(cfg);tip("battle")};
+var _pf22=paneFish;paneFish=function(p){_pf22(p);tip("fish")};
+var _pb22=paneBiz;paneBiz=function(p){_pb22(p);tip("biz")};
+var _tm22=tradeMenu;tradeMenu=function(){_tm22();tip("trade")};
+var _di22=dgIntro;dgIntro=function(id){_di22(id);tip("dungeon")};
+var _pm22=partyMenu;partyMenu=function(b){_pm22(b);tip("party")};
+
+/* ---------- backup automático ---------- */
+var _sk22=saveKeys;saveKeys=function(){return _sk22().filter(function(k){return k!=="rpm_bak"})};
+function autoBak(why){
+  try{
+    var list=JSON.parse(localStorage.getItem("rpm_bak")||"[]"),d=exportData();d.why=why;
+    var last=list[0];if(last&&Date.now()-new Date(last.em).getTime()<10*60*1000)list.shift();
+    list.unshift(d);while(list.length>3)list.pop();
+    localStorage.setItem("rpm_bak",JSON.stringify(list));
+  }catch(e){try{localStorage.removeItem("rpm_bak")}catch(_){}}
+}
+var _sl22=sleepDay;sleepDay=function(x){_sl22(x);if(S&&S.mode==="free")autoBak("Modo Livre · dia "+S.day)};
+var _ae22=rgArcEnd;rgArcEnd=function(){_ae22();if(RG)autoBak("Retornos · fim do Arco "+Math.min(RG.arc,8))};
+var _ps22=paneSet;
+paneSet=function(p){
+  _ps22(p);
+  var list=[];try{list=JSON.parse(localStorage.getItem("rpm_bak")||"[]")}catch(e){}
+  var h='<div class="bkbox"><div><b>Cópias automáticas</b><span>O jogo guarda sozinho as 3 últimas cópias: ao dormir no Modo Livre e ao terminar um arco no Retornos.</span></div>';
+  if(!list.length)h+='<span class="fine">Nenhuma cópia ainda.</span>';
+  list.forEach(function(b,i){var dt=new Date(b.em);h+='<div class="item"><div><b>'+esc(b.why||"Cópia")+'</b><span>'+dt.toLocaleDateString("pt-BR")+' às '+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})+'</span></div><button class="btn small" data-bk="'+i+'">Restaurar</button></div>'});
+  h+='</div><div class="item"><div><b>Dicas</b><span>Balões que explicam cada sistema na primeira vez.</span></div><span style="display:flex;gap:6px"><button class="btn small" id="tipTg">'+(tipsOn()?"Ligadas":"Desligadas")+'</button><button class="btn small" id="tipRs">Rever</button></span></div>';
+  p.insertAdjacentHTML("beforeend",h);
+  p.querySelectorAll("[data-bk]").forEach(function(b){b.onclick=function(){if(!confirmBk())return;importAny(JSON.stringify(list[+b.getAttribute("data-bk")]))}});
+  $("#tipTg").onclick=function(){SET.tips=!tipsOn();gset("rpm_set",SET);paneSet(p)};
+  $("#tipRs").onclick=function(){META.tips={};gset("rpm_meta",META);SET.tips=true;gset("rpm_set",SET);toast("As dicas vão aparecer de novo");paneSet(p)};
+};
+
+/* ---------- Perfil em gavetas ---------- */
+var _pp22=paneProfile;
+paneProfile=function(p){
+  _pp22(p);
+  try{
+    var sec=[].filter.call(p.querySelectorAll(":scope > p.sec"),function(e){return /Atributos/.test(e.textContent)})[0],at=p.querySelector(":scope > .attrs");
+    if(sec&&at){
+      var fines=[],n=at.nextElementSibling;while(n&&n.tagName==="P"&&n.classList.contains("fine")){fines.push(n);n=n.nextElementSibling}
+      var badge=ATTR.map(function(a){return a[2]+" "+(PF[a[0]]||0).toFixed(1)}).join(" · ");
+      var help=fines.length?drawer("pf_help","Como evoluir","",fines,false,"mini"):null;
+      var d=drawer("pf_attr","Atributos",badge,[at].concat(help?[help]:[]),false);
+      sec.parentNode.replaceChild(d,sec);
+    }
+    var br=p.querySelector(":scope > .chips"),trw=p.querySelector(":scope > .tree");
+    if(br&&!p.querySelector(".treettl")){var t=document.createElement("p");t.className="sec treettl";t.style.margin="10px 0 4px";t.textContent="Árvore de habilidades · pontos livres: "+(PF.pts||0);br.parentNode.insertBefore(t,br)}
+  }catch(e){}
+};
+
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
 var _toTitle8=toTitle;
@@ -8360,5 +8448,15 @@ toTitle();
 </script>
 
 <script>
-if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+if("serviceWorker" in navigator){
+  var hadSW=!!navigator.serviceWorker.controller;
+  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").then(function(r){setInterval(function(){r.update().catch(function(){})},30*60*1000)}).catch(function(){})});
+  /* versão nova instalada enquanto o jogo estava aberto: oferece recarregar */
+  navigator.serviceWorker.addEventListener("controllerchange",function(){
+    if(!hadSW){hadSW=true;return}
+    if(document.getElementById("upbar"))return;
+    var b=document.createElement("button");b.id="upbar";b.type="button";b.textContent="Nova versão do jogo instalada · tocar para atualizar";
+    b.onclick=function(){location.reload()};document.body.appendChild(b);
+  });
+}
 </script>

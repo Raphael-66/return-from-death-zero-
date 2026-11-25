@@ -1,0 +1,11 @@
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,300))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,200))}};
+ await st('free tip',`(function(){document.querySelector('#bFree').click();var t=document.querySelector('#tipbox');return t&&!t.hidden?t.innerText.slice(0,80):'none'})()`);
+ await p.screenshot({path:'/tmp/t22a.png'});
+ await st('ok',`(function(){document.querySelector('#tipOk').click();return JSON.stringify(META.tips)})()`);
+ await st('battle tip queued',`(function(){META.maxArc=8;REL_Q.length=0;L().pend=false;document.querySelector('#overlay').hidden=true;L().loc="floresta";startHubFight();var t=document.querySelector('#tipbox');return t.hidden?'hidden':t.innerText.slice(0,40)})()`);
+ await st('autobak',`(function(){B.done=true;document.querySelector('#overlay').hidden=true;B=null;S.h=22;sleepDay();document.querySelector('#overlay').hidden=true;var l=JSON.parse(localStorage.getItem("rpm_bak"));return l.length+' '+l[0].why+' keys '+Object.keys(l[0].dados).join(',')})()`);
+ await st('ajustes',`(function(){openMenu("Ajustes");return [].map.call(document.querySelectorAll('#pane .bkbox b, #pane [data-bk]'),function(e){return e.textContent}).join(' | ')})()`);
+ await st('perfil',`(function(){openMenu("Perfil");return [].map.call(document.querySelectorAll('#pane > details > summary, #pane .treettl'),function(e){return e.textContent}).join(' | ')})()`);
+ await p.screenshot({path:'/tmp/t22b.png'});
+ console.log(o.join('\n'));};

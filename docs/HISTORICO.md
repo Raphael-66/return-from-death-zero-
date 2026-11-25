@@ -74,3 +74,10 @@
 
 ## 2026-11-23 — Publicação
 - GitHub Pages ativado (branch `main`, raiz). Pacote PWA (manifest, service worker, ícones).
+
+## Atualização 22 — refinamentos
+- Dicas de primeira vez (Modo Livre, Retornos, batalha, noite, pesca, negócios, comércio, masmorra, grupo). Botões "Entendi" e "Desligar dicas"; em Ajustes dá para religar e rever.
+- Backup automático: ao dormir no Modo Livre e ao fim de cada arco, até 3 cópias em `rpm_bak` (a mais recente é substituída se tiver menos de 10 min). Restaurar em Ajustes.
+- Aviso de versão nova: quando o service worker troca, aparece a barra "Nova versão do jogo instalada · tocar para atualizar". O registro checa atualização a cada 30 min.
+- Perfil em gavetas: Atributos (com resumo) e "Como evoluir"; título com pontos livres da árvore.
+- Teste: `tests/v22_refino.js`.
