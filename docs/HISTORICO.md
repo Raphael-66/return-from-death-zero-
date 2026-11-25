@@ -103,3 +103,7 @@
 - **Comércio**: tapetes de Kararagi, selas de dragão e farinha do moinho.
 - **Atlas** na aba Mundo, por região, e "Lugares visitados" no medidor de perfeição. Conquistas novas: Andarilho, Cartógrafo, Turista dedicado, corrida, leilão e reconstrução.
 - Teste: `tests/v24_mapa.js`.
+
+## Atualização 25 — gavetas em sanfona
+- No Modo Livre, abrir uma gaveta fecha as outras do mesmo grupo (ações do lugar, atividades, cartões do hub). A que abriu é trazida para a vista. Ao montar a tela, se houver várias abertas no mesmo grupo, só a primeira fica aberta.
+- Teste: `tests/v25_gavetas.js`.

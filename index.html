@@ -9427,6 +9427,24 @@ WSEC.push({id:"atlas",n:"Atlas",render:function(b){
 var _pc24=perfCats;
 perfCats=function(){var c=_pc24();try{var v=PVS();c.push({k:"lug",n:"Lugares visitados",got:PLACES.filter(function(p){return v[p.id]}).length,tot:PLACES.length,w:5})}catch(e){}return c};
 
+/* ===== Atualização 25: gavetas em sanfona (uma aberta por vez em cada grupo) ===== */
+function drSibs(d){var p=d.parentNode;if(!p)return [];return [].filter.call(p.children,function(x){return x!==d&&x.classList&&x.classList.contains("drawer")})}
+var DRQ=false;
+document.addEventListener("toggle",function(e){
+  var d=e.target;if(!d||!d.classList||!d.classList.contains("drawer")||!d.open||DRQ)return;
+  DRQ=true;drSibs(d).forEach(function(x){if(x.open)x.open=false});DRQ=false;
+  /* a gaveta de cima fechou: traz a que abriu para a vista */
+  setTimeout(function(){try{var r=d.getBoundingClientRect();if(r.top<60||r.top>window.innerHeight*0.6)d.scrollIntoView({block:"start",behavior:document.documentElement.classList.contains("calm")?"auto":"smooth"})}catch(_){}},30);
+},true);
+function drNormalize(root){
+  if(!root)return;var seen=[];
+  [].forEach.call(root.querySelectorAll(".drawer"),function(d){var p=d.parentNode;if(seen.indexOf(p)>=0)return;seen.push(p);
+    var open=[].filter.call(p.children,function(x){return x.classList&&x.classList.contains("drawer")&&x.open});
+    DRQ=true;open.slice(1).forEach(function(x){x.open=false;try{var k=x.getAttribute("data-dk");}catch(_){}});DRQ=false;});
+}
+var _rh25=renderHub;
+renderHub=function(){_rh25();try{drNormalize($("#hub"))}catch(e){}};
+
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
 var _toTitle8=toTitle;
