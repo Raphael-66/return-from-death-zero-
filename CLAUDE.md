@@ -38,3 +38,6 @@ Leia também: `docs/ARQUITETURA.md`, `docs/SISTEMAS.md`, `docs/BALANCEAMENTO.md`
 - `renderBattle` recria o DOM da batalha: animações flutuantes vão para a camada fixa `#fxl`.
 - Perfil compartilhado entre modos: `PF` (`rpm_pf`). Cartas extras, moedas, fragmentos etc. sincronizam via `pfPull`/`pfPush` (`PF.sh`).
 - A classe CSS `.me` era usada no painel e na barra de vida: a barra do jogador agora é `.bar.hpme`.
+
+## Ferramentas externas
+- **Conector Unity (`Raphael-66/engine`)**: servidor MCP + pacote do Editor para o Claude controlar o Unity (versão de referência: Unity 6 / 6000.0 LTS). Fica **só** naquele repositório: não copie o código para cá. Este jogo é HTML/JS e não usa o conector; mudanças no conector vão em commits no `engine`.
