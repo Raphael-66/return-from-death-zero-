@@ -5,7 +5,7 @@ Rebalancear batalhas · super chefes canônicos · masmorras maiores · dormir o
 
 ## Sugestões ainda não feitas
 ### Prioridade alta
-- **Exportar/importar o save** (código ou arquivo) e backup automático. Hoje tudo depende do localStorage do aparelho.
+- ~~Exportar/importar o save~~ (feito na Atualização 21). Falta: backup automático periódico.
 - **Tutorial** curto e dicas na primeira vez de cada sistema.
 - **Hub com abas fixas** no rodapé (Mapa, Atividades, Pessoas, Vida, Menu): a tela do Modo Livre está muito longa.
 

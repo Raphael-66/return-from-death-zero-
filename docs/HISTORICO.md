@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## 2026-11-25 — Atualização 21: negócios e backup
+- Negócios: foco de produção (`FOCO`: equilibrado, volume, qualidade), equipe (`STAFF`: vendedor que vende sozinho com 15% de comissão, supervisor +20%, guarda contra roubo), gerentes canônicos (`MGR`: Felt, Petra, Ram, Otto, Anastasia, Frederica, respeitando o arco), eventos diários (`BEV`), relatório da manhã (`PF.bizRep`), histórico de 7 dias com gráfico e lucro total (`PF.bizTot`).
+- 4 comércios novos que produzem mercadorias de rota num armazém (Peixaria, Serraria, Veio arrendado, Vinícola), carregáveis na carroça para o comércio entre cidades.
+- Backup em Ajustes: baixar arquivo, copiar código, restaurar de arquivo ou código (todas as chaves `rpm_*`).
+- Mobbin (conector) exige plano pago: não foi usado.
+
 ## 2026-11-24 — Atualização 20: pesca nova
 - 13 pontos de pesca, um por lugar do mapa (`FSPOT`/`SPOTS` com `place`), 88 espécies (7 a 10 por lugar), com comportamento (`b`: mixed, smooth, dart, sinker, floater), horário (`tm`), estação (`se`) e chuva (`rain`).
 - Minijogo inspirado em Stardew Valley: barra de força no lançamento (lançamentos fortes atraem raros), fisgada, barra vertical com física (segurar sobe, soltar cai), medidor de captura, baú de tesouro e captura perfeita (bônus em moedas).

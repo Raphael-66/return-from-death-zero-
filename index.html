@@ -450,6 +450,24 @@ html.big .rgq{font-size:22px}html.big .btn{font-size:17px}html.big #box{font-siz
 .svside{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:flex-end}
 .svhold{min-height:120px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none}
 .fdex>summary{min-height:40px}
+.chipb.on{border-color:var(--gold);color:var(--gold)}
+.bzsum{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 8px}
+.bzsum>div{background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:8px 6px;text-align:center}
+.bzsum b{display:block;font-size:17px}.bzsum span{font-size:11px;color:var(--mute)}
+.bzp{color:#7ee2a0}.bzn{color:#ff9bab}
+details.bzc{border:1px solid var(--line);border-radius:12px;background:var(--ink2);margin:0 0 8px}
+details.bzc>summary{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;min-height:48px}
+details.bzc>summary::before{content:none}
+.bzbody{padding:0 12px 12px;display:flex;flex-direction:column;gap:6px}
+.bzspark{display:flex;align-items:flex-end;gap:2px;height:22px;width:60px}
+.bzspark i{flex:1;background:#58c58a;border-radius:2px 2px 0 0;min-height:3px}.bzspark i.neg{background:#ff6b81}
+.bzlog{display:flex;flex-direction:column;gap:2px;font-size:12.5px;color:var(--mute)}
+.bzact{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.brep{display:flex;flex-direction:column;gap:6px}
+.bkbox{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding:12px;border:1px solid var(--gold);border-radius:12px;background:var(--ink2)}
+.bkbox b{display:block}.bkbox span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.bkrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#bkTxt{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--ink2);color:var(--paper);font-size:13px}
 </style>
 
 
@@ -8149,6 +8167,183 @@ PAH.push(function(a){if(a==="fish"){openMenu("Pesca");return true}return false})
 ACAT.splice(1,0,["pesca","Pesca",/^fish$/]);
 /* o botão antigo "Pescar no lago" também abre a pesca do lugar */
 var _mh20=mapHub;mapHub=function(){_mh20();var hf=$("#hFish");if(hf){hf.hidden=true}};
+
+/* =====================================================================
+   ATUALIZAÇÃO 21: negócios mais profundos e backup do jogo.
+   - Comércios ganham foco de produção, equipe (vendedor, supervisor,
+     guarda), gerente (personagem da história), eventos diários,
+     relatório da manhã e histórico de lucro.
+   - 4 comércios novos que produzem mercadorias de comércio entre cidades.
+   - Backup: exportar e importar o save (arquivo ou código).
+   ===================================================================== */
+/* comércios novos: produzem mercadorias da rota de comércio (TG) num armazém */
+BIZ.push(
+ {id:"peixaria",n:"Peixaria do rio",cost:2200,arc:5,rep:30,loc:"ribeirinha",tg:"peixe",u:3,wage:40,d:"Peixe salgado em barris, direto do Rio de Lugunica."},
+ {id:"serraria",n:"Serraria da Flugel",cost:2600,arc:3,rep:30,loc:"liphas",tg:"madeira",u:3,wage:45,d:"Só madeira caída, juram os lenhadores."},
+ {id:"veio",n:"Veio arrendado",cost:3400,arc:2,rep:25,loc:"pedraferro",tg:"ferro",u:2,wage:55,d:"Um pedaço da mina, com mineiros contratados."},
+ {id:"vinicola",n:"Vinícola do vale",cost:4200,arc:2,rep:35,loc:"vale",tg:"vinho",u:2,wage:60,d:"Uvas do vale e barris que melhoram com o tempo."}
+);
+BIZ.forEach(function(b){BIZBY[b.id]=b});
+var FOCO={eq:["Equilibrado",1,1],vol:["Volume",1.3,0.85],qual:["Qualidade",0.8,1.35]};
+var STAFF={vend:["Vendedor","Vende sozinho a produção do dia (comissão de 15%).",60],sup:["Supervisor","+20% de produção.",80],guard:["Guarda","Evita roubos e prejuízos.",50]};
+var MGR=[
+ {id:"felt",n:"Felt",arc:1,d:"Vendas +10% e ninguém rouba de quem ela vigia.",s:1.1,p:1,safe:1},
+ {id:"petra",n:"Petra",arc:2,d:"Produção +15%. Os clientes adoram o sorriso dela.",s:1,p:1.15},
+ {id:"ram",n:"Ram",arc:2,d:"Produção +10% e equipe 20% mais barata.",s:1,p:1.1,staff:0.8},
+ {id:"otto",n:"Otto",arc:3,d:"Vendas +20%. Ele negocia até o preço da sombra.",s:1.2,p:1},
+ {id:"anastasia",n:"Anastasia",arc:3,d:"Vendas +30%. Exige que você seja pelo menos amigo dela.",s:1.3,p:1,rel:1},
+ {id:"frederica",n:"Frederica",arc:4,d:"Produção +10% e metade dos eventos ruins é evitada.",s:1,p:1.1,calm:1}
+];
+var MGRBY={};MGR.forEach(function(m){MGRBY[m.id]=m});
+function mgrOk(m){if(!charOk(m.id)||m.arc>arcReach())return false;if(m.rel&&REL_C[m.id]&&stg(m.id)<2)return false;return true}
+function mgrBusy(id,except){var z=BZ();for(var k in z)if(k!==except&&z[k]&&z[k].mg===id)return k;return null}
+function bzO(id){var o=BZ()[id];if(!o)return null;if(!o.fo)o.fo="eq";if(!o.st)o.st={};if(!o.log)o.log=[];if(o.wh===undefined)o.wh=0;return o}
+function bzProd(b,o){var m=MGRBY[o.mg],f=FOCO[o.fo];return Math.max(1,Math.round(b.u*o.lv*bizMult()*f[1]*(o.st.sup?1.2:1)*(m?m.p:1)))}
+function bzCap(b,o){return 12*o.lv}
+function bzUnit(b){if(b.tg)return sellP(b.tg,b.loc);return gPrice(GOODS[b.good])}
+function bzSellMul(o){var m=MGRBY[o.mg];return FOCO[o.fo][2]*(m?m.s:1)*0.85}
+function bzStaffWage(b,o){var m=MGRBY[o.mg],t=0;Object.keys(o.st).forEach(function(k){if(o.st[k])t+=Math.round(STAFF[k][2]*(1+0.25*(o.lv-1)))});return Math.round(t*(m&&m.staff?m.staff:1))}
+function bzGood(b){return b.tg?TGBY[b.tg].n:GOODS[b.good].n}
+function bzStock(b,o){return b.tg?o.wh:(LT()[b.good]||0)}
+function bzAdd(b,o,q){if(b.tg)o.wh+=q;else addGood(b.good,q)}
+function bzTake(b,o,q){if(b.tg)o.wh-=q;else LT()[b.good]=Math.max(0,(LT()[b.good]||0)-q)}
+var BEV=[
+ {id:"rico",w:3,bad:0,t:"Um cliente rico comprou adiantado",f:function(b,o,r){var c=Math.round(bzUnit(b)*3*o.lv);S.coin+=c;r.c+=c;return "¤ +"+c}},
+ {id:"festa",w:2,bad:0,t:"Uma festa na região esvaziou o estoque",f:function(b,o,r){r.pm=1.5;return "vendas +50% hoje"}},
+ {id:"forn",w:3,bad:1,t:"O fornecedor atrasou",f:function(b,o,r){r.pr=0.5;return "produção pela metade"}},
+ {id:"roubo",w:2,bad:1,thief:1,t:"Alguém roubou parte do estoque",f:function(b,o,r){var q=Math.min(bzStock(b,o),Math.ceil(o.lv*1.5));bzTake(b,o,q);return q+" unidades a menos"}},
+ {id:"inspe",w:2,bad:1,t:"Um fiscal da coroa passou por lá",f:function(b,o,r){var c=Math.round(20*o.lv);S.coin=Math.max(0,S.coin-c);r.c-=c;return "taxa de ¤ "+c}},
+ {id:"fama",w:2,bad:0,t:"Um viajante elogiou o comércio pela estrada",f:function(b,o,r){L().rep=Math.min(100,L().rep+1);return "reputação +1"}},
+ {id:"ideia",w:1,bad:0,t:"A equipe teve uma ideia boa",f:function(b,o,r){r.pr=1.4;return "produção +40% hoje"}}
+];
+function bzEvent(b,o){
+  if(Math.random()>0.14)return null;var m=MGRBY[o.mg],tot=0,pool=BEV.filter(function(e){if(e.thief&&(o.st.guard||(m&&m.safe)))return false;return true});
+  pool.forEach(function(e){tot+=e.w});var x=Math.random()*tot,ev=pool[0];for(var i=0;i<pool.length;i++){x-=pool[i].w;if(x<=0){ev=pool[i];break}}
+  if(ev.bad&&m&&m.calm&&Math.random()<0.5)return null;return ev;
+}
+/* dia dos comércios: produção, evento, venda automática e relatório */
+bizDaily=function(){
+  var lines=[],sum=0;
+  BIZ.forEach(function(b){
+    var o=bzO(b.id);if(!o||o.closed)return;
+    var r={c:0,pm:1,pr:1},ev=bzEvent(b,o),evt="";
+    if(ev&&!/roubo/.test(ev.id))evt=ev.t+": "+ev.f(b,o,r);
+    var q=Math.round(bzProd(b,o)*r.pr),room=Math.max(0,bzCap(b,o)-bzStock(b,o));q=Math.min(q,room);
+    if(q>0)bzAdd(b,o,q);
+    if(ev&&/roubo/.test(ev.id))evt=ev.t+": "+ev.f(b,o,r);
+    var sold=0,rev=0;
+    if(o.st.vend){sold=Math.min(bzStock(b,o),Math.round(bzProd(b,o)*1.2));if(sold>0){rev=Math.round(sold*bzUnit(b)*bzSellMul(o)*r.pm);bzTake(b,o,sold);S.coin+=rev}}
+    var net=rev+r.c;sum+=net;
+    o.log.push({d:S.day,p:q,s:sold,c:net,e:ev?ev.t:""});if(o.log.length>7)o.log.shift();
+    PF.bizTot=(PF.bizTot||0)+net;
+    lines.push({n:b.n,q:q,g:bzGood(b),s:sold,rev:rev,ev:evt,net:net});
+  });
+  if(lines.length){PF.bizRep={day:S.day+1,seen:false,lines:lines,sum:sum};if((PF.bizTot||0)>=5000)unlock("biz5k");if((PF.bizTot||0)>=50000)unlock("biz50k")}
+  pfSave();
+};
+ACH.biz5k=["Comerciante de verdade","Some ¤ 5.000 de lucro nos comércios."];
+ACH.biz50k=["Rede de comércios","Some ¤ 50.000 de lucro nos comércios."];
+/* atender no balcão também respeita foco, equipe e gerente */
+bizWork=function(id){
+  var b=BIZBY[id],o=bzO(id);if(!o||o.day===S.day||L().loc!==b.loc)return;
+  advanceTime();o.day=S.day;var q=Math.min(bzProd(b,o),Math.max(0,bzCap(b,o)-bzStock(b,o)));if(q>0)bzAdd(b,o,q);
+  L().rep=Math.min(100,L().rep+1);L().jx+=5;gainXP(8,true);pfSave();save();
+  dj("vida","Atendeu "+b.n+": +"+q+" "+bzGood(b)+".");
+  var o2=ovl('<h2 style="margin:0">'+esc(b.n)+'</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(rnd(["Você passa a manhã atendendo clientes, organizando a mercadoria e ouvindo reclamações. No fim, o caixa está mais cheio.","Alguém elogia o capricho e promete voltar. Em um comércio, isso vale quase tanto quanto uma moeda.","Você ajuda a equipe a arrumar o estoque e ainda aprende um truque novo com eles."]))+'</p><p class="sec" style="margin:0">+'+q+' '+esc(bzGood(b))+' · Reputação +1 · XP +8</p><button class="btn primary" id="bOk">Continuar</button>');
+  $("#bOk").onclick=function(){o2.hidden=true;renderHub()};
+};
+/* salários da equipe por semana */
+var _wk21=weekly;
+weekly=function(day){
+  _wk21(day);
+  var tot=0;BIZ.forEach(function(b){var o=bzO(b.id);if(o)tot+=bzStaffWage(b,o)});
+  if(tot){if(S.coin>=tot){S.coin-=tot;toast("Equipe dos comércios: ¤ −"+tot)}else{L().debt+=tot;toast("Sem caixa para a equipe: dívida +"+tot)}dj("vida","Pagamento da equipe dos comércios: ¤ "+tot+".")}
+};
+/* relatório da manhã */
+function bizReport(){
+  var R=PF.bizRep;if(!R)return;R.seen=true;pfSave();
+  var h='<p class="sec" style="margin:0">Dia '+(R.day)+' · Relatório dos negócios</p><h2 style="margin:0">Como foi a noite nos comércios</h2><div class="brep">';
+  R.lines.forEach(function(l){h+='<div class="item"><div><b>'+esc(l.n)+'</b><span>+'+l.q+' '+esc(l.g)+(l.s?' · vendeu '+l.s+' por ¤ '+l.rev:' · no estoque')+(l.ev?' · '+esc(l.ev):'')+'</span></div><span class="'+(l.net>0?"bzp":l.net<0?"bzn":"")+'">'+(l.net?(l.net>0?"+":"")+l.net:"—")+'</span></div>'});
+  h+='</div><p class="sec" style="margin:0">Resultado do dia: ¤ '+(R.sum>=0?"+":"")+R.sum+'. Sem vendedor, a mercadoria fica no estoque para você vender.</p><button class="btn" id="brGo">Abrir negócios</button><button class="btn primary" id="brOk">Continuar</button>';
+  var o=ovl(h);$("#brOk").onclick=function(){o.hidden=true;renderHub()};$("#brGo").onclick=function(){openMenu("Negócios")};
+}
+var _rh21=renderHub;
+renderHub=function(){_rh21();var R=PF.bizRep;if(S&&S.mode==="free"&&R&&!R.seen&&R.day===S.day&&$("#overlay").hidden&&!TRIP())bizReport()};
+/* aba Negócios renovada */
+var BZUI={open:null};
+function bzSpark(o){var mx=1;o.log.forEach(function(x){mx=Math.max(mx,Math.abs(x.c))});return '<div class="bzspark" title="Resultado dos últimos dias">'+o.log.map(function(x){return '<i class="'+(x.c<0?"neg":"")+'" style="height:'+Math.max(4,Math.round(Math.abs(x.c)/mx*100))+'%"></i>'}).join("")+'</div>'}
+paneBiz=function(p){
+  var own=BIZ.filter(function(b){return bzO(b.id)}),wk=0,yest=0;
+  own.forEach(function(b){var o=bzO(b.id);wk+=b.wage*o.lv+bzStaffWage(b,o);var l=o.log[o.log.length-1];if(l&&l.d===S.day-1)yest+=l.c});
+  var h='<h2>Negócios</h2><div class="bzsum"><div><b>'+own.length+'</b><span>comércios</span></div><div><b class="'+(yest>=0?"bzp":"bzn")+'">'+(yest>=0?"+":"")+yest+'</b><span>ontem</span></div><div><b>−'+wk+'</b><span>custos/semana</span></div><div><b>'+Math.round(PF.bizTot||0)+'</b><span>lucro total</span></div></div>';
+  h+='<p class="fine" style="margin:0 0 8px">Cada comércio produz toda noite. Com <b>vendedor</b>, a produção é vendida sozinha; sem ele, vai para o estoque (mercadorias comuns: aba Mercado; mercadorias de rota: carregue na carroça no local). <b class="coin">¤ '+S.coin+'</b></p>';
+  own.forEach(function(b){
+    var o=bzO(b.id),g=bzGood(b),up=Math.round(b.cost*0.7*o.lv),open=BZUI.open===b.id,m=MGRBY[o.mg],unit=bzUnit(b);
+    var estS=o.st.vend?Math.round(bzProd(b,o)*unit*bzSellMul(o)):0;
+    h+='<details class="bzc"'+(open?" open":"")+' data-bzo="'+b.id+'"><summary><span><b>'+esc(b.n)+'</b> · Nv '+o.lv+(m?' · '+esc(m.n):'')+'</span><span class="bzmini">'+bzSpark(o)+'</span></summary><div class="bzbody">';
+    h+='<p class="fine" style="margin:0">'+esc(PLBY[b.loc].n)+' · produz <b>'+bzProd(b,o)+' '+esc(g)+'</b>/dia · estoque '+bzStock(b,o)+'/'+bzCap(b,o)+' · preço hoje ~¤ '+unit+(estS?' · venda estimada ¤ '+estS+'/dia':'')+' · custos ¤ '+(b.wage*o.lv+bzStaffWage(b,o))+'/semana</p>';
+    h+='<p class="sec" style="margin:6px 0 2px">Foco</p><div class="chips">'+Object.keys(FOCO).map(function(k){var f=FOCO[k];return '<button class="chipb'+(o.fo===k?" on":"")+'" data-bz="fo:'+b.id+':'+k+'">'+f[0]+(k==="vol"?" (+30% qtd, −15% preço)":k==="qual"?" (−20% qtd, +35% preço)":"")+'</button>'}).join("")+'</div>';
+    h+='<p class="sec" style="margin:6px 0 2px">Equipe</p>';
+    Object.keys(STAFF).forEach(function(k){var s=STAFF[k],c=Math.round(s[2]*(1+0.25*(o.lv-1))*(m&&m.staff?m.staff:1));h+='<div class="item'+(o.st[k]?" got":"")+'"><div><b>'+s[0]+'</b><span>'+s[1]+' ¤ '+c+'/semana.</span></div><button class="btn small" data-bz="st:'+b.id+':'+k+'">'+(o.st[k]?"Dispensar":"Contratar")+'</button></div>'});
+    h+='<p class="sec" style="margin:6px 0 2px">Gerente</p><div class="chips"><button class="chipb'+(!o.mg?" on":"")+'" data-bz="mg:'+b.id+':">Ninguém</button>';
+    MGR.forEach(function(mm){var ok=mgrOk(mm),busy=mgrBusy(mm.id,b.id);if(!ok)return;h+='<button class="chipb'+(o.mg===mm.id?" on":"")+'" data-bz="mg:'+b.id+':'+mm.id+'"'+(busy?" disabled":"")+' title="'+esc(mm.d)+'">'+esc(mm.n)+(busy?" (ocupada)":"")+'</button>'});
+    h+='</div>'+(m?'<p class="fine" style="margin:2px 0 0">'+esc(m.d)+'</p>':'');
+    if(o.log.length){h+='<p class="sec" style="margin:6px 0 2px">Últimos dias</p><div class="bzlog">'+o.log.slice().reverse().map(function(x){return '<span>Dia '+x.d+': +'+x.p+(x.s?' · vendeu '+x.s:'')+' · <b class="'+(x.c>0?"bzp":x.c<0?"bzn":"")+'">¤ '+(x.c>0?"+":"")+x.c+'</b>'+(x.e?' · '+esc(x.e):'')+'</span>'}).join("")+'</div>'}
+    h+='<div class="bzact">';
+    if(b.tg&&o.wh>0)h+='<button class="btn small" data-bz="ld:'+b.id+'"'+((L().loc!==b.loc||cargoN()>=cargoCap())?" disabled":"")+'>Carregar na carroça'+(L().loc!==b.loc?" (no local)":"")+'</button>';
+    h+=(o.lv>=5?'<span class="fine">Nível máximo</span>':'<button class="btn small" data-bz="up:'+b.id+'"'+(S.coin<up?" disabled":"")+'>Ampliar para Nv '+(o.lv+1)+' · ¤ '+up+'</button>')+'</div></div></details>';
+  });
+  var avail=BIZ.filter(function(b){return !bzO(b.id)});
+  if(avail.length){
+    h+='<details class="bzc"'+(BZUI.open==="_new"||!own.length?" open":"")+' data-bzo="_new"><summary><span><b>Abrir novo comércio</b></span><span class="fine">'+avail.length+'</span></summary><div class="bzbody">';
+    avail.forEach(function(b){var lock=b.arc>arcReach()||L().rep<b.rep||!PLBY[b.loc]||PLBY[b.loc].arc>arcReach();
+      h+='<div class="item'+(lock?" locked":"")+'"><div><b>'+esc(b.n)+'</b><span>'+esc(b.d)+' Produz '+esc(bzGood(b))+(b.tg?" (mercadoria de rota)":"")+' em '+esc(PLBY[b.loc]?PLBY[b.loc].n:b.loc)+'. '+(b.arc>arcReach()?"Chegue ao Arco "+b.arc+". ":"")+(L().rep<b.rep?"Reputação "+b.rep+" necessária. ":"")+'</span></div><button class="btn small" data-bz="buy:'+b.id+'"'+((lock||S.coin<b.cost)?" disabled":"")+'>Abrir · ¤ '+b.cost+'</button></div>'});
+    h+='</div></details>';
+  }
+  p.innerHTML=h;
+  p.querySelectorAll("details[data-bzo]").forEach(function(d){d.addEventListener("toggle",function(){if(d.open)BZUI.open=d.getAttribute("data-bzo")})});
+  p.onclick=function(e){
+    var bt=e.target.closest?e.target.closest("button[data-bz]"):null;if(!bt||bt.disabled)return;
+    var a=bt.getAttribute("data-bz").split(":"),bz=BIZBY[a[1]],o=bzO(a[1]);BZUI.open=a[1];
+    if(a[0]==="buy"){if(S.coin<bz.cost||o)return;S.coin-=bz.cost;BZ()[bz.id]={lv:1};L().rep=Math.min(100,L().rep+3);sfx("catch");toast(bz.n+" aberto!");dj("vida","Abriu um comércio: "+bz.n+".");unlock("empresario");if(Object.keys(BZ()).length>=4)unlock("magnata")}
+    else if(a[0]==="up"){var c=Math.round(bz.cost*0.7*o.lv);if(S.coin<c||o.lv>=5)return;S.coin-=c;o.lv++;sfx("buy");toast(bz.n+": nível "+o.lv)}
+    else if(a[0]==="fo"){o.fo=a[2];sfx("swipe")}
+    else if(a[0]==="st"){o.st[a[2]]=!o.st[a[2]];sfx("buy");toast(STAFF[a[2]][0]+(o.st[a[2]]?" contratado":" dispensado"))}
+    else if(a[0]==="mg"){o.mg=a[2]||null;if(o.mg){toast(MGRBY[o.mg].n+" agora gerencia "+bz.n);dj("vida",MGRBY[o.mg].n+" passou a gerenciar "+bz.n+".")}}
+    else if(a[0]==="ld"){if(L().loc!==bz.loc)return;var t=TRD(),n=Math.min(o.wh,cargoCap()-cargoN());if(n<=0)return;o.wh-=n;t.cost[bz.tg]=((t.cost[bz.tg]||0)*(t.cargo[bz.tg]||0))/((t.cargo[bz.tg]||0)+n);t.cargo[bz.tg]=(t.cargo[bz.tg]||0)+n;sfx("buy");toast(n+" × "+TGBY[bz.tg].n+" na carroça (custo zero)")}
+    pfSave();save();try{updHead()}catch(_){}
+    var y=$("#overlay").scrollTop;paneBiz(p);$("#overlay").scrollTop=y;
+  };
+};
+/* placeActions antigos usam BZ()[id] e o: tudo continua igual; ação "Atender" agora usa bizWork novo */
+
+/* ---------- Backup do jogo (exportar / importar) ---------- */
+function saveKeys(){var k=[];try{for(var i=0;i<localStorage.length;i++){var x=localStorage.key(i);if(/^rpm_/.test(x))k.push(x)}}catch(e){}return k}
+function exportData(){var o={jogo:"Retorno pela Morte",v:1,em:new Date().toISOString(),dados:{}};saveKeys().forEach(function(k){o.dados[k]=localStorage.getItem(k)});return o}
+function exportCode(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(exportData()))))}catch(e){return ""}}
+function importAny(txt){
+  var o=null;txt=String(txt||"").trim();
+  try{o=JSON.parse(txt)}catch(e){try{o=JSON.parse(decodeURIComponent(escape(atob(txt))))}catch(e2){}}
+  if(!o||!o.dados||o.jogo!=="Retorno pela Morte"){toast("Esse arquivo ou código não é um backup do jogo.");return false}
+  try{saveKeys().forEach(function(k){localStorage.removeItem(k)});Object.keys(o.dados).forEach(function(k){if(/^rpm_/.test(k))localStorage.setItem(k,o.dados[k])})}catch(e){toast("Não deu para gravar o backup neste aparelho.");return false}
+  location.reload();return true;
+}
+function backupHTML(){
+  return '<div class="bkbox" id="bkBox"><div><b>Backup do jogo</b><span>Salve uma cópia de tudo (Retornos, Modo Livre, perfil e conquistas) para não perder o progresso ao trocar de celular ou limpar o navegador. Guarde o arquivo onde quiser, como no Google Drive.</span></div>'+
+   '<div class="bkrow"><button class="btn small" id="bkFile">Baixar arquivo</button><button class="btn small" id="bkCopy">Copiar código</button></div>'+
+   '<div class="bkrow"><label class="btn small" style="text-align:center">Restaurar de arquivo<input type="file" id="bkIn" accept=".json,application/json,text/plain" hidden></label><button class="btn small" id="bkPaste">Colar código</button></div><textarea id="bkTxt" hidden placeholder="Cole aqui o código do backup" rows="3"></textarea><button class="btn small" id="bkGo" hidden>Restaurar este código</button></div>';
+}
+function bindBackup(){
+  var f=$("#bkFile");if(!f)return;
+  f.onclick=function(){var data=JSON.stringify(exportData()),blob=new Blob([data],{type:"application/json"}),a=document.createElement("a"),d=new Date();
+    a.href=URL.createObjectURL(blob);a.download="retorno-pela-morte-backup-"+d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()+".json";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);toast("Backup baixado")};
+  $("#bkCopy").onclick=function(){var c=exportCode();var done=function(){toast("Código copiado. Guarde em um lugar seguro.")};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(c).then(done,function(){var t=$("#bkTxt");t.hidden=false;t.value=c;t.select();toast("Copie o código da caixa")});else{var t=$("#bkTxt");t.hidden=false;t.value=c;t.select()}};
+  $("#bkIn").onchange=function(){var fl=this.files&&this.files[0];if(!fl)return;var rd=new FileReader();rd.onload=function(){var t=$("#bkTxt");t.hidden=false;t.value=rd.result;$("#bkGo").hidden=false;toast("Arquivo carregado. Toque em Restaurar.")};rd.readAsText(fl)};
+  $("#bkPaste").onclick=function(){var t=$("#bkTxt");t.hidden=false;t.value="";$("#bkGo").hidden=false;t.focus()};
+  $("#bkGo").onclick=function(){if(confirmBk())importAny($("#bkTxt").value)};
+}
+var bkArm=0;function confirmBk(){if(bkArm&&Date.now()-bkArm<5000){bkArm=0;return true}bkArm=Date.now();toast("Toque de novo para confirmar: o progresso atual será substituído pelo backup.");return false}
+var _ps21=paneSet;paneSet=function(p){_ps21(p);p.insertAdjacentHTML("beforeend",backupHTML());bindBackup()};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

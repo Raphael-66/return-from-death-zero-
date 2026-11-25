@@ -1,0 +1,13 @@
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,420))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,300))}};
+ await st('setup',`(function(){document.querySelector('#bFree').click();META.maxArc=8;S.coin=30000;L().rep=60;REL_Q.length=0;L().pend=false;L().loc="vila";S.h=9;renderHub();document.querySelector('#overlay').hidden=true;return 1})()`);
+ await st('open biz',`(function(){openMenu("Negócios");["padaria","vinicola"].forEach(function(id){document.querySelector('[data-bz="buy:'+id+'"]').click()});return Object.keys(BZ()).join(',')})()`);
+ await st('configure',`(function(){document.querySelector('[data-bz="st:padaria:vend"]').click();document.querySelector('[data-bz="fo:padaria:qual"]').click();document.querySelector('[data-bz="mg:padaria:petra"]').click();document.querySelector('[data-bz="st:vinicola:guard"]').click();return JSON.stringify(BZ())})()`);
+ await p.screenshot({path:'/tmp/b21a.png'});
+ await st('sleep',`(function(){document.querySelector('#overlay').hidden=true;var c0=S.coin;S.h=22;sleepDay();var o=document.querySelector('#overlay');var b=o.querySelector('button');if(b)b.click();o.hidden=true;renderHub();var t=document.querySelector('#overlay').innerText.slice(0,500);return 'coin '+c0+'->'+S.coin+' | '+t})()`);
+ await p.screenshot({path:'/tmp/b21b.png'});
+ await st('wine to cargo',`(function(){document.querySelector('#overlay').hidden=true;L().loc="vale";openMenu("Negócios");var b=document.querySelector('[data-bz="ld:vinicola"]');var d=b&&b.disabled;if(b)b.click();return 'dis='+d+' cargo='+JSON.stringify(TRD().cargo)})()`);
+ await st('7 days',`(function(){for(var i=0;i<7;i++){document.querySelector('#overlay').hidden=true;S.h=22;sleepDay();document.querySelector('#overlay').hidden=true}return 'tot '+PF.bizTot+' log '+BZ().padaria.log.length})()`);
+ await st('backup',`(function(){openMenu("Ajustes");var c=exportCode();var o=JSON.parse(decodeURIComponent(escape(atob(c))));return Object.keys(o.dados).join(',')+' len '+c.length+' btn '+!!document.querySelector('#bkFile')})()`);
+ await p.evaluate(()=>{document.querySelector('#bkBox').scrollIntoView()});await p.screenshot({path:'/tmp/b21c.png'});
+ console.log(o.join('\n'));};
