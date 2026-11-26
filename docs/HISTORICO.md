@@ -162,3 +162,8 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
   - mortes, sanidade, fragmentos e moedas ganharam ícones em SVG (`iconizeStats`), que substituem ↺ ☾ ◆ ¤ automaticamente.
 - **Modo Retornos** em cartão carmim e **Modo Livre** em cartão de cristal. `theme-color` e o manifesto atualizados para `#120e1d`.
 - Correção: a classe `in` dos ícones colidia com `.in` das janelas; renomeada para `ii`.
+
+## Atualização 30 — logo nova
+- Ícone do app redesenhado na identidade "Cristal e Miasma": um cristal facetado ciano dentro de um anel carmim com seta girando para trás (o Retorno pela Morte), marcas de relógio em lilás e fundo roxo-sombra.
+- Arquivos: `icons/icon-512.png`, `icon-192.png`, `apple-touch-icon.png` (180), `favicon-32.png` (versão simplificada), `icon-maskable-512.png` (desenho a 80%, para a máscara circular do Android) e a fonte vetorial `icons/logo.svg`. No manifesto, os ícones comuns ficaram com `purpose: any`.
+- A mesma logo substitui o relógio no topo da tela inicial (`LOGO_SVG`), com o anel girando devagar (respeita "menos movimento").

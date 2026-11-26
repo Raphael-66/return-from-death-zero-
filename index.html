@@ -830,6 +830,11 @@ h1{font-size:clamp(34px,10vw,50px)}
 .m2 .wstar{fill:#7fe3e0;stroke:#120e1d}
 .m2 .lbg{fill:#1a1529}
 .m2 .tbg{fill:#1a1529;stroke:#463c69}
+/* ===== Atualização 30: logo ===== */
+#title .clock.logo{width:118px;height:118px;border:none;border-radius:50%;box-shadow:0 0 60px rgba(154,124,240,.28),0 0 30px rgba(127,227,224,.12);background:radial-gradient(circle at 50% 42%,#34245c,#1d1533 60%,transparent 72%)}
+#title .clock.logo::after{display:none}
+#title .clock.logo svg{width:100%;height:100%;display:block}
+#title .clock.logo .lr{transform-box:view-box;transform-origin:256px 256px;animation:back 40s linear infinite}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9186,7 +9191,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 29 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 30 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10240,6 +10245,11 @@ function iconizeStats(root){
 }
 var STQ=false;
 if(window.MutationObserver)new MutationObserver(function(){if(STQ)return;STQ=true;requestAnimationFrame(function(){STQ=false;try{iconizeStats()}catch(e){}})}).observe(document.body,{childList:true,subtree:true,characterData:true});
+
+/* ===== Atualização 30: logo nova (cristal no anel do retorno) também na tela inicial ===== */
+var LOGO_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs> <radialGradient id="lg_bg" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#34245c"/><stop offset=".55" stop-color="#1d1533"/><stop offset="1" stop-color="#0e0a17"/></radialGradient> <linearGradient id="lg_ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7d93"/><stop offset=".5" stop-color="#e0475f"/><stop offset="1" stop-color="#9e2440"/></linearGradient> <radialGradient id="lg_glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#7fe3e0" stop-opacity=".38"/><stop offset="1" stop-color="#7fe3e0" stop-opacity="0"/></radialGradient> </defs><circle cx="256" cy="262" r="150" fill="url(#lg_glow)"/><g class="lr"> <path d="M331.0 126.1L334.5 120.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M385.9 181.0L392.0 177.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M406.0 256.0L419.0 256.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M385.9 331.0L392.0 334.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M331.0 385.9L334.5 392.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M256.0 406.0L256.0 419.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M181.0 385.9L177.5 392.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M126.1 331.0L120.0 334.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M106.0 256.0L93.0 256.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M126.1 181.0L120.0 177.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M181.0 126.1L177.5 120.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/> <path d="M305.2 72.5 A190 190 0 1 0 405.7 139.0" fill="none" stroke="url(#lg_ring)" stroke-width="15" stroke-linecap="round"/> <path d="M387.3 115.4 L421.9 128.9 L392.0 152.3 Z" fill="#ff7d93" stroke="#ff7d93" stroke-width="4" stroke-linejoin="round"/> </g><g stroke="#0d3a40" stroke-width="4" stroke-linejoin="round"> <path d="M184 222 256 126 226 222Z" fill="#d4faf5"/> <path d="M226 222 256 126 286 222Z" fill="#a5f0ea"/> <path d="M286 222 256 126 328 222Z" fill="#5fcbc7"/> <path d="M184 222 226 222 256 396Z" fill="#73dad5"/> <path d="M226 222 286 222 256 396Z" fill="#4cbcbb"/> <path d="M286 222 328 222 256 396Z" fill="#2b8f95"/> </g> <path d="M184 222 256 126 328 222 256 396Z" fill="none" stroke="#0d3a40" stroke-width="6" stroke-linejoin="round"/> <path d="M232 170 246 146" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-opacity=".85"/> <path d="M338 140 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6Z" fill="#ffffff" fill-opacity=".9"/><circle cx="170" cy="330" r="3.5" fill="#c9b8ff" fill-opacity=".6"/><circle cx="352" cy="352" r="2.5" fill="#7fe3e0" fill-opacity=".7"/> </svg>';
+var _tp30=titlePolish;
+titlePolish=function(){_tp30();var c=document.querySelector("#title .clock");if(c&&!c.classList.contains("logo")){c.classList.add("logo");c.innerHTML=LOGO_SVG}};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
