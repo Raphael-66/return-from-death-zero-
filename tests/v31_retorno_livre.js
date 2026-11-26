@@ -1,0 +1,25 @@
+// Atualização 31: Retorno pela Morte no Modo Livre (ponto do dia, derrota e colapso, ecos, revanche, Cheiro da Bruxa, marca no mapa).
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const sh=async n=>{await p.waitForTimeout(450);await p.screenshot({path:'/tmp/shots/'+n+'.png'})};const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,300))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,300))}};
+ await ev(`SET.tips=false;META.maxArc=3`);
+ await ev(`document.querySelector('#bFree').click()`);
+ await st('snap',`(function(){document.querySelector('#overlay').hidden=true;renderHub();var x=loopGet();return [!!x,x&&x.day,S.lid===x.lid,S.coin,S.san]})()`);
+ await st('dia acontece',`(function(){S.coin+=500;advanceTime(3);dj("vida","Comprou um bolo enorme na feira.");dj("vida","Conversou com Felt sobre telhados.");save();return [S.coin,fmtH(S.h)]})()`);
+ await st('luta e perde',`(function(){document.querySelector('#overlay').hidden=true;startHunt({enemy:"Urso de musgo",arch:"bruto",lv:5},1);B.done=false;endBattle(false);return [!!document.querySelector('#lpDie'),document.querySelector('#bNext').textContent]})()`);
+ await sh('a0_derrota');
+ await st('escolha',`(function(){document.querySelector('#lpDie').click();return document.querySelector('#overlay').innerText.slice(0,240)})()`);
+ await sh('a1_escolha');
+ await st('retorna',`(function(){document.querySelector('#lpGo').click();return [S.coin,fmtH(S.h),S.san,S.frags,PF.lp.mi,PF.lp.mem.length,PF.lp.echo.join(' | ')]})()`);
+ await p.waitForTimeout(900);await sh('a2_rewind');
+ await p.waitForTimeout(1800);
+ await st('hub',`(function(){var c=document.querySelector('#lpCard');return c?c.innerText.slice(0,260):'none'})()`);
+ await ev(`window.scrollTo(0,0);document.querySelector('#hub').scrollTop=0`);await sh('a3_hub');
+ await st('revanche',`(function(){startHunt({enemy:"Urso de musgo",arch:"bruto",lv:5},1);return [B.memo,B.pblk,B.log.slice(0,60)]})()`);
+ await st('vence',`(function(){B.done=false;endBattle(true);return META.ach.indexOf('lpwin')>=0})()`);
+ await st('aceitar',`(function(){document.querySelector('#overlay').hidden=true;B=null;var s0=S.san;startHunt({enemy:"Lobo",arch:"agil",lv:5},1);B.done=false;endBattle(false);document.querySelector('#lpDie').click();document.querySelector('#lpNo').click();return [s0,S.san,PF.lp.mem.length]})()`);
+ await st('colapso',`(function(){document.querySelector('#overlay').hidden=true;var c0=S.coin;S.coin+=99;collapse(function(){go("_hub")});var has=!!document.querySelector('#lpMad');document.querySelector('#lpMad').click();document.querySelector('#lpGo').click();return [has,c0,S.coin,PF.lp.mi,PF.lp.ret[S.day]]})()`);
+ await p.waitForTimeout(2600);
+ await st('3 retornos',`META.ach.filter(function(a){return /^lp/.test(a)}).join(',')`);
+ await st('mapa x',`(function(){document.querySelector('#overlay').hidden=true;renderHub();return document.querySelectorAll('.lpx').length})()`);
+ await st('dorme',`(function(){S.h=22;sleepDay();document.querySelector('#overlay').hidden=true;renderHub();return [PF.lp.mi,S.day,loopGet().day,!!document.querySelector('#lpCard .lpm')]})()`);
+ console.log(o.join('\n'));};

@@ -835,6 +835,24 @@ h1{font-size:clamp(34px,10vw,50px)}
 #title .clock.logo::after{display:none}
 #title .clock.logo svg{width:100%;height:100%;display:block}
 #title .clock.logo .lr{transform-box:view-box;transform-origin:256px 256px;animation:back 40s linear infinite}
+/* ===== Atualização 31: Retorno pela Morte no Modo Livre ===== */
+#overlay.rewind{background:radial-gradient(circle at 50% 42%,#3a1430,#120e1d 70%);align-items:center}
+.rwin{align-items:center;text-align:center;gap:10px}
+.rwclock{width:150px;height:150px;animation:rwSpin 2.2s cubic-bezier(.6,0,.2,1) forwards;filter:drop-shadow(0 0 24px rgba(224,71,95,.55))}
+.rwclock svg{width:100%;height:100%}
+@keyframes rwSpin{0%{transform:rotate(0) scale(.7);opacity:0}15%{opacity:1}100%{transform:rotate(-1080deg) scale(1);opacity:1}}
+.rwt{margin:0;font-family:var(--display);font-size:26px;color:#ffd9df;animation:rwIn 2.2s ease forwards}
+.rwh{margin:0;font-size:15px;letter-spacing:.12em;color:var(--cristal);opacity:0;animation:rwIn 1s 1.2s ease forwards}
+@keyframes rwIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lpcost{display:flex;flex-direction:column;gap:3px;border:1px solid rgba(255,155,171,.45);background:rgba(224,71,95,.12);border-radius:12px;padding:10px 12px}
+.lpcost b{color:#ffd9df}.lpcost span{font-size:13.5px;color:#f3c7cf}
+.lpcard{border-color:rgba(224,71,95,.45);background:linear-gradient(180deg,#2a1530,#1a1226)}
+.lpm{margin:4px 0 0;font-size:14.5px;color:#ffe3e8}
+.lpe{margin-top:6px}.lpe summary{cursor:pointer;font-size:13px;color:#c9b8ff}.lpe p{margin:4px 0 0;font-size:13px;color:var(--mute)}
+.mimeter{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-top:8px;font-size:13px;color:#c9b8ff}
+.mimeter .bar>div{background:linear-gradient(90deg,#6a4bd0,#b79cff)}
+.mimeter b{color:#c9b8ff}
+.m2 .lpx circle{fill:#e0475f;stroke:#fff5f7;stroke-width:2}.m2 .lpx text{fill:#fff;font-size:12px;font-weight:700;text-anchor:middle;pointer-events:none}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9191,7 +9209,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 30 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 31 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10250,6 +10268,137 @@ if(window.MutationObserver)new MutationObserver(function(){if(STQ)return;STQ=tru
 var LOGO_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs> <radialGradient id="lg_bg" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#34245c"/><stop offset=".55" stop-color="#1d1533"/><stop offset="1" stop-color="#0e0a17"/></radialGradient> <linearGradient id="lg_ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7d93"/><stop offset=".5" stop-color="#e0475f"/><stop offset="1" stop-color="#9e2440"/></linearGradient> <radialGradient id="lg_glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#7fe3e0" stop-opacity=".38"/><stop offset="1" stop-color="#7fe3e0" stop-opacity="0"/></radialGradient> </defs><circle cx="256" cy="262" r="150" fill="url(#lg_glow)"/><g class="lr"> <path d="M331.0 126.1L334.5 120.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M385.9 181.0L392.0 177.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M406.0 256.0L419.0 256.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M385.9 331.0L392.0 334.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M331.0 385.9L334.5 392.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M256.0 406.0L256.0 419.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M181.0 385.9L177.5 392.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M126.1 331.0L120.0 334.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M106.0 256.0L93.0 256.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M126.1 181.0L120.0 177.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M181.0 126.1L177.5 120.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/> <path d="M305.2 72.5 A190 190 0 1 0 405.7 139.0" fill="none" stroke="url(#lg_ring)" stroke-width="15" stroke-linecap="round"/> <path d="M387.3 115.4 L421.9 128.9 L392.0 152.3 Z" fill="#ff7d93" stroke="#ff7d93" stroke-width="4" stroke-linejoin="round"/> </g><g stroke="#0d3a40" stroke-width="4" stroke-linejoin="round"> <path d="M184 222 256 126 226 222Z" fill="#d4faf5"/> <path d="M226 222 256 126 286 222Z" fill="#a5f0ea"/> <path d="M286 222 256 126 328 222Z" fill="#5fcbc7"/> <path d="M184 222 226 222 256 396Z" fill="#73dad5"/> <path d="M226 222 286 222 256 396Z" fill="#4cbcbb"/> <path d="M286 222 328 222 256 396Z" fill="#2b8f95"/> </g> <path d="M184 222 256 126 328 222 256 396Z" fill="none" stroke="#0d3a40" stroke-width="6" stroke-linejoin="round"/> <path d="M232 170 246 146" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-opacity=".85"/> <path d="M338 140 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6Z" fill="#ffffff" fill-opacity=".9"/><circle cx="170" cy="330" r="3.5" fill="#c9b8ff" fill-opacity=".6"/><circle cx="352" cy="352" r="2.5" fill="#7fe3e0" fill-opacity=".7"/> </svg>';
 var _tp30=titlePolish;
 titlePolish=function(){_tp30();var c=document.querySelector("#title .clock");if(c&&!c.classList.contains("logo")){c.classList.add("logo");c.innerHTML=LOGO_SVG}};
+
+/* ===== Atualização 31: Retorno pela Morte no Modo Livre =====
+   Toda manhã o dia fica guardado. Ao morrer (derrota em batalha ou colapso) Subaru pode voltar à manhã,
+   lembrando do que o matou. Cada retorno custa sanidade e aumenta o Cheiro da Bruxa. */
+var LOOPK="rpm_loop";
+function LP2(){var l=PF.lp||(PF.lp={mi:0,tot:0,ret:{},mem:[],echo:[],md:0,rw:0});if(!l.ret)l.ret={};if(!l.mem)l.mem=[];if(!l.echo)l.echo=[];return l}
+function loopGet(){try{return JSON.parse(localStorage.getItem(LOOPK)||"null")}catch(e){return null}}
+function loopSnap(){
+  if(!S||S.mode!=="free")return;
+  if(!S.lid){S.lid=Date.now().toString(36)+Math.random().toString(36).slice(2,6);save()}
+  var l=LP2();if(l.md!==S.day){l.mem=[];l.echo=[];l.md=S.day}
+  var pf=JSON.parse(JSON.stringify(PF));delete pf.lp;
+  try{localStorage.setItem(LOOPK,JSON.stringify({lid:S.lid,day:S.day,h:S.h,s:S,pf:pf,dl:(PF.diary||[]).length}))}catch(e){}
+}
+function loopOk(){var x=loopGet();return !!(x&&S&&S.mode==="free"&&x.lid===S.lid&&x.day===S.day)}
+var _sk31=saveKeys;saveKeys=function(){return _sk31().filter(function(k){return k!==LOOPK})};
+/* guarda o dia na primeira vez que o hub aparece em cada manhã */
+var _rh31=renderHub;
+renderHub=function(){
+  _rh31();
+  if(!S||S.mode!=="free")return;
+  var x=loopGet();if(!x||x.lid!==S.lid||x.day!==S.day)loopSnap();
+  loopHub();
+};
+/* o Cheiro da Bruxa diminui a cada noite */
+var _sd31=sleepDay;
+sleepDay=function(){var d0=S&&S.day;var r=_sd31.apply(this,arguments);try{if(S&&S.mode==="free"&&S.day>d0){var l=LP2();l.mi=Math.max(0,l.mi-12);pfSave()}}catch(e){}return r};
+
+ACH.lp1=["Ainda não acabou","Retorne pela Morte no Modo Livre."];
+ACH.lp3=["O mesmo dia, de novo","Retorne três vezes no mesmo dia."];
+ACH.lpmi=["Cheiro da Bruxa","Deixe o Cheiro da Bruxa chegar a 100."];
+ACH.lpwin=["Desta vez, não","Vença o inimigo que matou você no mesmo dia."];
+
+function loopReturn(cause){
+  var x=loopGet();if(!x||x.lid!==S.lid||x.day!==S.day)return false;
+  var l=JSON.parse(JSON.stringify(LP2())),here=PLBY[L().loc];
+  /* o que aconteceu na tentativa apagada */
+  var dw="Dia "+S.day,echo=(PF.diary||[]).slice(x.dl).filter(function(e){return e.w===dw&&e.tag!=="morte"}).map(function(e){return e.txt}).slice(-6);
+  var n=(l.ret[S.day]||0)+1;l.ret={};l.ret[S.day]=n;l.tot++;
+  l.mem.push({c:cause,loc:L().loc,pl:here?here.n:"",h:S.h});if(l.mem.length>4)l.mem.shift();
+  l.echo=echo;l.md=S.day;l.mi=Math.min(100,l.mi+25);
+  /* volta no tempo: o dia inteiro, de manhã */
+  PF=x.pf;PF.lp=l;S=x.s;
+  S.san=Math.max(5,S.san-10-4*(n-1));S.frags=(S.frags||0)+1;
+  dj("morte","Retornou pela Morte para a manhã do dia "+S.day+" ("+cause+").");
+  save();pfSave();loopSnap();
+  unlock("lp1");if(n>=3)unlock("lp3");if(l.mi>=100)unlock("lpmi");
+  return true;
+}
+function rewindFx(done){
+  var o=$("#overlay");o.className="rewind";o.hidden=false;
+  o.innerHTML='<div class="in rwin"><div class="rwclock">'+(typeof LOGO_SVG==="string"?LOGO_SVG.replace(/lg_/g,"rw_"):"")+'</div><p class="rwt">Retorno pela Morte</p><p class="rwh">'+fmtH(S.h)+' · Dia '+S.day+'</p></div>';
+  sfx("bad");vib([80,60,120]);
+  var calm=document.documentElement.classList.contains("calm");
+  setTimeout(function(){o.hidden=true;o.className="";if(done)done()},calm?600:2300);
+}
+function deathChoice(cause,accept){
+  var l=LP2(),n=(l.ret[S.day]||0),cost=10+4*n;
+  var h='<div class="oart">'+artFor("morte")+'</div><p class="sec" style="margin:0">'+esc(cause)+'</p><h2 style="margin:0">Tudo fica escuro</h2><p style="margin:0;color:#ffd9df;font-size:16.5px;line-height:1.55">O mundo se apaga. Mas, no fundo, algo antigo e conhecido segura Subaru pelo coração e puxa para trás.</p>'+
+   '<div class="lpcost"><b>Retornar pela Morte</b><span>Volta para as '+fmtH(loopGet().h)+' de hoje, lembrando do que aconteceu. Sanidade −'+cost+' · Cheiro da Bruxa +25 · ◆ +1</span></div>'+
+   '<button class="btn primary" id="lpGo">Retornar pela Morte</button><button class="btn" id="lpNo">Aceitar e seguir em frente</button>';
+  var o=ovl(h);o.className="death";
+  $("#lpGo").onclick=function(){B=null;if(!loopReturn(cause)){accept();return}rewindFx(function(){go("_hub")})};
+  $("#lpNo").onclick=function(){o.hidden=true;o.className="";accept()};
+}
+/* derrota em batalha no Modo Livre */
+var _eb31=endBattle;
+endBattle=function(win){
+  var cfg=B&&B.cfg,was=B&&B.done;_eb31(win);
+  if(was||win||!cfg||!S||S.mode!=="free"||!loopOk())return;
+  var bn=$("#bNext");if(!bn)return;var old=bn.onclick;
+  bn.insertAdjacentHTML("beforebegin",'<button class="btn primary" id="lpDie">Retornar pela Morte</button>');bn.textContent="Aceitar a derrota";bn.className="btn";
+  $("#lpDie").onclick=function(){var cause=String(cfg.enemy||"Uma luta").replace(/^Elite: /,"");deathChoice(cause,function(){if(old)old.call(bn);else{var o=$("#overlay");o.hidden=true;o.className="";B=null;go(cfg.lose||"_hubl")}})};
+};
+/* colapso mental no Modo Livre */
+var _co31=collapse;
+collapse=function(then){
+  var free=S&&S.mode==="free"&&loopOk();_co31(then);
+  if(!free)return;var b=$("#bMad");if(!b)return;
+  b.insertAdjacentHTML("beforebegin",'<button class="btn primary" id="lpMad">Retornar pela Morte</button>');
+  $("#lpMad").onclick=function(){deathChoice("Colapso mental",function(){var o=$("#overlay");o.hidden=true;o.className="";if(then)then();else go("_hub")})};
+};
+/* revanche: lembrar dos golpes de quem te matou */
+var _sb31=startBattle;
+startBattle=function(cfg){
+  _sb31(cfg);
+  try{
+    if(!S||S.mode!=="free"||!B||!B.cfg)return;var l=LP2();if(l.md!==S.day)return;
+    var nm=String(B.cfg.enemy||"").replace(/^Elite: /,""),m=l.mem.filter(function(x){return x.c===nm})[0];if(!m)return;
+    B.memo=1;B.pblk=(B.pblk||0)+10;B.ehp=Math.round(B.ehp*.88);
+    B.log="Você lembra de cada golpe de "+nm+". Desta vez, você sabe para onde ir. (escudo +10, inimigo −12% de vida)";renderBattle();
+  }catch(e){}
+};
+var _eb31b=endBattle;
+endBattle=function(win){var memo=B&&B.memo,was=B&&B.done;_eb31b(win);if(!was&&win&&memo)unlock("lpwin")};
+/* Cheiro da Bruxa: pessoas se afastam e mabeasts farejam */
+var _ra31=relAdd;
+relAdd=function(id,n){var l=PF.lp;if(n>0&&l&&l.mi>=40&&S&&S.mode==="free"){n=Math.max(1,Math.round(n*.7))}return _ra31(id,n)};
+var _rh31b=renderHub;
+renderHub=function(){
+  var l0=PF.lastLoc;_rh31b();
+  try{var l=PF.lp;if(!S||S.mode!=="free"||!l||l.mi<70||l0===L().loc||TRIP()||L().loc==="casa")return;
+    if(Math.random()<.3)setTimeout(function(){if(!$("#overlay").hidden)return;var o=ovl('<p class="sec" style="margin:0;color:#c9b8ff">Cheiro da Bruxa</p><h2 style="margin:0">Algo farejou você</h2><p style="margin:0;font-size:17px;line-height:1.55">Mabeasts saem do mato devagar, de olho em você. Eles sentem o cheiro que só Subaru carrega.</p><button class="btn primary" id="miGo">Lutar</button>');
+      $("#miGo").onclick=function(){o.hidden=true;startHunt(mkMon(arcReach(),refLv()),1)}},800)}catch(e){}
+};
+/* quem percebe escreve */
+var _mm31=mailMorning;
+mailMorning=function(){_mm31();try{var l=PF.lp;if(!l||l.mi<50||(l.lw&&S.day-l.lw<5))return;
+  var who=charOk("rem")?["Rem","rem","Um cheiro estranho","Desculpe a intromissão. Ontem você passou por mim e eu senti um cheiro que me deixou com medo. Não sei o que é. Só… tome cuidado, por favor."]:charOk("beatrice")?["Beatrice","beatrice","Você anda fedendo","Betty sente de longe esse cheiro de bruxa. Não pergunte como. Fique longe de encrenca por uns dias, de fato."]:["Felt","felt","Que cheiro é esse?","Ô, você anda mexendo com o quê? Os cachorros do bairro latem quando você passa. Toma um banho, sei lá."];
+  mailAdd(who[0],who[1],who[2],who[3],null);l.lw=S.day;pfSave()}catch(e){}};
+/* no hub: o que você lembra e o medidor do cheiro */
+function loopHub(){
+  var hub=$("#hub");if(!hub||$("#lpCard"))return;var l=PF.lp;if(!l)return;
+  var mem=l.md===S.day?l.mem:[],echo=l.md===S.day?l.echo:[],h='';
+  if(mem.length){var n=l.ret[S.day]||0;
+    h+='<p class="sec" style="margin:0;color:#ff9bab">Retorno '+n+' de hoje · você lembra</p>';
+    mem.forEach(function(m){h+='<p class="lpm">Às '+fmtH(m.h)+(m.pl?", em "+esc(m.pl):"")+', '+(m.c==="Colapso mental"?"sua mente desabou":esc(m.c)+" matou você")+'.</p>'});
+    if(echo.length)h+='<details class="lpe"><summary>Ecos do dia apagado ('+echo.length+')</summary>'+echo.map(function(t){return '<p>'+esc(t)+'</p>'}).join("")+'</details>';
+  }
+  if(l.mi>0)h+='<div class="mimeter" title="Cheiro da Bruxa"><span>Cheiro da Bruxa</span><div class="bar"><div style="width:'+l.mi+'%"></div></div><b>'+l.mi+'</b></div>'+(l.mi>=40?'<p class="fine" style="margin:0">'+(l.mi>=70?"Mabeasts farejam você nas estradas, e as pessoas se afastam um pouco.":"As pessoas se afastam um pouco: relação ganha 30% a menos.")+' Diminui 12 por noite.</p>':'');
+  if(!h)return;
+  var c=document.createElement("div");c.className="hubcard lpcard";c.id="lpCard";c.innerHTML=h;
+  var first=hub.querySelector(".hubcard");if(first&&first.nextSibling)hub.insertBefore(c,first.nextSibling);else hub.appendChild(c);
+}
+/* mapa: onde você morreu hoje */
+var _ms31=mapSVG;
+mapSVG=function(lf){var s=_ms31(lf);try{var l=PF.lp;if(!l||l.md!==S.day||!l.mem.length)return s;var g='';
+  l.mem.forEach(function(m){var xy=POS[m.loc];if(xy)g+='<g class="lpx"><circle cx="'+(xy[0]-24)+'" cy="'+(xy[1]+20)+'" r="9"/><text x="'+(xy[0]-24)+'" y="'+(xy[1]+24.5)+'">✕</text></g>'});
+  return s.replace(/(<rect width="\d+" height="\d+" fill="url\(#mgVig\)")/,g+"$1")}catch(e){return s}};
+/* perfil: quantas vezes */
+var _pc31=paneCodex;paneCodex=function(p){_pc31(p);var l=PF.lp;if(l&&l.tot)p.insertAdjacentHTML("beforeend",'<p class="fine" style="margin:10px 0 0">No Modo Livre, Subaru já retornou pela Morte '+l.tot+' vez'+(l.tot>1?"es":"")+'.</p>')};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

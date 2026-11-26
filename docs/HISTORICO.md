@@ -167,3 +167,15 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - Ícone do app redesenhado na identidade "Cristal e Miasma": um cristal facetado ciano dentro de um anel carmim com seta girando para trás (o Retorno pela Morte), marcas de relógio em lilás e fundo roxo-sombra.
 - Arquivos: `icons/icon-512.png`, `icon-192.png`, `apple-touch-icon.png` (180), `favicon-32.png` (versão simplificada), `icon-maskable-512.png` (desenho a 80%, para a máscara circular do Android) e a fonte vetorial `icons/logo.svg`. No manifesto, os ícones comuns ficaram com `purpose: any`.
 - A mesma logo substitui o relógio no topo da tela inicial (`LOGO_SVG`), com o anel girando devagar (respeita "menos movimento").
+
+## Atualização 31 — Retorno pela Morte no Modo Livre
+- **Ponto do dia**: na primeira vez que o hub aparece em cada manhã, o estado inteiro (save do Modo Livre + perfil `PF`) fica guardado em `rpm_loop`, junto com um id do jogo (`S.lid`) para nunca restaurar o save de outro jogo. Esse ponto não vai nos backups.
+- **Ao morrer** (derrota em batalha ou colapso mental): escolha entre "Aceitar a derrota" (como antes) e **Retornar pela Morte**, que volta à manhã do mesmo dia com animação do anel girando para trás. O retorno custa sanidade (−10, depois −4 a mais por retorno no mesmo dia), dá ◆ +1 e soma +25 ao **Cheiro da Bruxa**.
+- **O que fica**:
+  - a lembrança de quem e onde te matou (cartão no hub e ✕ vermelho no mapa);
+  - os "ecos do dia apagado" (o que você fez na tentativa desfeita);
+  - **revanche** contra o mesmo inimigo naquele dia, com escudo +10 e vida do inimigo −12%;
+  - as conquistas, porque `META` não volta no tempo.
+- **Cheiro da Bruxa** (`PF.lp.mi`, 0–100, −12 por noite): a partir de 40, a relação ganha 30% a menos; a partir de 70, mabeasts farejam você ao chegar nos lugares (30%). Com 50 ou mais, alguém próximo (Rem, Beatrice ou Felt, conforme o arco) escreve preocupado.
+- Conquistas: "Ainda não acabou", "O mesmo dia, de novo", "Cheiro da Bruxa", "Desta vez, não".
+- Teste: `tests/v31_retorno_livre.js`.
