@@ -146,3 +146,19 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - A névoa dos lugares futuros virou neblina clara. Os emblemas dos lugares continuam como medalhões escuros, para destacar.
 - **Zoom**: a regra antiga `.wmap.wbig{width:640px}` travava o tamanho e os botões não faziam efeito. Agora os botões + e − funcionam (de "mapa inteiro na moldura" até 2,2×), há zoom com dois dedos no celular e Ctrl + roda no computador. O mapa abre em 0,6× para mostrar mais.
 - Teste: `tests/v28_zoom.js`.
+
+## Atualização 29 — identidade "Cristal e Miasma"
+- **Paleta nova, tirada do universo do jogo** no lugar do azul-marinho com dourado:
+  - base em roxo-sombra (miasma da Bruxa): `--ink #120e1d`, `--ink2 #1a1529`, `--ink3 #251e3a`, `--line #3a3157`;
+  - texto em marfim-lavanda `#f1ecf7`;
+  - **cristal** `#7fe3e0` (gelo de Emilia) como cor de ação, seleção e foco. O token `--gold` agora aponta para o cristal;
+  - **carmim** `#e0475f` (Retorno pela Morte) para perigo e para o Modo Retornos;
+  - **miasma** `#9a7cf0` para fragmentos e mente;
+  - **ouro velho** `#d9b26f` só para moedas, raridade e conquistas.
+- As 103 cores fixas antigas do CSS foram convertidas para os tons novos. O mapa de pergaminho e as cartas ficaram como estavam.
+- **Títulos** em IM Fell English (estilo livro antigo), com Marcellus como reserva. Texto corrido continua em Karla.
+- **Ícones**:
+  - lugares viram **gemas octogonais** (no mapa, na ficha, na chegada e nos cartões de modo), enquanto pessoas continuam em medalhões redondos;
+  - mortes, sanidade, fragmentos e moedas ganharam ícones em SVG (`iconizeStats`), que substituem ↺ ☾ ◆ ¤ automaticamente.
+- **Modo Retornos** em cartão carmim e **Modo Livre** em cartão de cristal. `theme-color` e o manifesto atualizados para `#120e1d`.
+- Correção: a classe `in` dos ícones colidia com `.in` das janelas; renomeada para `ii`.
