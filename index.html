@@ -652,6 +652,49 @@ details.bzc>summary::before{content:none}
 .campc div{display:flex;flex-direction:column;gap:3px;min-width:0}.campc b{color:var(--c)}.campc span{font-size:13px;line-height:1.35}
 .campc .fine{margin:0;font-size:12px}.campc .tag{flex:none;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c)}
 .item.warn{border-color:#ff4d6d}
+/* ===== Atualização 26: paleta e acabamento ===== */
+:root{
+  --ink:#0b0f1f; --ink2:#141a33; --ink3:#1e2747; --line:#2e3a68;
+  --paper:#ecf0fa; --mute:#97a2c4; --ice:#9ad8ff; --blood:#d23a55; --gold:#e6bb68; --moon:#aeb8ff;
+  --gold2:#a9823c; --miasma:#8b6cc9; --mathers:#6fb380; --ok:#7fd1a0; --warn:#ffcf70; --bad:#ff6b80;
+  --lift:inset 0 1px 0 rgba(255,255,255,.045);
+  --sh1:0 1px 0 rgba(0,0,0,.35),0 6px 16px -8px rgba(0,0,0,.55);
+  --sh2:0 2px 0 rgba(0,0,0,.35),0 16px 34px -14px rgba(0,0,0,.7);
+  --goldgrad:linear-gradient(180deg,#f1cf87,#e6bb68 55%,#c99a45);
+}
+body{background:radial-gradient(120% 70% at 50% -10%,#18204a 0%,var(--ink) 55%) fixed,var(--ink)}
+/* superfícies: brilho fino no topo e sombra curta embaixo, em vez de bordas pesadas */
+.hubcard{background:linear-gradient(180deg,#171e3c,#121831);box-shadow:var(--lift),var(--sh1);border-color:#27325c}
+.item,.act,.drawer{box-shadow:var(--lift)}
+.act{background:linear-gradient(180deg,#212b4f,#1b2343);border-color:#2b3766}
+.act:disabled{background:#161c36;box-shadow:none}
+.btn{box-shadow:var(--lift)}
+.btn.primary{background:var(--goldgrad);border-color:#c99a45;color:#1d1504;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px -10px rgba(230,187,104,.7)}
+.btn.primary:hover{background:linear-gradient(180deg,#f6d899,#ebc276 55%,#cfa04d)}
+.btn.primary:disabled{filter:saturate(.4) brightness(.7);box-shadow:none}
+.sec{color:#8e9ac0}
+/* emblemas */
+.ico{width:1.25em;height:1.25em;display:inline-block;vertical-align:-.28em;flex:none}
+.ico.in{width:1.15em;height:1.15em;vertical-align:-.22em;color:var(--gold)}
+#icoSprite .f,svg .f{fill:currentColor;stroke:none;opacity:.16}
+#icoSprite .d{stroke-dasharray:2 2.6}
+.m2 .wico{color:#f3dca6;pointer-events:none}
+.m2 .wcity .wico{color:#ffe7b0}.m2 .wvil .wico{color:#bfe7c8}.m2 .wdg .wico{color:#d9c2ff}
+.m2 .wnode.cur .wico{color:#fff1cf}
+.psheet .pic .ico,.arrv .aic .ico{width:24px;height:24px}
+.arrv .aic .ico{width:30px;height:30px}
+.mcard .mic .ico{width:24px;height:24px}
+#bRG .mcard .mic{color:#3a2a08}#bFree .mcard .mic{color:var(--moon)}
+.campc{padding-left:8px}
+.campc .crest{width:42px;height:42px;flex:none;color:var(--c);filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.crestin{width:1.3em;height:1.3em}
+/* avatares: medalhão com anel na cor da pessoa */
+.rpic{background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--c) 75%,#fff),var(--c) 60%,color-mix(in srgb,var(--c) 55%,#000));box-shadow:0 0 0 2px var(--ink2),0 0 0 3.5px color-mix(in srgb,var(--c) 60%,transparent);font-family:var(--display);font-weight:400;color:#0b0f1f}
+/* gavetas: título com filete dourado quando abertas */
+.drawer[open]>summary .dt{color:#f3e3bd}
+.drawer[open]{border-color:#3a4677}
+/* barras: cantos e brilho */
+.bar>div{background-image:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 60%)}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9008,7 +9051,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 25 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 26 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -9762,6 +9805,101 @@ mapSVG=function(lf){
 var _ps25=plSheetHTML;
 plSheetHTML=function(id){var h=_ps25(id);if(!PF.war||!PF.war.on||!TEROF[id])return h;var o=terOwn(TEROF[id]);
   return h.replace('</p>','</p><p class="pp" style="color:'+NAT[o].c+'">Território: '+esc(TERBY[TEROF[id]].n)+' · '+esc(NAT[o].n)+(placeOcc(id)?" (ocupado)":"")+'</p>')};
+
+/* ===== Atualização 26: identidade visual (emblemas em SVG, brasões e paleta) ===== */
+var ICO={
+ capital:'<path d="M4 17 3 8l5 4 4-7 4 7 5-4-1 9Z"/><path d="M4 20h16"/><path class="f" d="M4 17 3 8l5 4 4-7 4 7 5-4-1 9Z"/><circle cx="12" cy="14" r="1.2"/>',
+ bairro:'<path d="M9 4h6M10.5 4v2M13.5 4v2"/><rect x="8" y="6" width="8" height="11" rx="1.5"/><path class="f" d="M12 9c-1.6 1.7-1.6 3.5 0 4.6 1.6-1.1 1.6-2.9 0-4.6Z"/><path d="M12 9c-1.6 1.7-1.6 3.5 0 4.6 1.6-1.1 1.6-2.9 0-4.6ZM10 17v3h4v-3"/>',
+ casa:'<path d="m3 11 9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5M7 13h2M15 13h2"/><path class="f" d="M5 9.5 12 4l7 5.5V20H5Z"/>',
+ vila:'<path d="M2 20h20M4 20v-7l4-4 4 4v7M12 20v-9l4.5-4 4.5 4v9"/><path d="M7 20v-3h2v3M15 20v-4h3v4"/><path class="f" d="M12 20v-9l4.5-4 4.5 4v9Z"/>',
+ floresta:'<path d="M7 4 3 13h8ZM7 13v5M16 6l-5 11h10ZM16 17v3M2 20h20"/><path class="f" d="M16 6l-5 11h10Z"/>',
+ caverna:'<path d="M3 20C3 10 7 5 12 5s9 5 9 15M8 20c0-6 2-8 4-8s4 2 4 8M6 8l2 2M18 8l-2 2"/><path class="f" d="M8 20c0-6 2-8 4-8s4 2 4 8Z"/>',
+ mina:'<path d="M5 9q7-6 14 0M12 6v15"/><path d="M10 21h4"/><path class="f" d="M5 9q7-6 14 0l-7-2Z"/>',
+ caravana:'<path d="M4 14V9q8-6 16 0v5ZM3 14h18"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="17" cy="17.5" r="2.5"/><path class="f" d="M4 14V9q8-6 16 0v5Z"/>',
+ vale:'<circle cx="16" cy="7.5" r="2.5"/><path d="M2 19q5-8 10-3 4-4 10 3M2 21h20"/><path class="f" d="M2 19q5-8 10-3 4-4 10 3Z"/>',
+ cripta:'<path d="M7 20V10q0-5 5-5t5 5v10M5 20h14M12 9v6M10 11h4"/><path class="f" d="M7 20V10q0-5 5-5t5 5v10Z"/>',
+ torreeco:'<path d="m8 21 1-16h6l1 16ZM9 5l3-3 3 3M10 9.5h4M10.4 13.5h3.2"/><path d="M18 9q2 2 0 4M20 7q3 4 0 8"/><path class="f" d="m8 21 1-16h6l1 16Z"/>',
+ camaras:'<path d="m12 3 6 6-6 12L6 9ZM6 9h12M12 3l-2 6 2 12 2-12Z"/><path class="f" d="m12 3 6 6-6 12L6 9Z"/>',
+ santuario:'<path class="d" d="M3 19Q3 6 12 6t9 13"/><path d="M7 19v-6M17 19v-6M5.5 12.5h13M6.5 15h11M2 19h20"/><path class="f" d="M3 19Q3 6 12 6t9 13Z"/>',
+ pristella:'<path d="M3 14q9-10 18 0M3 14v-2.5M21 14v-2.5M8 10.2V14M16 10.2V14"/><path d="M3 18q2-1.5 4 0t4 0 4 0 4 0M5 21q2-1.5 4 0t4 0 4 0"/>',
+ aqueduto:'<path d="M2 7h20M2 7v13M22 7v13M2 12q3-4 6 0v8M8 12q3-4 6 0v8M14 12q3-4 6 0"/><path d="M2 4.5q2.5-1.5 5 0t5 0 5 0 5 0"/>',
+ torre:'<path d="m9 21 1-12h4l1 12M8 9h8V5H8ZM8 5V3M12 5V3M16 5V3M5 21h14"/><path class="f" d="M8 9h8V5H8Z"/>',
+ biblioteca:'<rect x="4" y="6" width="4" height="14" rx=".6"/><rect x="9" y="4" width="4" height="16" rx=".6"/><path d="m14.5 7 3.5-1 3 13-3.5 1ZM3 21h18M9 8h4"/><path class="f" d="M9 4h4v16H9Z"/>',
+ vollachia:'<path d="M4 21V10l3-2 3 2v11M14 21V10l3-2 3 2v11M10 14h4M10 21v-4q2-2 4 0v4"/><path d="M12 11V4m-2 2 2-2 2 2"/><path class="f" d="M4 21V10l3-2 3 2v11ZM14 21V10l3-2 3 2v11Z"/>',
+ fortaleza:'<path d="M4 21V9h4v3h3V9h2v3h3V9h4v12ZM10 21v-4h4v4"/><path d="M12 2.5v4M10.3 3.5l3.4 2M13.7 3.5l-3.4 2"/><path class="f" d="M4 21V9h4v3h3V9h2v3h3V9h4v12Z"/>',
+ pedraferro:'<path d="M5 9h12q3 0 4-2v4q-2 1-5 1l-1 2h2v2H7v-2h2l-1-2q-3 0-3-3ZM8 5l2 2M12 3.5V6M16 5l-2 2"/><path class="f" d="M5 9h12q3 0 4-2v4q-2 1-5 1l-1 2h2v2H7v-2h2l-1-2q-3 0-3-3Z"/>',
+ liphas:'<circle cx="12" cy="9" r="6"/><path d="M12 15v6M9 21h6M12 17l-3-3M12 18l3-3"/><circle class="f" cx="12" cy="9" r="6"/>',
+ ribeirinha:'<path d="M3 15h18l-3 4H6ZM12 15V4M12 5l6 8h-6"/><path d="M3 21.5q2-1.4 4 0t4 0 4 0 4 0"/><path class="f" d="M12 5l6 8h-6Z"/>',
+ guaral:'<path d="M5 21V7l7-4 7 4v14M9 21v-7q3-3 6 0v7M5 10h14"/><path class="f" d="M5 21V7l7-4 7 4v14Z"/>',
+ moinho:'<path d="m10 21 1-10h2l1 10M12 9 6.5 3.5M12 9l5.5-5.5M12 9l-5.5 5.5M12 9l5.5 5.5M8 21h8"/><circle cx="12" cy="9" r="1.3"/><path class="f" d="M12 9 6.5 3.5 4.8 5.2Z"/>',
+ criadouro:'<ellipse cx="12" cy="15.5" rx="4.2" ry="3.6"/><circle cx="6.5" cy="10" r="1.6"/><circle cx="10" cy="7.3" r="1.6"/><circle cx="14" cy="7.3" r="1.6"/><circle cx="17.5" cy="10" r="1.6"/><ellipse class="f" cx="12" cy="15.5" rx="4.2" ry="3.6"/>',
+ karsten:'<path d="M6 20v-9q0-7 6-7t6 7v9ZM6 12h12M9 15.5h6M12 4q3-3 6-1"/><path class="f" d="M6 20v-9q0-7 6-7t6 7v9Z"/>',
+ farol:'<path d="m9 21 1-12h4l1 12ZM9 9h6M10 9V6h4v3M9.5 6 12 3l2.5 3M9.6 15h4.8M16 7l5-2M16 8.5h5.5M8 7 3 5"/><path class="f" d="M10 9V6h4v3Z"/>',
+ banok:'<path d="M4 15q0-4 6-4h6l5-3-2 4q-1 5-7 5H8q-4 0-4-2ZM9 11q3-4 6 0M8 20h7M11.5 17v3"/><path d="M21 8q.6-2.4-1-4"/><path class="f" d="M4 15q0-4 6-4h6l5-3-2 4q-1 5-7 5H8q-4 0-4-2Z"/>',
+ acampamento:'<path d="M3 20 12 4l9 16ZM12 20l-2.5-6M12 20l2.5-6M12 4l-1-2M12 4l1-2M2 20h20"/><path class="f" d="M3 20 12 4l9 16Z"/>',
+ cinzas:'<path d="M4 21v-9l2-2 1 3 2-2v10M15 21q-4-4-1-9 1 3 2 1 4 4 1 8Z"/><path d="M3 21h18"/><path class="f" d="M15 21q-4-4-1-9 1 3 2 1 4 4 1 8Z"/>',
+ gusteko:'<path d="M12 2v3.5M10.5 3.5h3M8 21v-9l4-6 4 6v9M4 21v-6l4-3M16 12l4 3v6M3 21h18"/><circle cx="12" cy="13" r="1.6"/><path class="f" d="M8 21v-9l4-6 4 6v9Z"/>',
+ passo:'<path d="m2 20 6-12 4 6 3-4 7 10ZM6.5 11 8 8l1.5 3M11 20q1-3 3-4"/><path class="f" d="m2 20 6-12 4 6 3-4 7 10Z"/>',
+ mosteiro:'<path d="M5 21v-8h14v8M7 13q0-6 5-6t5 6M12 7V4M10.5 21v-4q1.5-1.5 3 0v4M3 21h18"/><path class="f" d="M7 13q0-6 5-6t5 6Z"/>',
+ porto:'<circle cx="12" cy="5" r="2"/><path d="M12 7v13M8 11h8M4 14q1 6 8 6t8-6M4 14l-1 2.2M20 14l1 2.2"/>',
+ oasis:'<path d="M12 21q-1-6 1-12M13 9Q9 6 5 8M13 9q3-4 7-2M13 9q-3 0-5 4M13 9q4 0 5 3M5 21q7-3 14 0"/><path class="f" d="M5 21q7-3 14 0Z"/>',
+ /* interface */
+ retorno:'<path d="M5.5 9.5A7 7 0 1 1 5 13"/><path d="M5 5v4.5h4.5M12 8.5V12l2.8 1.8"/>',
+ lua:'<path d="M15 3.5a8 8 0 1 0 5.5 11.5A6.5 6.5 0 0 1 15 3.5Z"/><path class="f" d="M15 3.5a8 8 0 1 0 5.5 11.5A6.5 6.5 0 0 1 15 3.5Z"/>',
+ /* nações */
+ n_lug:'<path d="M4 16q3-10 14-10-3 3-1 5-4 0-4 3-3-1-5 3Z"/><path d="M8 13q2-1 4 0M18 6l2-2"/><path class="f" d="M4 16q3-10 14-10-3 3-1 5-4 0-4 3-3-1-5 3Z"/>',
+ n_vol:'<path d="M12 6v13M9.5 16.5h5M12 19v2M8.5 6l1-3 2.5 2 2.5-2 1 3Z"/><path class="f" d="M8.5 6l1-3 2.5 2 2.5-2 1 3Z"/>',
+ n_kar:'<path d="M12 4v16M8 20h8M5 7h14M5 7l-2.5 6h5ZM19 7l-2.5 6h5Z"/><path class="f" d="M2.5 13h5L5 7ZM16.5 13h5L19 7Z"/>',
+ n_gus:'<path d="m12 3 1.8 5.2L19 6.5l-2.7 4.9L21 13l-5.2 1.3L17 19.5l-5-2.8-5 2.8 1.2-5.2L3 13l4.7-1.6L5 6.5l5.2 1.7Z"/><circle class="f" cx="12" cy="12" r="3"/>',
+ /* campos da Seleção (dentro de um escudo) */
+ c_emilia:'<path d="M12 7.5v9M8.2 9.7l7.6 4.6M15.8 9.7l-7.6 4.6M12 7.5l-1 1M12 7.5l1 1M12 16.5l-1-1M12 16.5l1-1"/>',
+ c_crusch:'<path d="M12 7v10M9.6 14.4h4.8M12 17v1.6M7.5 9.5q2-1 3 .5M7 12q2-1 3 .5"/>',
+ c_priscilla:'<circle cx="12" cy="12" r="2.6"/><path d="M12 7v1.6M12 15.4V17M7 12h1.6M15.4 12H17M8.5 8.5l1.1 1.1M14.4 14.4l1.1 1.1M15.5 8.5l-1.1 1.1M9.6 14.4l-1.1 1.1"/>',
+ c_anastasia:'<circle cx="12" cy="12.8" r="3.2"/><path d="M12 11v3.6M9.2 7.8l1.3 2.3M14.8 7.8l-1.3 2.3"/>',
+ c_felt:'<path d="M8 16q1-6 8.5-7.5-1.8 2.6-.8 3.6-2.8.6-3.3 2.6-2.4-.6-4.4 1.3Z"/><path d="M8 16l-1.5 1.5"/>'
+};
+var SHIELD='<path d="M12 3 19 5.5V11q0 6-7 10-7-4-7-10V5.5Z"/>';
+(function(){
+  var sp=document.createElementNS("http://www.w3.org/2000/svg","svg");sp.setAttribute("aria-hidden","true");sp.setAttribute("id","icoSprite");sp.setAttribute("style","position:absolute;width:0;height:0;overflow:hidden");
+  var h='';Object.keys(ICO).forEach(function(k){var body=ICO[k];if(k.indexOf("c_")===0)body=SHIELD+'<path class="f" d="M12 3 19 5.5V11q0 6-7 10-7-4-7-10V5.5Z"/>'+body;
+    h+='<symbol id="i-'+k+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+body+'</symbol>'});
+  sp.innerHTML=h;document.body.insertBefore(sp,document.body.firstChild);
+})();
+function ico(id,cls){return ICO[id]?'<svg class="ico'+(cls?" "+cls:"")+'" aria-hidden="true"><use href="#i-'+id+'"/></svg>':""}
+function plIco(p,cls){return p&&ICO[p.id]?ico(p.id,cls):esc(p?p.ic:"")}
+
+/* mapa: emblemas no lugar dos símbolos de texto */
+var _ms26=mapSVG;
+mapSVG=function(lf){
+  var s=_ms26(lf);
+  return s.replace(/(<g class="wnode[^"]*" data-pl="([a-z0-9]+)"[^>]*>)([\s\S]*?)<text x="([\d.]+)" y="([\d.]+)" class="wic">[^<]*<\/text>/g,function(m,g,id,mid,x,y){
+    var p=PLBY[id];if(!p||!ICO[id]||/ lock/.test(g))return m;
+    var r=/r="([\d.]+)" class="wc"/.exec(mid),R=r?+r[1]:18,sz=Math.round(R*1.25),cx=+x,cy=+y-5;
+    return g+mid+'<use href="#i-'+id+'" x="'+(cx-sz/2)+'" y="'+(cy-sz/2)+'" width="'+sz+'" height="'+sz+'" class="wico"/>';
+  });
+};
+/* ficha, chegada e atlas */
+var _psh26=plSheetHTML;
+plSheetHTML=function(id){var h=_psh26(id),p=PLBY[id];if(!p||!ICO[id]||p.arc>arcReach())return h;return h.replace('<span class="pic">'+p.ic+'</span>','<span class="pic">'+ico(id)+'</span>')};
+var _ac26=arrivalCard;
+arrivalCard=function(loc){_ac26(loc);var e=document.querySelector("#overlay .arrv .aic");if(e&&ICO[loc])e.innerHTML=ico(loc)};
+WSEC.forEach(function(w){if(w.id!=="atlas")return;var r0=w.render;w.render=function(b){r0(b);
+  [].forEach.call(b.querySelectorAll(".item:not(.locked) b"),function(el){var t=el.textContent,p=PLACES.filter(function(x){return t.indexOf(x.n)>0&&t.indexOf(x.ic)===0})[0];if(p&&ICO[p.id])el.innerHTML=ico(p.id,"in")+" "+esc(p.n)})}});
+/* cabeçalho do mapa: "Você está em" com emblema */
+var _rh26=renderHub;
+renderHub=function(){_rh26();try{if(!S||S.mode!=="free")return;var sec=document.querySelector("#hMapCard > .sec");var p=PLBY[L().loc];if(sec&&p&&ICO[p.id]&&sec.textContent.indexOf(p.ic)>=0)sec.innerHTML=esc(sec.textContent.split(p.ic)[0])+ico(p.id,"in")+" "+esc(p.n)}catch(e){}};
+
+/* brasões dos campos e das nações */
+var _cm26=campMenu;
+campMenu=function(){_cm26();[].forEach.call(document.querySelectorAll("#overlay .campc"),function(c,i){var id=Object.keys(CAMP)[i];if(id)c.insertAdjacentHTML("afterbegin",ico("c_"+id,"crest"))})};
+WSEC.forEach(function(w){if(w.id!=="camp")return;var r0=w.render;w.render=function(b){r0(b);var ids=Object.keys(CAMP);[].forEach.call(b.querySelectorAll(".item b"),function(el,i){if(ids[i])el.insertAdjacentHTML("afterbegin",ico("c_"+ids[i],"in crestin")+" ")})}});
+var _wr26=warRoom;
+warRoom=function(){_wr26();var map={Lugunica:"lug",Vollachia:"vol",Gusteko:"gus",Kararagi:"kar"};
+  [].forEach.call(document.querySelectorAll("#overlay .sec, #overlay .item b"),function(el){var t=el.textContent.trim();Object.keys(map).forEach(function(n){if(t.indexOf(n)===0&&!el.querySelector(".ico"))el.insertAdjacentHTML("afterbegin",ico("n_"+map[n],"in")+" ")})})};
+
+/* tela inicial: emblemas nos cartões de modo */
+var _tp26=titlePolish;
+titlePolish=function(){_tp26();var a=document.querySelector("#bRG .mic"),b=document.querySelector("#bFree .mic");if(a)a.innerHTML=ico("retorno");if(b)b.innerHTML=ico("lua")};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

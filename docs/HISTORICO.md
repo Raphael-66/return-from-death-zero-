@@ -114,3 +114,9 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - **Mapa maior (880×1120)**: Reino Sagrado de Gusteko ao norte, Cidades-Estado de Kararagi a oeste e mais terras de Vollachia ao sul. Lugares novos (Gusteko, Passo Nevado, Mosteiro do Gelo, Porto das Velas, Rota do Oásis) ficam como "Após o fim" até o Arco 8 terminar.
 - **Guerra entre impérios** (depois do fim): 14 territórios de 4 nações (`TER`, `NAT`). Vollachia e Gusteko atacam (aviso com 2 dias); defenda numa batalha decisiva ou reforce com moedas. Sala de guerra na Capital: territórios, missões de front (Estandartes ⚑), diplomacia (aliança ou guerra com Kararagi, trégua com moral baixa) e crônica. Ofensivas custam ⚑3 e são batalhas em duas ondas: vanguarda e depois o general (chefe com fase 2). Tomar a capital de uma nação faz ela se render e pagar tributo. Lugares ocupados não têm comércio nem atividade única, e podem ter patrulhas. No mapa: cor de cada nação, frentes de guerra em vermelho e ⚔ nos ataques a caminho.
 - Teste: `tests/v25_guerra.js`.
+
+## Atualização 26 — identidade visual
+- **Emblemas em SVG** desenhados para o jogo (traço de gravura, 24×24, `ICO` + sprite `#icoSprite`): 35 lugares, 4 nações, 5 brasões dos campos da Seleção e os ícones dos modos (Retornos e Livre). Aparecem no mapa, na ficha do lugar, na chegada, no Atlas, no cabeçalho do mapa, nos Campos da Seleção e na Sala de guerra. Funcionam offline, sem imagens externas.
+- **Paleta em tokens** (`:root`): noite, ardósia, véu, ouro régio, sangue do retorno, gelo, mais `--miasma`, `--mathers`, `--ok`, `--warn`, `--bad`, sombras `--sh1/--sh2` e `--goldgrad`.
+- **Acabamento**: fundo com luz suave no topo, cartões com brilho fino e sombra curta, botão principal em ouro com relevo, avatares em medalhão com anel na cor da pessoa, gavetas abertas com título dourado, barras com brilho.
+- Funções: `ico(id, classe)`, `plIco(lugar)`. Teste visual: `tests/v26_visual.js`.
