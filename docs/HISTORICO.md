@@ -170,3 +170,17 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 
 ## Atualização 31 — revertida
 - O Retorno pela Morte no Modo Livre foi desfeito a pedido do dono; o jogo voltou ao estado da Atualização 30. Dados que sobraram em aparelhos (`rpm_loop`, `PF.lp`, `S.lid`) não são usados e não atrapalham.
+
+## Atualização 32 — Histórias pessoais e Mundo vivo (Modo Livre)
+- **Histórias pessoais** (`STORY`): 7 personagens (Emilia, Rem, Ram, Beatrice, Crusch, Priscilla, Anastasia), 4 capítulos cada, com texto próprio.
+  - Cada capítulo aparece num **lugar e numa janela de horas** quando o vínculo chega ao estágio certo (Conhecidos → Próximos), no máximo um por dia por pessoa.
+  - As escolhas somam traços: coragem, coração ou sinceridade. O traço mais forte define o tom do final.
+  - O final dá um **bônus permanente** (`STORY[id].perk`, somado no `eq()`). Estado em `PF.story`.
+  - O botão aparece em "Especial daqui".
+- **Aba Histórias** no grupo Pessoas: progresso, próximo capítulo (lugar, horário e o que falta) e a **agenda de hoje** de cada personagem.
+- **Rotina por hora** (`ROUT`, com variações por dia da semana em `RVAR`): a partir do Arco 2, cada personagem segue uma rotina e os pontinhos no mapa acompanham a hora. O cônjuge continua em casa à noite.
+- **Convites** (`PF.inv`): de manhã, às vezes alguém próximo convida para treino, chá, feira, jantar, estrelas ou uma tarefa, num lugar e horário (também chega como carta). Comparecer dá relação +10 e sanidade +5; faltar custa −2. Um cartão no hub mostra convites e histórias prontas.
+- **Mapa vivo**:
+  - primavera com flores, verão verde, outono com florestas cor de ferrugem e inverno com neve e lagos congelados;
+  - entardecer em tom rosado e noite azulada com luzes acesas nas cidades.
+- Conquistas: "Uma história começa", "Até o fim", "Conhecer de verdade", "Encontro marcado". Teste: `tests/v32_historias.js`.

@@ -1,0 +1,23 @@
+// Atualização 32: histórias pessoais em capítulos, rotina por hora, convites, estações e noite no mapa.
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const sh=async n=>{await p.waitForTimeout(450);await p.screenshot({path:'/tmp/shots/'+n+'.png'})};const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,330))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,300))}};
+ await ev(`SET.tips=false;META.maxArc=3`);
+ await ev(`document.querySelector('#bFree').click()`);
+ await st('pronta emilia',`(function(){document.querySelector('#overlay').hidden=true;L().loc="capital";PF.lastLoc="capital";S.h=10;renderHub();return [storyHere(),!!document.querySelector('[data-ac="hs:emilia"]'),!!document.querySelector('#lvCard')]})()`);
+ await ev(`window.scrollTo(0,0);document.querySelector('#hub').scrollTop=0`);await sh('b0_hub');
+ await st('cap1',`(function(){placeAction("hs:emilia");return document.querySelector('#overlay').innerText.slice(0,200)})()`);
+ await sh('b1_cap');
+ await st('escolhe',`(function(){document.querySelector('[data-so="1"]').click();var s=SY("emilia");return [s.c,JSON.stringify(s.tr),relOf("emilia").rp]})()`);
+ await st('mesmo dia bloqueia',`(function(){document.querySelector('#overlay').hidden=true;relOf("emilia").rp=200;return storyReady("emilia").why})()`);
+ await st('caps 2-4',`(function(){var out=[];[["floresta",7],["vila",16],["floresta",20]].forEach(function(x){S.day++;L().loc=x[0];S.h=x[1];document.querySelector('#overlay').hidden=true;var ids=storyHere();out.push(ids.join(','));if(ids.indexOf("emilia")<0)return;storyPlay("emilia");var b=document.querySelector('[data-so="0"]')||document.querySelector('[data-sf]');b.click();});return [out.join('|'),SY("emilia").done,SY("emilia").fk]})()`);
+ await sh('b2_final');
+ await st('perk',`(function(){document.querySelector('#overlay').hidden=true;return eq("neg")})()`);
+ await st('aba historias',`(function(){openMenu("Histórias");return [document.querySelector('#pane h2').textContent,document.querySelectorAll('#pane .item.story').length,document.querySelector('[data-t="Histórias"]').getAttribute('aria-selected')]})()`);
+ await sh('b3_aba');
+ await st('rotina',`(function(){document.querySelector('#overlay').hidden=true;S.h=7;var a=placeOf("emilia",S.day,0);S.h=13;var b=placeOf("rem",S.day,1);S.h=23;var c=placeOf("ram",S.day,2);return [a,b,c]})()`);
+ await st('convite',`(function(){var n=0;for(var i=0;i<20&&!(PF.inv&&PF.inv.day===S.day);i++){PF.inv=null;invMorning();n++}var iv=PF.inv;L().loc=iv.at;PF.lastLoc=iv.at;S.h=iv.h[0];renderHub();var b=document.querySelector('[data-ac="inv:go"]');if(!b)return 'sem botao '+JSON.stringify(iv);placeAction("inv:go");return [iv.id,iv.t,iv.done,document.querySelector('#overlay').innerText.slice(0,120)]})()`);
+ await st('noite e inverno',`(function(){document.querySelector('#overlay').hidden=true;S.day=64;S.h=21;L().loc="capital";renderHub();var sv=document.querySelector('#hub .mapwrap svg');return [sv.getAttribute('class'),document.querySelectorAll('.lamp').length,!!document.querySelector('.snowov')]})()`);
+ await ev(`document.querySelector('#hMapCard').scrollIntoView();var w=document.querySelector('#hub .mapwrap');w.scrollLeft=120;w.scrollTop=200`);await sh('b4_noite_inverno');
+ await st('outono dia',`(function(){S.day=50;S.h=12;renderHub();return document.querySelector('#hub .mapwrap svg').getAttribute('class')})()`);
+ await ev(`document.querySelector('#hMapCard').scrollIntoView();var w=document.querySelector('#hub .mapwrap');w.scrollLeft=120;w.scrollTop=300`);await sh('b5_outono');
+ console.log(o.join('\n'));};

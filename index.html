@@ -835,6 +835,32 @@ h1{font-size:clamp(34px,10vw,50px)}
 #title .clock.logo::after{display:none}
 #title .clock.logo svg{width:100%;height:100%;display:block}
 #title .clock.logo .lr{transform-box:view-box;transform-origin:256px 256px;animation:back 40s linear infinite}
+/* ===== Atualização 32: histórias e mundo vivo ===== */
+.act.sact{border-color:color-mix(in srgb,var(--c) 70%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--c) 18%,transparent),#2a2241 65%)}
+.act.sact b{color:color-mix(in srgb,var(--c) 55%,#fff)}
+#overlay.story .in>h2{font-size:30px}
+.btn.sbest{border-color:var(--cristal)}.btn.sbest small{color:var(--cristal);font-size:11.5px;margin-left:6px}
+.sperk{display:flex;flex-direction:column;gap:2px;border:1px solid var(--cristal);background:rgba(127,227,224,.08);border-radius:12px;padding:10px 12px}
+.sperk b{color:var(--cristal)}.sperk span{font-size:13.5px}
+.item.story{border-left:4px solid var(--c)}
+.item .ag{font-size:12px;color:#8a80a8;margin-top:2px}
+.lvcard{display:flex;flex-direction:column;gap:6px}
+.lvl{margin:0;font-size:14px;line-height:1.4;padding-left:10px;border-left:3px solid var(--c)}
+.lvl b{color:color-mix(in srgb,var(--c) 60%,#fff)}
+#lvMore{align-self:flex-start;margin-top:2px}
+/* estações no mapa */
+.m2.s-out .bForest{fill:#c27a35;stroke:#8a4f1f}.m2.s-out .ptT{fill:#a3501f;stroke:#6e3414}
+.m2.s-out .coastL[fill]{filter:sepia(.35) saturate(1.2)}
+.m2.s-inv .bForest{fill:#4f6f5c;stroke:#3a5546}.m2.s-inv .ptT{fill:#e3eef0;stroke:#2f5242;stroke-width:.9}
+.m2 .snowov{fill:#ffffff;opacity:.38;pointer-events:none}
+.m2.s-inv .lake3{fill:#cfe6f2;stroke:#8fb5cf}
+.m2.s-pri .bForest{fill:#6fb35e}
+.m2 .flw0{fill:#ff9ec7}.m2 .flw1{fill:#fff6a8}.m2 .flw2{fill:#ffffff}
+.m2.s-ver .bForest{fill:#4f9447}
+/* noite e entardecer */
+.m2 .nightov{pointer-events:none;fill:#0d1540;opacity:0}
+.m2.night .nightov{opacity:.42}.m2.dusk .nightov{fill:#6b2a52;opacity:.18}
+.m2 .lamp{fill:#ffd36b;opacity:.95;filter:drop-shadow(0 0 3px #ffb84d)}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9191,7 +9217,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 30 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 32 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10250,6 +10276,282 @@ if(window.MutationObserver)new MutationObserver(function(){if(STQ)return;STQ=tru
 var LOGO_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs> <radialGradient id="lg_bg" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#34245c"/><stop offset=".55" stop-color="#1d1533"/><stop offset="1" stop-color="#0e0a17"/></radialGradient> <linearGradient id="lg_ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7d93"/><stop offset=".5" stop-color="#e0475f"/><stop offset="1" stop-color="#9e2440"/></linearGradient> <radialGradient id="lg_glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#7fe3e0" stop-opacity=".38"/><stop offset="1" stop-color="#7fe3e0" stop-opacity="0"/></radialGradient> </defs><circle cx="256" cy="262" r="150" fill="url(#lg_glow)"/><g class="lr"> <path d="M331.0 126.1L334.5 120.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M385.9 181.0L392.0 177.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M406.0 256.0L419.0 256.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M385.9 331.0L392.0 334.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M331.0 385.9L334.5 392.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M256.0 406.0L256.0 419.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M181.0 385.9L177.5 392.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M126.1 331.0L120.0 334.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M106.0 256.0L93.0 256.0" stroke="#c9b8ff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/><path d="M126.1 181.0L120.0 177.5" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/><path d="M181.0 126.1L177.5 120.0" stroke="#c9b8ff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/> <path d="M305.2 72.5 A190 190 0 1 0 405.7 139.0" fill="none" stroke="url(#lg_ring)" stroke-width="15" stroke-linecap="round"/> <path d="M387.3 115.4 L421.9 128.9 L392.0 152.3 Z" fill="#ff7d93" stroke="#ff7d93" stroke-width="4" stroke-linejoin="round"/> </g><g stroke="#0d3a40" stroke-width="4" stroke-linejoin="round"> <path d="M184 222 256 126 226 222Z" fill="#d4faf5"/> <path d="M226 222 256 126 286 222Z" fill="#a5f0ea"/> <path d="M286 222 256 126 328 222Z" fill="#5fcbc7"/> <path d="M184 222 226 222 256 396Z" fill="#73dad5"/> <path d="M226 222 286 222 256 396Z" fill="#4cbcbb"/> <path d="M286 222 328 222 256 396Z" fill="#2b8f95"/> </g> <path d="M184 222 256 126 328 222 256 396Z" fill="none" stroke="#0d3a40" stroke-width="6" stroke-linejoin="round"/> <path d="M232 170 246 146" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-opacity=".85"/> <path d="M338 140 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6Z" fill="#ffffff" fill-opacity=".9"/><circle cx="170" cy="330" r="3.5" fill="#c9b8ff" fill-opacity=".6"/><circle cx="352" cy="352" r="2.5" fill="#7fe3e0" fill-opacity=".7"/> </svg>';
 var _tp30=titlePolish;
 titlePolish=function(){_tp30();var c=document.querySelector("#title .clock");if(c&&!c.classList.contains("logo")){c.classList.add("logo");c.innerHTML=LOGO_SVG}};
+
+/* ===== Atualização 32: Histórias pessoais e Mundo vivo (Modo Livre) ===== */
+
+/* ---------- 1. Histórias pessoais ----------
+   Cada capítulo: vínculo mínimo (estágio), lugar, janela de horas, texto e 3 escolhas.
+   Cada escolha soma um traço: g = gentileza, c = coragem, h = honestidade. O final muda conforme o traço mais forte. */
+var STORY={
+ emilia:{n:"A garota de gelo",perk:{neg:4},pd:"Efeitos ruins −4% para sempre",ch:[
+  {st:1,at:"capital",h:[8,18],t:"A moeda que ninguém aceita",x:"Na feira, um vendedor fecha a cara quando vê as orelhas de Emilia e diz que não tem nada para vender. Ela finge que não ouviu, mas aperta a bolsa com força.",o:[
+   ["Encarar o vendedor","Você diz, alto o bastante para a feira ouvir, que dinheiro de cliente não tem orelha. Ele vende, resmungando. Emilia segura o riso.","c"],
+   ["Comprar por ela, sem alarde","Você compra a mesma fruta duas barracas adiante e entrega para ela como se fosse nada. Ela demora a agradecer, e agradece duas vezes.","g"],
+   ["Perguntar como ela está","Ela diz que está acostumada. Depois, baixinho, admite que nunca fica mais fácil. Você só escuta.","h"]]},
+  {st:2,at:"floresta",h:[6,10],t:"Flores de gelo",x:"De manhã cedo, Emilia treina sozinha perto do lago. Cada feitiço deixa uma flor de gelo na grama, e ela parece não perceber como é bonito.",o:[
+   ["Tentar ajudar no treino","Você tenta segurar um alvo de madeira e escorrega no gelo. Ela ri tanto que erra o próximo feitiço, e não liga.","c"],
+   ["Elogiar as flores","Ela olha para a grama como se visse pela primeira vez. 'Nunca tinha pensado nelas como bonitas.'","g"],
+   ["Perguntar por que treina tanto","'Porque quero que as pessoas me vejam por quem eu sou, e não pelo que parece.' Ela diz rápido, como quem ensaiou.","h"]]},
+  {st:3,at:"vila",h:[15,20],t:"As crianças de Irlam",x:"Algumas crianças da vila se escondem quando Emilia passa. Uma delas, mais corajosa, pergunta se é verdade que meia-elfa congela quem toca.",o:[
+   ["Organizar uma brincadeira de neve","Emilia faz neve cair só sobre a praça. Em dez minutos, as crianças estão em guerra de bolas de neve, e ela é a general.","c"],
+   ["Deixar Emilia responder","Ela se agacha e estende a mão. A menina toca, devagar. 'Está quente!' Emilia fica sem palavras.","g"],
+   ["Explicar com calma","Você conta que Emilia salvou mais gente do que congelou, ou seja, ninguém. As crianças ficam pensativas, e uma delas pede desculpas.","h"]]},
+  {st:4,at:"floresta",h:[19,24],t:"Promessa no lago",x:"À noite, o lago reflete as estrelas. Emilia pergunta, sem olhar para você: 'Se um dia o mundo inteiro me odiasse, o que você faria?'"}
+ ],fin:{c:["Você responde que brigaria com o mundo inteiro, se fosse preciso. Ela ri, emocionada. 'Então eu vou ter que ficar forte também, para você não brigar sozinho.'"],g:["Você diz que ficaria ao lado dela, mesmo sem saber o que fazer. Ela encosta a cabeça no seu ombro. 'Isso já é muito.'"],h:["Você diz que teria medo, mas ficaria mesmo assim. 'Obrigada por não mentir', ela diz, e segura sua mão."]}},
+ rem:{n:"A irmã que corre atrás",perk:{hp:4},pd:"Vida em batalha +4 para sempre",ch:[
+  {st:1,at:"casa",h:[5,9],t:"Café antes de todos",x:"Antes do sol, a cozinha da mansão já está acesa. Rem prepara o café da casa inteira em silêncio, rápida e precisa.",o:[
+   ["Oferecer ajuda","Ela hesita e te entrega as batatas. Você descasca mal, ela corrige com paciência. O café sai um pouco mais tarde e um pouco mais alegre.","g"],
+   ["Pedir para ela ensinar um prato","Rem ensina o segredo do caldo da casa. 'Não conte para a irmã. Ela acha que é receita dela.'","h"],
+   ["Insistir que ela descanse hoje","Ela fica sem reação. 'Ninguém nunca disse isso para Rem.' Mesmo assim, termina o café, mas senta para comer com você.","c"]]},
+  {st:2,at:"vila",h:[9,13],t:"Compras em Irlam",x:"Rem faz as compras da mansão na vila. Um vendedor tenta cobrar a mais, achando que ela não vai reparar.",o:[
+   ["Deixar Rem resolver","Ela sorri, educada, e recita o preço de cada coisa da semana passada. O vendedor devolve o troco e até dá uma maçã.","h"],
+   ["Pechinchar junto","Vocês dois fazem uma dupla tão chata que o vendedor dá desconto só para vocês irem embora.","c"],
+   ["Carregar todas as sacolas","Você volta com os braços doendo. Rem fica vermelha e diz que não precisava, mas anda devagar para te esperar.","g"]]},
+  {st:3,at:"casa",h:[20,24],t:"A irmã mais forte",x:"Na varanda, Rem confessa que passou a vida tentando alcançar a irmã. 'Ram sempre foi a melhor. Rem é só a que tenta.'",o:[
+   ["Dizer que tentar também é força","Ela repete a frase baixinho, como se guardasse num bolso. 'Tentar também é força.'","g"],
+   ["Contar que você também se compara","Você conta como era ser o pior em tudo no seu mundo. Ela ri, sem maldade. 'Então somos dois.'","h"],
+   ["Desafiar Rem a fazer algo só dela","Ela pensa e diz que gostaria de aprender a desenhar. Você promete posar, mesmo sendo péssimo modelo.","c"]]},
+  {st:4,at:"floresta",h:[15,20],t:"Força de verdade",x:"Na trilha, um mabeast salta entre vocês. Rem se coloca na frente sem pensar. Depois, com o bicho espantado, ela pergunta, ainda ofegante: 'Rem fez certo?'"}
+ ],fin:{c:["Você diz que da próxima vez quer lutar ao lado, e não atrás dela. Rem sorri do jeito mais sincero que você já viu. 'Então lado a lado.'"],g:["Você diz que ela sempre faz certo quando faz por alguém. Rem esconde o rosto, feliz demais para falar."],h:["Você admite que ficou com medo por ela. 'Rem também ficou com medo por você', ela diz, e as duas mãos ainda tremem juntas."]}},
+ ram:{n:"Ram não precisa de ninguém",perk:{xp:5},pd:"XP +5% para sempre",ch:[
+  {st:1,at:"casa",h:[13,17],t:"Ram não está descansando",x:"No jardim, Ram está deitada na grama, olhos fechados. 'Ram está meditando sobre a casa. Não atrapalhe.'",o:[
+   ["Deitar ao lado e meditar também","Vocês dois 'meditam' por uma hora. Ninguém comenta o ronco de ninguém.","g"],
+   ["Avisar que Roswaal vem aí","Ela está de pé e com a vassoura na mão em um segundo. Depois percebe a mentira e te olha como quem anota um nome.","c"],
+   ["Perguntar o que ela pensa da casa","Para sua surpresa, ela responde sério. A casa é o lugar que ela escolheu proteger.","h"]]},
+  {st:2,at:"vila",h:[10,14],t:"Batatas, sempre batatas",x:"Ram foi escalada para a cozinha da festa da vila e anuncia o cardápio: batatas cozidas. Só isso.",o:[
+   ["Sugerir um tempero","Ela aceita, contrariada. As batatas fazem sucesso e Ram leva todo o crédito, claro.","h"],
+   ["Defender as batatas","Você jura que nunca comeu batata melhor. Ela finge indiferença e te serve o dobro.","g"],
+   ["Desafiar para uma disputa de pratos","Você perde feio. Ram explica que perder para ela é natural, e quase sorri.","c"]]},
+  {st:3,at:"floresta",h:[17,20],t:"O que ficou para trás",x:"Ram para numa clareira e fica olhando o horizonte por um tempo longo. 'Há coisas que Ram perdeu e não vai recuperar. Não pergunte.'",o:[
+   ["Não perguntar","Vocês ficam em silêncio até o sol baixar. Na volta, ela anda mais perto de você do que de costume.","g"],
+   ["Dizer que ela não precisa ser forte o tempo todo","'Ram decide quando é forte.' Mas ela não discorda.","h"],
+   ["Prometer ajudar a proteger o que ficou","Ela ri pelo nariz. 'Com esses braços?' E ainda assim aceita a promessa.","c"]]},
+  {st:4,at:"casa",h:[21,24],t:"Ram admite uma coisa",x:"Tarde da noite, Ram aparece com duas xícaras de chá. 'Ram vai dizer isso uma vez só, e você vai fingir que não ouviu.'"}
+ ],fin:{c:["Ela diz que você é menos inútil do que parece. Você agradece o elogio. 'Não foi elogio', ela diz, e foi."],g:["Ela admite que a casa fica mais leve com você por perto. Depois bebe o chá inteiro de uma vez, vermelha."],h:["Ela diz que confia em você. Só isso. Para Ram, é quase uma declaração de guerra."]}},
+ beatrice:{n:"A guardiã dos livros",perk:{neg:3,luck:2},pd:"Efeitos ruins −3% e sorte +2% para sempre",ch:[
+  {st:1,at:"casa",h:[9,18],t:"A porta errada que é a certa",x:"Você abre uma porta qualquer da mansão e dá de cara com a biblioteca proibida, de novo. Beatrice nem levanta os olhos do livro. 'De fato, você é insistente.'",o:[
+   ["Pedir para ficar só um pouco","'Cinco minutos', ela diz. Você fica duas horas, e ela não manda embora.","g"],
+   ["Elogiar a biblioteca","Ela finge desinteresse, mas começa a explicar a ordem dos livros por meia hora.","h"],
+   ["Desafiar ela a te expulsar","Ela te expulsa com magia. Você volta pela mesma porta. Ela suspira, vencida.","c"]]},
+  {st:2,at:"casa",h:[14,19],t:"Leitura em voz alta",x:"Beatrice deixa um livro aberto na sua frente. 'Leia. Betty quer saber se a sua voz é tão irritante lendo quanto falando.'",o:[
+   ["Ler fazendo vozes","Você faz uma voz diferente para cada personagem. Ela tapa a boca para não rir, e falha.","c"],
+   ["Ler devagar e com cuidado","Ela fecha os olhos e escuta. Quando você para, ela pede, sem perceber: 'Continue.'","g"],
+   ["Admitir que lê mal","'Ao menos é honesto.' Ela lê para você, e a voz dela muda quando chega na parte triste.","h"]]},
+  {st:3,at:"vila",h:[10,16],t:"Betty fora da biblioteca",x:"Depois de muita insistência, Beatrice aceita ir até a vila. Ela anda segurando sua manga e reclamando de tudo.",o:[
+   ["Comprar um doce para ela","Ela diz que doce é coisa de criança, e come três.","g"],
+   ["Mostrar a feira inteira","Ela finge cansaço, mas aponta para cada barraca nova. 'E aquela, de fato?'","c"],
+   ["Perguntar se ela gostou","'Talvez Betty volte', ela diz, depois de muito pensar. Vindo dela, é um sim.","h"]]},
+  {st:4,at:"casa",h:[20,24],t:"O livro em branco",x:"Beatrice mostra um livro com as páginas em branco. 'Betty esperou por algo escrito aqui durante muito tempo. Nunca veio.'"}
+ ],fin:{c:["Você pega uma pena e escreve a primeira linha: amanhã vocês vão à feira de novo. Ela olha a página por muito tempo. 'Boba.' E guarda o livro."],g:["Você diz que talvez o livro esteja esperando ser escrito por ela. Beatrice segura sua mão com as duas. 'Então escreva comigo.'"],h:["Você admite que não sabe o que dizer. 'Às vezes isso é o certo', ela responde, e encosta em você."]}},
+ crusch:{n:"A palavra de Crusch",perk:{sdmg:1,hp:2},pd:"Dano de Subaru +1 e vida +2 para sempre",ch:[
+  {st:1,at:"capital",h:[7,12],t:"Palavra dada",x:"No pátio de treino, Crusch observa você manejar uma espada de madeira. 'Diga-me sem rodeios: por que treina, se claramente não é o seu talento?'",o:[
+   ["Dizer a verdade","Você diz que treina para não ficar parado quando alguém precisar. Ela assente, séria. 'Isso basta.'","h"],
+   ["Pedir uma lição","Ela corrige sua postura com dois toques. Você melhora mais em um minuto do que num mês.","c"],
+   ["Fazer piada","Ela não ri, mas os cantos da boca entregam. 'Humor também é escudo. Use bem.'","g"]]},
+  {st:2,at:"karsten",h:[14,18],t:"Os estábulos",x:"Crusch cuida pessoalmente dos dragões-terrestres da casa. Um deles, mais arisco, não deixa ninguém chegar perto.",o:[
+   ["Chegar devagar e esperar","Depois de muito tempo, o dragão encosta o focinho na sua mão. Crusch observa em silêncio, satisfeita.","g"],
+   ["Montar mesmo assim","Você cai três vezes. Na quarta, fica. Crusch bate palmas, uma vez, o que vale por um desfile.","c"],
+   ["Perguntar a história dele","Ela conta que ele foi resgatado de um comerciante cruel. Por isso não confia. 'Como certas pessoas.'","h"]]},
+  {st:3,at:"capital",h:[18,23],t:"Banquete de nobres",x:"Num banquete, um nobre tenta envergonhar Crusch com uma pergunta capciosa diante de todos.",o:[
+   ["Responder antes dela","Sua resposta é desajeitada, mas desarma o nobre. Crusch te olha de canto, divertida.","c"],
+   ["Confiar que ela resolve","Ela responde em três frases e o salão inteiro fica do lado dela. Depois agradece por você não ter interrompido.","g"],
+   ["Apontar a mentira na pergunta","Crusch percebe que você enxergou o mesmo que ela. 'Temos olhos parecidos', diz depois.","h"]]},
+  {st:4,at:"karsten",h:[6,10],t:"O vento da manhã",x:"Ao amanhecer, Crusch te chama para cavalgar até o limite das terras da casa. Lá, ela pergunta o que você quer da vida, e espera a resposta sem pressa."}
+ ],fin:{c:["Você diz que quer ser alguém em quem ela possa apoiar a espada. 'Então já é', ela responde."],g:["Você diz que quer que as pessoas de quem gosta estejam bem. Ela sorri de verdade. 'É um bom desejo para um cavaleiro.'"],h:["Você admite que ainda não sabe. 'A honestidade é um começo melhor que muitas certezas', diz Crusch, e estende a mão."]}},
+ priscilla:{n:"O sol caprichoso",perk:{luck:4,coin:2},pd:"Sorte +4% e moedas +2% para sempre",ch:[
+  {st:1,at:"capital",h:[11,16],t:"Audiência ao sol",x:"Priscilla te chama até a varanda dela e te observa como quem escolhe um vinho. 'Divirta-me. Você tem um minuto.'",o:[
+   ["Contar uma história absurda do seu mundo","Ela ri alto, do jeito de quem não ri por educação. 'Mais um minuto, então.'","c"],
+   ["Elogiar a varanda","'Óbvio que é bela. É minha.' Mas ela parece gostar que você reparou.","g"],
+   ["Dizer que não sabe divertir ninguém","'Ao menos não finge.' Ela te dá mais cinco minutos por pura curiosidade.","h"]]},
+  {st:2,at:"capital",h:[19,24],t:"A aposta do vinho",x:"Priscilla aposta que você não consegue adivinhar a idade do vinho que ela serve. Se errar, carrega o guarda-sol dela por uma semana.",o:[
+   ["Chutar com confiança","Você erra por vinte anos. Ela ri e decreta: uma semana de guarda-sol.","c"],
+   ["Admitir que não entende de vinho","'Honestidade é tediosa, mas rara.' Ela te poupa da aposta, desta vez.","h"],
+   ["Elogiar o vinho em vez de responder","'Esperto.' Ela enche sua taça de novo, o que, para ela, é um prêmio.","g"]]},
+  {st:3,at:"criadouro",h:[13,18],t:"Corrida para Priscilla",x:"No Haras, Priscilla escolhe o dragão mais teimoso e diz que você vai correr com ele. 'O mundo gira a meu favor. Vamos ver se gira a seu.'",o:[
+   ["Correr com tudo","Você chega em segundo, coberto de poeira. Ela declara que, por estar com ela, isso conta como vitória.","c"],
+   ["Conversar com o dragão antes","O dragão parece entender. Vocês terminam em terceiro, sem cair, o que já é um milagre.","g"],
+   ["Pedir que ela corra junto","Ela aceita, ganha, e passa o resto do dia de bom humor.","h"]]},
+  {st:4,at:"capital",h:[10,15],t:"O que o sol escolhe",x:"Priscilla te entrega uma flor vermelha, sem explicação. 'Ninguém recebe nada de mim por acaso. Diga por que acha que mereceu.'"}
+ ],fin:{c:["Você diz que mereceu por ter coragem de ficar perto do sol. Ela gargalha. 'Resposta certa.'"],g:["Você diz que não sabe se mereceu, mas que vai cuidar dela. Priscilla desvia o olhar. 'Faça isso, então.'"],h:["Você diz que talvez não tenha merecido. 'Por isso mesmo', ela responde, e vai embora antes que você veja o rosto dela."]}},
+ anastasia:{n:"Contrato sem cláusulas",perk:{coin:4,disc:2},pd:"Moedas +4% e lojas −2% para sempre",ch:[
+  {st:1,at:"capital",h:[9,13],t:"O preço de tudo",x:"Anastasia te para na rua e pergunta quanto você acha que vale. Não a sua roupa. Você.",o:[
+   ["Dar um preço alto","'Gosto de quem se valoriza. Mas vai ter que provar.' Ela anota algo num caderninho.","c"],
+   ["Dizer que não está à venda","Ela sorri, satisfeita. 'Resposta de quem vale muito.'","h"],
+   ["Perguntar quanto ela vale","Ela ri, surpresa. 'Ninguém nunca me perguntou isso.' E não responde, o que diz muito.","g"]]},
+  {st:2,at:"caravana",h:[10,16],t:"Contrato com a caravana",x:"Anastasia negocia com uma caravana inteira e te usa como 'consultor do outro mundo'. Os mercadores te olham esperando uma ideia genial.",o:[
+   ["Inventar uma ideia na hora","Você sugere vender comida quente para viajantes. A ideia, por sorte, é boa. Anastasia fecha o negócio sorrindo.","c"],
+   ["Ficar quieto e observar","Depois, ela diz que seu silêncio fez os mercadores pensarem que você sabia algo. 'Funcionou melhor que muita fala.'","g"],
+   ["Admitir que não entende de comércio","Ela ri e transforma isso em vantagem: 'Até o meu consultor acha o preço alto!'","h"]]},
+  {st:3,at:"bairro",h:[13,18],t:"Investimento no bairro",x:"Anastasia mostra um galpão abandonado no Bairro Pobre. 'Posso transformar isso num mercado. Ou em lucro rápido. Qual você escolheria?'",o:[
+   ["Mercado para o bairro","'Lucro lento, mas lucro bom.' Ela parece mais contente do que admite.","g"],
+   ["Lucro rápido","'Esperto, mas frio.' Ela escolhe o mercado mesmo assim e te observa, curiosa.","c"],
+   ["Perguntar o que ela escolheria","'O mercado. Mas queria ver se você também.' Ela parece aliviada.","h"]]},
+  {st:4,at:"capital",h:[18,23],t:"O papel em branco",x:"No escritório dela, Anastasia empurra uma folha em branco na sua direção. 'Um contrato. Sem cláusulas. Escreva o que quiser.'"}
+ ],fin:{c:["Você escreve: 'sócios'. Ela lê três vezes e guarda a folha no lenço. 'Melhor negócio do ano.'"],g:["Você devolve a folha em branco. 'Não preciso de contrato para ficar.' Ela fica em silêncio, e depois ri, emocionada."],h:["Você escreve só o seu nome e o dela. 'Simples', ela diz. 'Os melhores contratos são.'"]}}
+};
+function SY(id){var s=PF.story||(PF.story={});return s[id]||(s[id]={c:0,tr:{g:0,c:0,h:0},last:-9,done:false})}
+function storyNext(id){var d=STORY[id],s=SY(id);if(!d||s.done||!charOk(id))return null;var ch=d.ch[s.c];if(!ch)return null;return ch}
+function hourIn(h,w){var x=((h%24)+24)%24;return w[1]>w[0]?(x>=w[0]&&x<w[1]):(x>=w[0]||x<w[1])}
+function storyReady(id){
+  var ch=storyNext(id);if(!ch||!S)return null;var s=SY(id);
+  var why=[];if(relStage(id)<ch.st)why.push("vínculo: "+STG[ch.st][0]);if(S.day<=s.last)why.push("outro dia");
+  if(PLBY[ch.at]&&PLBY[ch.at].arc>arcReach())why.push("Arco "+PLBY[ch.at].arc);
+  return {ch:ch,ok:!why.length,why:why};
+}
+function storyHere(){var out=[];if(!S||S.mode!=="free")return out;var loc=L().loc;
+  Object.keys(STORY).forEach(function(id){var r=storyReady(id);if(r&&r.ok&&r.ch.at===loc&&hourIn(S.h,r.ch.h))out.push(id)});return out}
+ACH.hist1=["Uma história começa","Viva o primeiro capítulo da história de alguém."];
+ACH.hist4=["Até o fim","Termine a história pessoal de alguém."];
+ACH.histall=["Conhecer de verdade","Termine todas as histórias pessoais."];
+function storyPlay(id){
+  var d=STORY[id],s=SY(id),ch=storyNext(id);if(!ch)return;var C=REL_C[id],last=s.c===d.ch.length-1;
+  var h='<p class="sec" style="margin:0;color:'+C.c+'">'+esc(C.n)+' · '+esc(d.n)+' · capítulo '+(s.c+1)+' de '+d.ch.length+'</p><h2 style="margin:0">'+esc(ch.t)+'</h2><p style="margin:0;font-size:17px;line-height:1.6">'+esc(ch.x)+'</p>';
+  if(!last)ch.o.forEach(function(op,i){h+='<button class="btn" data-so="'+i+'">'+esc(op[0])+'</button>'});
+  else{var tr=s.tr,best=["c","g","h"].sort(function(a,b){return tr[b]-tr[a]})[0];
+    h+=[["c","Responder com coragem"],["g","Responder com o coração"],["h","Responder com sinceridade"]].map(function(x){return '<button class="btn'+(x[0]===best?" sbest":"")+'" data-sf="'+x[0]+'">'+x[1]+(x[0]===best?' <small>o seu jeito</small>':'')+'</button>'}).join("")}
+  var o=ovl(h);o.classList.add("story");
+  o.querySelectorAll("[data-so]").forEach(function(b){b.onclick=function(){var op=ch.o[+b.getAttribute("data-so")];s.tr[op[2]]++;s.c++;s.last=S.day;relAdd(id,8);gainXP(10,true);advanceTime(1);unlock("hist1");
+    dj("amor",C.n+": "+ch.t+".");pfSave();save();
+    o.innerHTML='<div class="in"><p style="margin:0;font-size:17px;line-height:1.6">'+esc(op[1])+'</p><p class="sec" style="margin:0">Relação com '+esc(C.n)+' +8 · capítulo '+s.c+' de '+d.ch.length+' concluído</p><button class="btn primary" id="soOk">Continuar</button></div>';
+    $("#soOk").onclick=function(){o.hidden=true;try{updHead()}catch(_){}renderHub()}}});
+  o.querySelectorAll("[data-sf]").forEach(function(b){b.onclick=function(){var k=b.getAttribute("data-sf"),txt=d.fin[k][0];
+    s.done=true;s.c=d.ch.length;s.fk=k;s.last=S.day;relAdd(id,15);gainXP(30,true);advanceTime(1);unlock("hist1");unlock("hist4");
+    if(Object.keys(STORY).every(function(x){return SY(x).done}))unlock("histall");
+    dj("amor","Final da história de "+C.n+": "+ch.t+".");pfSave();save();sfx("win");
+    o.innerHTML='<div class="in"><p class="sec" style="margin:0;color:'+C.c+'">Final · '+esc(d.n)+'</p><p style="margin:0;font-size:17px;line-height:1.6">'+esc(txt)+'</p><div class="sperk"><b>Laço para sempre</b><span>'+esc(d.pd)+'</span></div><p class="sec" style="margin:0">Relação com '+esc(C.n)+' +15</p><button class="btn primary" id="soOk">Guardar esta lembrança</button></div>';
+    $("#soOk").onclick=function(){o.hidden=true;try{updHead()}catch(_){}renderHub()}}});
+}
+/* bônus permanentes dos finais */
+var _eq32=eq;eq=function(k){var v=_eq32(k);try{if(S&&S.mode==="free"&&PF.story)Object.keys(STORY).forEach(function(id){var s=PF.story[id];if(s&&s.done){var p=STORY[id].perk[k];if(p)v+=p}})}catch(e){}return v};
+/* botão no lugar certo, na hora certa */
+PAX.push(function(lf){var ids=storyHere();return ids.map(function(id){var ch=storyNext(id);return '<button class="act sact" data-ac="hs:'+id+'" style="--c:'+REL_C[id].c+'"><b>★ '+esc(REL_C[id].n)+': '+esc(ch.t)+'</b><span>História pessoal · capítulo '+(SY(id).c+1)+' de '+STORY[id].ch.length+'</span></button>'}).join("")});
+PAH.push(function(a){if(a.indexOf("hs:")!==0)return false;storyPlay(a.slice(3));return true});
+ACAT.forEach(function(c){if(c[0]==="uniq")c[2]=/^(ua|hs:.*|inv:.*)$/});
+/* aba Histórias (grupo Pessoas) */
+function paneStories(p){
+  var h='<h2>Histórias</h2><p style="margin:4px 0 8px;color:var(--mute)">Cada pessoa tem uma história em capítulos. Eles aparecem num lugar e numa hora certos, quando o vínculo cresce. O jeito como você responde muda o final.</p>';
+  Object.keys(STORY).forEach(function(id){var d=STORY[id],s=SY(id),C=REL_C[id];
+    if(!charOk(id)){h+='<div class="item locked"><div><b>???</b><span>Alguém que você ainda não conheceu.</span></div></div>';return}
+    var r=storyReady(id),pct=Math.round(s.c/d.ch.length*100),hint;
+    if(s.done)hint="Concluída · "+({c:"coragem",g:"coração",h:"sinceridade"})[s.fk]+" · "+d.pd;
+    else{var ch=r.ch;hint="Próximo: "+ch.t+" · "+(PLBY[ch.at]?PLBY[ch.at].n:ch.at)+", das "+ch.h[0]+"h às "+(ch.h[1]%24)+"h"+(r.ok?" · pronto!":" · falta "+r.why.join(", "))}
+    h+='<div class="item story'+(s.done?" got":"")+'" style="--c:'+C.c+'"><div><b style="color:'+C.c+'">'+esc(C.n)+' · '+esc(d.n)+'</b><span>'+esc(hint)+'</span><div class="bar" style="margin-top:6px"><div style="width:'+pct+'%;background:'+C.c+'"></div></div></div><span>'+s.c+'/'+d.ch.length+'</span></div>'});
+  h+='<p class="sec">Agenda de hoje</p>'+agendaHTML();
+  p.innerHTML=h;
+}
+var _om32=openMenu;
+MGROUP.forEach(function(g){if(g[0]==="Pessoas"&&g[1].indexOf("Histórias")<0)g[1].push("Histórias")});
+openMenu=function(tab){
+  var st=(tab==="Histórias"&&S&&S.mode==="free");
+  _om32(st?"Família":tab);
+  if(!S||S.mode!=="free")return;
+  var tabs=document.querySelector("#overlay .tabs");
+  if(tabs&&!tabs.querySelector('[data-t="Histórias"]')){var fam=tabs.querySelector('[data-t="Família"]');if(fam){var b=fam.cloneNode(true);b.setAttribute("data-t","Histórias");b.textContent="Histórias";b.setAttribute("aria-selected","false");b.hidden=fam.hidden;b.onclick=function(e){e.stopPropagation();openMenu("Histórias")};fam.parentNode.insertBefore(b,fam.nextSibling)}}
+  if(st){var pane=$("#pane");if(pane)paneStories(pane);[].forEach.call(document.querySelectorAll("#overlay .tab"),function(t){t.setAttribute("aria-selected",t.getAttribute("data-t")==="Histórias")})}
+};
+
+/* ---------- 2. Mundo vivo: rotina por hora ---------- */
+var ROUT={
+ emilia:[[6,9,"floresta"],[9,12,"casa"],[12,15,"vila"],[15,19,"casa"],[19,22,"floresta"],[22,6,"casa"]],
+ rem:[[5,9,"casa"],[9,12,"vila"],[12,17,"casa"],[17,19,"floresta"],[19,5,"casa"]],
+ ram:[[6,10,"casa"],[10,13,"vila"],[13,17,"casa"],[17,20,"floresta"],[20,6,"casa"]],
+ beatrice:[[0,24,"casa"]],
+ crusch:[[6,10,"karsten"],[10,18,"capital"],[18,6,"karsten"]],
+ priscilla:[[10,13,"capital"],[13,18,"criadouro"],[18,10,"capital"]],
+ anastasia:[[8,12,"capital"],[12,16,"bairro"],[16,20,"caravana"],[20,8,"capital"]]
+};
+/* pequenas variações pelo dia da semana */
+var RVAR={beatrice:function(d,h){return (d%7===0&&h>=14&&h<17)?"vila":null},emilia:function(d,h){return (d%7===3&&h>=12&&h<15)?"capital":null},
+ rem:function(d,h){return (d%7===5&&h>=9&&h<12)?"capital":null},priscilla:function(d,h){return (d%2===0&&h>=13&&h<18)?"capital":null}};
+function routAt(id,day,h){var r=ROUT[id];if(!r)return null;var v=RVAR[id]&&RVAR[id](day,h);if(v)return v;for(var i=0;i<r.length;i++)if(hourIn(h,[r[i][0],r[i][1]]))return r[i][2];return null}
+var _po32=placeOf;
+placeOf=function(id,day,t){
+  var base=_po32(id,day,t);
+  try{if(!S||S.mode!=="free"||!ROUT[id]||day!==S.day||!charOk(id)||arcReach()<2)return base;
+    var h=((S.h%24)+24)%24,par=PF.rel&&PF.rel.partner;if(par===id&&(h>=20||h<6))return base;
+    var p=routAt(id,day,h);if(!p||!PLBY[p]||PLBY[p].arc>arcReach())return base;
+    /* convite aceito: a pessoa espera no lugar combinado */
+    var iv=INV();if(iv&&iv.id===id&&iv.day===S.day&&!iv.done&&hourIn(h,iv.h))return iv.at;
+    return p}catch(e){return base}
+};
+function agendaHTML(){
+  var day=S.day,h='';
+  Object.keys(ROUT).forEach(function(id){if(!charOk(id)||!REL_C[id])return;var r=ROUT[id],now=placeOf(id,day,Math.min(S.t,2));
+    var parts=r.map(function(x){var p=PLBY[x[2]];return (p&&p.arc<=arcReach()?(p.s||p.n):"?")+" "+x[0]+"–"+(x[1]%24)+"h"});
+    h+='<div class="item"><div><b style="color:'+REL_C[id].c+'">'+esc(REL_C[id].n)+'</b><span>Agora: '+esc(now&&PLBY[now]?PLBY[now].n:"longe")+'</span><span class="ag">'+esc(parts.join(" · "))+'</span></div></div>'});
+  return h||'<p class="fine">Ninguém por perto ainda.</p>';
+}
+/* ---------- 3. Convites ---------- */
+var IVK=[
+ ["Treino ao amanhecer","floresta",[6,9],"Um treino leve antes do dia começar."],
+ ["Chá da tarde","casa",[15,18],"Chá, biscoitos e conversa sem pressa."],
+ ["Passeio pela feira","vila",[10,13],"Andar pela feira e ver as novidades."],
+ ["Jantar na cidade","capital",[19,22],"Um jantar simples num lugar bonito."],
+ ["Olhar as estrelas","floresta",[20,23],"Deitar na grama e contar estrelas."],
+ ["Ajuda com uma tarefa","vila",[13,17],"Uma tarefa pequena, feita a dois."]
+];
+var IVTXT={emilia:"Emilia",rem:"Rem",ram:"Ram",beatrice:"Beatrice",crusch:"Crusch",priscilla:"Priscilla",anastasia:"Anastasia"};
+function INV(){return PF.inv||null}
+ACH.inv1=["Encontro marcado","Compareça a um convite."];
+function invMorning(){
+  if(!S||S.mode!=="free"||arcReach()<2)return;
+  var iv=INV();if(iv&&iv.day<S.day&&!iv.done){var id0=iv.id;if(REL_C[id0])relAdd(id0,-2);PF.inv=null}
+  if(PF.inv&&PF.inv.day===S.day)return;
+  if(Math.random()>.5)return;
+  var who=Object.keys(ROUT).filter(function(id){return REL_C[id]&&charOk(id)&&relStage(id)>=1});if(!who.length)return;
+  var id=rnd(who),opts=IVK.filter(function(k){return PLBY[k[1]]&&PLBY[k[1]].arc<=arcReach()}),k=rnd(opts);
+  if(["crusch","priscilla","anastasia"].indexOf(id)>=0&&k[1]!=="capital"&&Math.random()<.6)k=IVK[3];
+  PF.inv={id:id,t:k[0],at:k[1],h:k[2],d:k[3],day:S.day,done:false};pfSave();
+  try{mailAdd(REL_C[id].n,id,"Convite: "+k[0],"Hoje, das "+k[2][0]+"h às "+k[2][1]+"h, em "+PLBY[k[1]].n+". "+k[3]+" Se puder, apareça. Vou esperar.",null)}catch(e){}
+}
+var _sd32=sleepDay;
+sleepDay=function(){var d0=S&&S.day;var r=_sd32.apply(this,arguments);try{if(S&&S.mode==="free"&&S.day>d0)invMorning()}catch(e){}return r};
+PAX.push(function(lf){var iv=INV();if(!iv||iv.done||iv.day!==S.day||iv.at!==lf.loc||!hourIn(S.h,iv.h))return "";
+  return '<button class="act sact" data-ac="inv:go" style="--c:'+REL_C[iv.id].c+'"><b>♥ Convite de '+esc(REL_C[iv.id].n)+': '+esc(iv.t)+'</b><span>Até as '+iv.h[1]+'h. '+esc(iv.d)+'</span></button>'});
+PAH.push(function(a){if(a!=="inv:go")return false;var iv=INV();if(!iv||iv.done)return true;var C=REL_C[iv.id];
+  var txt={"Treino ao amanhecer":C.n+" aparece no horário, com uma garrafa de água para cada um. O treino é curto, o sol nasce no meio, e vocês terminam rindo do seu fôlego.",
+   "Chá da tarde":C.n+" serve o chá com mais cuidado do que precisava. A conversa vai de assunto bobo em assunto bobo, e a tarde passa sem ninguém perceber.",
+   "Passeio pela feira":"Vocês andam pela feira sem destino. "+C.n+" para em cada barraca nova e acaba escolhendo uma lembrancinha para você.",
+   "Jantar na cidade":"O lugar é pequeno, a comida é boa e "+C.n+" conta uma história que nunca tinha contado para ninguém.",
+   "Olhar as estrelas":"Deitados na grama, vocês inventam nomes para as estrelas. Os de "+C.n+" são melhores, e você admite.",
+   "Ajuda com uma tarefa":"A tarefa leva o dobro do tempo, porque vocês conversam mais do que trabalham. "+C.n+" não reclama."}[iv.t]||("Você passa um tempo bom com "+C.n+".");
+  iv.done=true;relAdd(iv.id,10);S.san=clamp(S.san+5,0,100);gainXP(8,true);advanceTime(2);unlock("inv1");dj("amor","Convite de "+C.n+": "+iv.t+".");pfSave();save();sfx("ok");
+  uaOv("Convite de "+C.n,iv.t,txt,"Relação com "+C.n+" +10 · Sanidade +5");return true});
+/* no hub: aviso do convite e de histórias prontas */
+var _rh32=renderHub;
+renderHub=function(){
+  _rh32();
+  try{if(!S||S.mode!=="free")return;var hub=$("#hub");if(!hub||$("#lvCard"))return;var lines=[];
+    var iv=INV();if(iv&&iv.day===S.day&&!iv.done)lines.push('<p class="lvl" style="--c:'+REL_C[iv.id].c+'">♥ <b>'+esc(REL_C[iv.id].n)+'</b> te convidou: '+esc(iv.t)+', em '+esc(PLBY[iv.at].n)+', das '+iv.h[0]+'h às '+iv.h[1]+'h.</p>');
+    Object.keys(STORY).forEach(function(id){var r=storyReady(id);if(r&&r.ok)lines.push('<p class="lvl" style="--c:'+REL_C[id].c+'">★ História de <b>'+esc(REL_C[id].n)+'</b>: '+esc(r.ch.t)+' · '+esc(PLBY[r.ch.at].n)+', '+r.ch.h[0]+'h–'+(r.ch.h[1]%24)+'h</p>')});
+    if(!lines.length)return;
+    var c=document.createElement("div");c.className="hubcard lvcard";c.id="lvCard";c.innerHTML=lines.slice(0,3).join("")+'<button class="chip" id="lvMore">Ver histórias e agenda</button>';
+    var first=hub.querySelector(".hubcard");if(first&&first.nextSibling)hub.insertBefore(c,first.nextSibling);else hub.appendChild(c);
+    $("#lvMore").onclick=function(){openMenu("Histórias")};
+  }catch(e){}
+};
+
+/* ---------- 4. Estações e noite no mapa ---------- */
+var _aa32=atlasArt;
+atlasArt=function(){
+  var s=_aa32(),se=(S&&S.mode==="free")?seasonOf().id:"ver";
+  var ov='';
+  if(se==="inv")ov='<path d="'+ (s.match(/<path d="([^"]+)" fill="url\(#gLand\)" class="coastL"\/>/)||[0,""])[1]+'" class="snowov"/>';
+  if(se==="pri"){for(var i=0;i<60;i++){var x=120+((mh("f"+i)>>>0)%720),y=260+((mh("y"+i)>>>0)%700);if(!nearNode(x,y,24))ov+='<circle cx="'+x+'" cy="'+y+'" r="'+(1.6+(i%3)*.6)+'" class="flw'+(i%3)+'"/>'}}
+  return s.replace('<g class="relief3">',ov+'<g class="relief3">');
+};
+var _ma32=mapArt;
+mapArt=function(){var se=(S&&S.mode==="free")?seasonOf().id:"ver",k=arcReach()+":"+MAPW2+":"+se;if(ART3.k!==k){ART3.k=k;ART3.s=atlasArt()}return ART3.s};
+var _ms32=mapSVG;
+mapSVG=function(lf){
+  var s=_ms32(lf);if(!S||S.mode!=="free")return s;
+  var se=seasonOf().id,h=((S.h%24)+24)%24,night=h>=19||h<6,dusk=(h>=17&&h<19)||(h>=5&&h<7);
+  s=s.replace('class="wmap wbig m2"','class="wmap wbig m2 s-'+se+(night?" night":dusk?" dusk":"")+'"');
+  if(night||dusk){var g='<rect width="'+MAPW2+'" height="'+MAPH2+'" class="nightov"/>';
+    if(night)PLACES.forEach(function(p){var xy=POS[p.id];if(!xy||p.arc>arcReach()||p.dg)return;for(var i=0;i<3;i++){var a=mh(p.id+i)>>>0;g+='<circle cx="'+(xy[0]+(a%40)-20)+'" cy="'+(xy[1]+((a>>8)%30)-6)+'" r="1.6" class="lamp"/>'}});
+    s=s.replace(/(<g class="wnode)/,g+"$1")}
+  return s;
+};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
