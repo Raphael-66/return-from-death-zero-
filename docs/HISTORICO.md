@@ -120,3 +120,15 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - **Paleta em tokens** (`:root`): noite, ardósia, véu, ouro régio, sangue do retorno, gelo, mais `--miasma`, `--mathers`, `--ok`, `--warn`, `--bad`, sombras `--sh1/--sh2` e `--goldgrad`.
 - **Acabamento**: fundo com luz suave no topo, cartões com brilho fino e sombra curta, botão principal em ouro com relevo, avatares em medalhão com anel na cor da pessoa, gavetas abertas com título dourado, barras com brilho.
 - Funções: `ico(id, classe)`, `plIco(lugar)`. Teste visual: `tests/v26_visual.js`.
+
+## Atualização 27 — mapa em estilo atlas
+- O terreno do mapa foi refeito por completo (`atlasArt()`, guardado em cache por arco):
+  - litoral irregular com curvas de profundidade no mar e textura de ondas;
+  - terras altas e baixadas com sombreamento;
+  - serras com encosta clara e escura e neve: Serra do Norte com o Passo Nevado e Montes da Fronteira com a passagem para Guaral;
+  - florestas, dunas e neve com textura (Mathers, Mata Densa, Augria, estepe de Kararagi, planalto de Gusteko);
+  - Grande Lago com a ilha do Farol e outros lagos menores;
+  - quatro rios que engrossam até a foz (Rio de Lugunica, Rio Gelado e outros);
+  - fronteiras nacionais tracejadas com brilho.
+- Nomes de nações em curva acompanhando o terreno, nomes de regiões, serras e águas (águas em itálico azul), grade de cartógrafo (A–H, 1–9), moldura dupla, rosa dos ventos e cartela com título e escala.
+- O mapa abre com zoom 0,9 para mostrar mais da geografia.

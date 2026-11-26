@@ -695,6 +695,40 @@ body{background:radial-gradient(120% 70% at 50% -10%,#18204a 0%,var(--ink) 55%) 
 .drawer[open]{border-color:#3a4677}
 /* barras: cantos e brilho */
 .bar>div{background-image:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 60%)}
+/* ===== Atualização 27: atlas ===== */
+.m2 .bathy{fill:none;stroke:#8fd3ff;stroke-linejoin:round}
+.m2 .coastL{stroke:#c9b98a;stroke-width:1.3;stroke-opacity:.55;stroke-linejoin:round}
+.m2 .ptT{fill:#2f6a49;stroke:#173826;stroke-width:.6}
+.m2 .forest{opacity:.85}
+.m2 .ptD{fill:none;stroke:#c9a15a;stroke-width:1;opacity:.55;stroke-linecap:round}
+.m2 .ptS{fill:#dfeaff;opacity:.35}
+.m2 .ptW{fill:none;stroke:#5d8ccc;stroke-width:.8;opacity:.35;stroke-linecap:round}
+.m2 .lake3{fill:#1d4f86;stroke:#8fd3ff;stroke-width:1;stroke-opacity:.45}
+.m2 .rv{fill:none;stroke:#4f8fd0;stroke-linecap:round;stroke-linejoin:round}
+.m2 .rvB{fill:none;stroke:#0b0f1f;stroke-opacity:.35;stroke-linecap:round;stroke-linejoin:round}
+.m2 .bdG{fill:none;stroke:#e6bb68;stroke-width:6;stroke-opacity:.08;stroke-linecap:round}
+.m2 .bdL{fill:none;stroke:#e6bb68;stroke-width:1.2;stroke-opacity:.55;stroke-dasharray:7 3 1.5 3;stroke-linecap:round}
+.m2 .pkL{fill:#3a4677}.m2 .pkR{fill:#222b50}.m2 .pkO{fill:none;stroke:#11162d;stroke-width:1;stroke-linejoin:round}
+.m2 .pkH{fill:none;stroke:#11162d;stroke-width:.7;opacity:.7}.m2 .pkS{fill:#e9f0ff;opacity:.85}
+.m2 .flugel3 circle{fill:#2f6b3f;stroke:#173826;stroke-width:1}.m2 .flugel3 path{fill:#5a4030}
+.m2 .labN{font-family:var(--display);font-size:17px;letter-spacing:.32em;fill:#e6bb68;fill-opacity:.62;paint-order:stroke;stroke:#0b0f1f;stroke-width:3px;stroke-opacity:.6}
+.m2 .labR{font-family:var(--display);font-size:13px;letter-spacing:.14em;fill:#ecf0fa;fill-opacity:.55;text-anchor:middle;paint-order:stroke;stroke:#0b0f1f;stroke-width:3px;stroke-opacity:.5}
+.m2 .labM{font-family:var(--display);font-size:11px;letter-spacing:.18em;fill:#c9d2ee;fill-opacity:.5;text-anchor:middle;paint-order:stroke;stroke:#0b0f1f;stroke-width:3px;stroke-opacity:.5}
+.m2 .labW{font-family:var(--display);font-style:italic;font-size:12.5px;letter-spacing:.08em;fill:#9ad8ff;fill-opacity:.7;text-anchor:middle}
+.m2 .labRv{font-family:var(--display);font-style:italic;font-size:10.5px;letter-spacing:.06em;fill:#9ad8ff;fill-opacity:.8}
+.m2 .grid{stroke:#c9b98a;stroke-width:.6;stroke-opacity:.08;stroke-dasharray:2 6}
+.m2 .gridL{font-family:var(--display);font-size:10px;fill:#c9b98a;fill-opacity:.55;text-anchor:middle}
+.m2 .frm1{fill:none;stroke:#c9b98a;stroke-opacity:.45;stroke-width:1.4}.m2 .frm2{fill:none;stroke:#c9b98a;stroke-opacity:.25;stroke-width:.8}
+.m2 .frmC{fill:#e6bb68;opacity:.7}
+.m2 .rz1{fill:#0b0f1f;fill-opacity:.55;stroke:#c9b98a;stroke-opacity:.5}.m2 .rz2{fill:none;stroke:#c9b98a;stroke-opacity:.3;stroke-dasharray:1 3}
+.m2 .rzA{fill:#e6bb68;opacity:.85}.m2 .rzB{fill:#c9b98a;opacity:.6}.m2 .rzD{fill:#3a3320;opacity:.9}.m2 .rzN{fill:#ffd88a}.m2 .rzN2{fill:#8a6a2c}
+.m2 .rzT{font-family:var(--display);font-size:12px;fill:#ffd88a;text-anchor:middle}
+.m2 .ct1{fill:#0b0f1f;fill-opacity:.82;stroke:#c9b98a;stroke-opacity:.55}.m2 .ct2{fill:none;stroke:#c9b98a;stroke-opacity:.25}
+.m2 .ctT{font-family:var(--display);font-size:20px;letter-spacing:.12em;fill:#f1cf87;text-anchor:middle}
+.m2 .ctS{font-size:10.5px;fill:#c9d2ee;fill-opacity:.75;text-anchor:middle;letter-spacing:.04em}
+.m2 .ctB{stroke:#c9b98a;stroke-width:1.2;fill:none}.m2 .ctBk{stroke:#c9b98a;stroke-width:4}
+.m2 .rd0{stroke:#0b0f1f;stroke-width:4.5;opacity:.6}
+.m2 .rd1{stroke:#e2d2a4;stroke-width:1.5;stroke-dasharray:4 3.5;opacity:.8}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9051,7 +9085,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 26 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 27 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -9900,6 +9934,126 @@ warRoom=function(){_wr26();var map={Lugunica:"lug",Vollachia:"vol",Gusteko:"gus"
 /* tela inicial: emblemas nos cartões de modo */
 var _tp26=titlePolish;
 titlePolish=function(){_tp26();var a=document.querySelector("#bRG .mic"),b=document.querySelector("#bFree .mic");if(a)a.innerHTML=ico("retorno");if(b)b.innerHTML=ico("lua")};
+
+/* ===== Atualização 27: mapa como atlas (geografia desenhada) ===== */
+var ART3={k:null,s:""};
+function r3(i){return ((mh("g"+i)>>>0)%10007)/10007}
+/* contorno natural: subdivide e desloca o meio de cada trecho */
+function jag(pts,depth,amp,seed,closed){
+  var p=pts.map(function(x){return [x[0],x[1]]});
+  for(var d=0;d<depth;d++){var q=[],n=closed?p.length:p.length-1;
+    for(var i=0;i<n;i++){var a=p[i],b=p[(i+1)%p.length];q.push(a);var dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,o=(r3(seed*131+d*977+i*31)-.5)*amp*L;q.push([(a[0]+b[0])/2-dy/L*o,(a[1]+b[1])/2+dx/L*o])}
+    if(!closed)q.push(p[p.length-1]);p=q}
+  return p;
+}
+function pth(p,closed){return "M"+p.map(function(x){return x[0].toFixed(1)+" "+x[1].toFixed(1)}).join(" L")+(closed?" Z":"")}
+function blob(cx,cy,rx,ry,seed,n){var pts=[];n=n||10;for(var i=0;i<n;i++){var a=i/n*Math.PI*2,k=.78+r3(seed*7+i)*.36;pts.push([cx+Math.cos(a)*rx*k,cy+Math.sin(a)*ry*k])}return pth(jag(pts,3,.32,seed,true),true)}
+function nearNode(x,y,d){return Object.keys(POS).some(function(k){return Math.hypot(POS[k][0]-x,POS[k][1]-y)<d})}
+function peak(x,y,s,snow){
+  var hw=s*.95,h=s*1.25,t=x+","+(y-h);
+  var g='<path d="M'+(x-hw)+' '+y+' L'+t+' L'+(x+hw*.15)+' '+y+'Z" class="pkL"/><path d="M'+t+' L'+(x+hw)+' '+y+' L'+(x+hw*.15)+' '+y+'Z" class="pkR"/>';
+  for(var i=1;i<=3;i++){var f=i/4;g+='<path d="M'+(x+hw*.12*f+hw*(1-f)*0).toFixed(1)+' '+(y-h*(1-f)).toFixed(1)+' l'+(hw*.45*(1-f*.4)).toFixed(1)+' '+(h*.32).toFixed(1)+'" class="pkH"/>'}
+  g+='<path d="M'+(x-hw)+' '+y+' L'+t+' L'+(x+hw)+' '+y+'" class="pkO"/>';
+  if(snow)g+='<path d="M'+(x-hw*.34)+' '+(y-h*.73)+' L'+t+' L'+(x+hw*.34)+' '+(y-h*.73)+' L'+(x+hw*.1)+' '+(y-h*.64)+' L'+(x-hw*.08)+' '+(y-h*.78)+'Z" class="pkS"/>';
+  return g;
+}
+function range(line,seed,smin,smax,snow,gap){
+  var out=[],pts=jag(line,3,.25,seed,false),acc=0;
+  for(var i=1;i<pts.length;i++){var a=pts[i-1],b=pts[i],L=Math.hypot(b[0]-a[0],b[1]-a[1]);acc+=L;
+    while(acc>=13){acc-=13;var f=1-acc/L,x=a[0]+(b[0]-a[0])*f+(r3(seed+i*13+acc)-.5)*16,y=a[1]+(b[1]-a[1])*f+(r3(seed+i*17+acc)-.5)*14;
+      if(gap&&gap.some(function(g){return x>g[0]&&x<g[1]}))continue;if(nearNode(x,y,30))continue;
+      out.push([x,y,smin+r3(seed+i*7+acc)*(smax-smin)])}}
+  out.sort(function(a,b){return a[1]-b[1]});
+  return out.map(function(m){return peak(m[0],m[1],m[2],snow&&m[2]>smin+(smax-smin)*.35)}).join("");
+}
+function river(line,seed,w0,w1,id){
+  var p=jag(line,3,.3,seed,false),n=p.length,s='',k=3;
+  if(id)s+='<path id="'+id+'" d="'+pth(p)+'" fill="none" stroke="none"/>';
+  s+='<path d="'+pth(p)+'" class="rvB" style="stroke-width:'+(w1+4)+'"/>';
+  for(var j=0;j<k;j++){var a=Math.floor(j*(n-1)/k),b=Math.floor((j+1)*(n-1)/k);s+='<path d="'+pth(p.slice(a,b+1))+'" class="rv" style="stroke-width:'+(w0+(w1-w0)*j/(k-1)).toFixed(2)+'"/>'}
+  return s;
+}
+function border(line,seed){var d=pth(jag(line,3,.22,seed,false));return '<path d="'+d+'" class="bdG"/><path d="'+d+'" class="bdL"/>'}
+function tlabel(id,d,txt,cls,off){return '<path id="'+id+'" d="'+d+'" fill="none" stroke="none"/><text class="'+cls+'"><textPath href="#'+id+'" startOffset="'+(off||"50%")+'" text-anchor="middle">'+txt+'</textPath></text>'}
+function atlasArt(){
+  var W=MAPW2,H=MAPH2,s='';
+  s+='<defs><radialGradient id="mgFog"><stop offset="0" stop-color="#05070f" stop-opacity=".5"/><stop offset=".55" stop-color="#05070f" stop-opacity=".28"/><stop offset="1" stop-color="#05070f" stop-opacity="0"/></radialGradient>'+
+   '<radialGradient id="mgVig" cx="50%" cy="50%" r="72%"><stop offset=".62" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></radialGradient>'+
+   '<radialGradient id="mgHere"><stop offset="0" stop-color="#e6bb68" stop-opacity=".35"/><stop offset="1" stop-color="#e6bb68" stop-opacity="0"/></radialGradient>'+
+   '<linearGradient id="gSea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d1a3e"/><stop offset="1" stop-color="#070d24"/></linearGradient>'+
+   '<linearGradient id="gLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#232c52"/><stop offset=".5" stop-color="#1c2547"/><stop offset="1" stop-color="#19213f"/></linearGradient>'+
+   '<radialGradient id="gHigh"><stop offset="0" stop-color="#3a4678" stop-opacity=".55"/><stop offset="1" stop-color="#3a4678" stop-opacity="0"/></radialGradient>'+
+   '<radialGradient id="gLow"><stop offset="0" stop-color="#2f5a48" stop-opacity=".45"/><stop offset="1" stop-color="#2f5a48" stop-opacity="0"/></radialGradient>'+
+   '<radialGradient id="gSand"><stop offset="0" stop-color="#b48a47" stop-opacity=".32"/><stop offset="1" stop-color="#b48a47" stop-opacity="0"/></radialGradient>'+
+   '<pattern id="pTree" width="15" height="14" patternUnits="userSpaceOnUse"><path d="M3.5 7.5 6 2.5 8.5 7.5Z M6 7.5v2" class="ptT"/><path d="M10.5 13 13 8 15.5 13Z M13 13v1" class="ptT"/></pattern>'+
+   '<pattern id="pDune" width="26" height="15" patternUnits="userSpaceOnUse"><path d="M2 10q5-6 10 0M15 5q4-4 8 0" class="ptD"/></pattern>'+
+   '<pattern id="pSnow" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".9" class="ptS"/><circle cx="9" cy="9" r=".7" class="ptS"/></pattern>'+
+   '<pattern id="pWave" width="34" height="18" patternUnits="userSpaceOnUse"><path d="M2 9q4-3 8 0t8 0" class="ptW"/></pattern>'+
+   '</defs>';
+  /* mar */
+  s+='<rect width="'+W+'" height="'+H+'" fill="url(#gSea)"/><rect width="'+W+'" height="'+H+'" fill="url(#pWave)" opacity=".5"/>';
+  var coast=[[150,28],[260,18],[380,32],[520,14],[660,26],[800,12],[880,10],[884,1124],[520,1124],[330,1104],[225,1062],[168,1002],[150,940],[96,884],[44,846],[30,790],[34,720],[58,640],[32,560],[46,470],[24,390],[52,300],[84,232],[60,172],[98,112],[126,60]];
+  var cp=pth(jag(coast,4,.28,11,true),true);
+  /* curvas de profundidade */
+  [[46,.045],[30,.06],[17,.08],[8,.12]].forEach(function(x){s+='<path d="'+cp+'" class="bathy" style="stroke-width:'+x[0]+';opacity:'+x[1]+'"/>'});
+  s+='<path d="'+cp+'" fill="url(#gLand)" class="coastL"/>';
+  /* relevo: terras altas, baixadas e areia */
+  s+='<ellipse cx="500" cy="190" rx="400" ry="90" fill="url(#gHigh)"/><ellipse cx="600" cy="800" rx="330" ry="60" fill="url(#gHigh)"/><ellipse cx="520" cy="640" rx="90" ry="60" fill="url(#gHigh)"/>';
+  s+='<ellipse cx="710" cy="660" rx="170" ry="120" fill="url(#gLow)"/><ellipse cx="720" cy="880" rx="150" ry="80" fill="url(#gLow)"/><ellipse cx="420" cy="520" rx="140" ry="80" fill="url(#gLow)" opacity=".6"/>';
+  s+='<ellipse cx="785" cy="340" rx="140" ry="110" fill="url(#gSand)"/><ellipse cx="130" cy="560" rx="130" ry="280" fill="url(#gSand)" opacity=".8"/>';
+  /* biomas com textura */
+  s+='<path d="'+blob(480,88,390,62,3,14)+'" fill="url(#pSnow)" opacity=".9"/>';
+  s+='<path d="'+blob(785,345,105,85,5)+'" fill="url(#pDune)" opacity=".9"/><path d="'+blob(128,600,82,200,6,12)+'" fill="url(#pDune)" opacity=".55"/>';
+  s+='<path d="'+blob(712,680,105,68,7,12)+'" fill="url(#pTree)" class="forest"/><path d="'+blob(722,885,105,50,8,12)+'" fill="url(#pTree)" class="forest"/><path d="'+blob(410,355,44,26,9)+'" fill="url(#pTree)" class="forest"/>';
+  /* lagos */
+  s+='<path d="'+blob(282,398,74,42,12,12)+'" class="lake3"/><path d="'+blob(290,384,17,12,13)+'" fill="url(#gLand)" class="coastL"/>';
+  s+='<path d="'+blob(632,692,22,11,14)+'" class="lake3"/><path d="'+blob(738,602,13,8,15)+'" class="lake3"/><path d="'+blob(104,392,10,6,16)+'" class="lake3"/>';
+  /* rios */
+  s+=river([[585,245],[565,300],[545,352],[505,410],[470,442],[440,472],[410,500],[380,506],[345,482],[318,445]],21,1.2,3.6,"rvLug");
+  s+=river([[218,398],[180,412],[128,440],[74,468],[18,486]],22,3.4,4.4);
+  s+=river([[852,468],[830,520],[800,560],[782,612],[736,664],[692,690],[654,692]],23,1,2.8,"rvMat");
+  s+=river([[638,800],[616,858],[648,940],[700,1010],[760,1124]],24,1.4,4,"rvVol");
+  /* fronteiras */
+  s+=border([[60,232],[150,238],[245,240]],31)+border([[245,240],[330,234],[430,242],[560,236],[700,242],[884,236]],32)+border([[245,240],[252,330],[240,420],[252,520],[240,620],[256,720],[250,800]],33);
+  s+=border([[250,800],[330,816],[430,806],[520,800],[620,812],[720,802],[884,816]],34)+border([[250,800],[212,880],[182,950],[166,990]],35);
+  /* serras */
+  var m='';
+  m+=range([[150,152],[290,140]],41,9,17,true,[[296,366]])+range([[380,150],[650,160]],42,10,19,true)+range([[750,150],[870,160]],43,10,18,true);
+  m+=range([[140,215],[296,200]],44,10,20,true)+range([[366,206],[880,212]],45,11,22,true,[[296,366]]);
+  m+=range([[300,778],[492,772]],46,9,17,true)+range([[548,774],[880,778]],47,9,18,true);
+  m+=range([[455,636],[600,642]],48,6,10,false)+range([[700,262],[870,276]],49,6,10,false);
+  s+='<g class="relief3">'+m+'</g>';
+  /* a grande árvore */
+  if(arcReach()>=3)s+='<g class="flugel3"><circle cx="572" cy="552" r="16"/><circle cx="560" cy="546" r="10"/><circle cx="585" cy="545" r="11"/><path d="M569 566h6v12h-6Z"/></g>';
+  /* nomes */
+  s+=tlabel("lbLug","M392 306 Q575 268 748 300","REINO DE LUGUNICA","labN");
+  s+=tlabel("lbGus","M190 62 Q470 36 750 60","REINO SAGRADO DE GUSTEKO","labN");
+  s+=tlabel("lbKar","M168 1000 Q112 790 146 590","CIDADES DE KARARAGI","labN");
+  s+=tlabel("lbVol","M300 1052 Q570 1018 870 1050","IMPÉRIO DE VOLLACHIA","labN");
+  s+='<text x="785" y="258" class="labR">Dunas de Augria</text><text x="735" y="532" class="labR">Terras de Mathers</text><text x="420" y="766" class="labM">Montes da Fronteira</text><text x="640" y="128" class="labM">Serra do Norte</text>';
+  s+='<text x="232" y="432" class="labW">Grande Lago</text><text x="74" y="1000" class="labW">Mar do Oeste</text><text x="54" y="160" class="labW">Mar Gelado</text>';
+  s+='<text class="labRv" dy="-5"><textPath href="#rvLug" startOffset="18%">Rio de Lugunica</textPath></text><text class="labRv" dy="-5"><textPath href="#rvVol" startOffset="40%">Rio Gelado</textPath></text>';
+  /* grade de cartógrafo e moldura */
+  var g='';for(var i=1;i<8;i++){var x=i*110;g+='<path d="M'+x+' 14V'+(H-14)+'" class="grid"/><text x="'+(x-55)+'" y="26" class="gridL">'+"ABCDEFGH".charAt(i-1)+'</text>'}
+  g+='<text x="'+(W-55)+'" y="26" class="gridL">H</text>';
+  for(var j=1;j<10;j++){var y=j*112;g+='<path d="M14 '+y+'H'+(W-14)+'" class="grid"/><text x="24" y="'+(y-52)+'" class="gridL">'+j+'</text>'}
+  s+=g+'<rect x="7" y="7" width="'+(W-14)+'" height="'+(H-14)+'" class="frm1"/><rect x="12" y="12" width="'+(W-24)+'" height="'+(H-24)+'" class="frm2"/>';
+  [[12,12],[W-12,12],[12,H-12],[W-12,H-12]].forEach(function(c){s+='<path d="M'+c[0]+' '+(c[1]-5)+' L'+(c[0]+5)+' '+c[1]+' L'+c[0]+' '+(c[1]+5)+' L'+(c[0]-5)+' '+c[1]+'Z" class="frmC"/>'});
+  /* rosa dos ventos */
+  var rz='<g class="rose3" transform="translate(76 82)"><circle r="34" class="rz1"/><circle r="27" class="rz2"/>';
+  for(var a=0;a<8;a++){var big=a%2===0,R=big?32:20,ang=a*Math.PI/4-Math.PI/2,x2=Math.cos(ang)*R,y2=Math.sin(ang)*R,pa=ang+Math.PI/2,w=big?6:4;
+    rz+='<path d="M0 0 L'+(Math.cos(pa)*w).toFixed(1)+' '+(Math.sin(pa)*w).toFixed(1)+' L'+x2.toFixed(1)+' '+y2.toFixed(1)+'Z" class="'+(a===0?"rzN":big?"rzA":"rzB")+'"/><path d="M0 0 L'+(-Math.cos(pa)*w).toFixed(1)+' '+(-Math.sin(pa)*w).toFixed(1)+' L'+x2.toFixed(1)+' '+y2.toFixed(1)+'Z" class="'+(a===0?"rzN2":"rzD")+'"/>'}
+  rz+='<circle r="3" class="rzN"/><text y="-40" class="rzT">N</text></g>';
+  s+=rz;
+  /* cartela com título e escala */
+  s+='<g class="cart" transform="translate(22 1016)"><rect width="196" height="86" rx="6" class="ct1"/><rect x="4" y="4" width="188" height="78" rx="4" class="ct2"/>'+
+   '<text x="98" y="30" class="ctT">Lugunica</text><text x="98" y="47" class="ctS">e os reinos vizinhos</text>'+
+   '<path d="M38 66h120M38 62v8M78 63v6M118 63v6M158 62v8" class="ctB"/><path d="M38 66h40" class="ctBk"/><path d="M118 66h40" class="ctBk"/><text x="98" y="80" class="ctS">meio dia de estrada</text></g>';
+  return s;
+}
+mapArt=function(){var k=arcReach()+":"+MAPW2;if(ART3.k!==k){ART3.k=k;ART3.s=atlasArt()}return ART3.s};
+/* o mapa abre um pouco mais afastado, para ver a geografia */
+if(MAPZ===1)MAPZ=.9;
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
