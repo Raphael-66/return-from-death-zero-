@@ -132,3 +132,17 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
   - fronteiras nacionais tracejadas com brilho.
 - Nomes de nações em curva acompanhando o terreno, nomes de regiões, serras e águas (águas em itálico azul), grade de cartógrafo (A–H, 1–9), moldura dupla, rosa dos ventos e cartela com título e escala.
 - O mapa abre com zoom 0,9 para mostrar mais da geografia.
+
+## Atualização 28 — mapa colorido de cartografia e zoom consertado
+- **Cores de mapa de verdade**:
+  - mar azul com faixas claras perto da costa;
+  - planícies verdes e terras altas castanhas;
+  - florestas verde-escuras com copas desenhadas, mais 10 bosques espalhados;
+  - desertos cor de areia com dunas e o planalto de Gusteko branco de neve;
+  - montanhas marrons com picos nevados, rios e lagos azuis;
+  - estradas em marrom tracejado, fronteiras em vinho;
+  - nomes em tinta marrom, águas em itálico;
+  - rosa dos ventos e cartela em tom de pergaminho.
+- A névoa dos lugares futuros virou neblina clara. Os emblemas dos lugares continuam como medalhões escuros, para destacar.
+- **Zoom**: a regra antiga `.wmap.wbig{width:640px}` travava o tamanho e os botões não faziam efeito. Agora os botões + e − funcionam (de "mapa inteiro na moldura" até 2,2×), há zoom com dois dedos no celular e Ctrl + roda no computador. O mapa abre em 0,6× para mostrar mais.
+- Teste: `tests/v28_zoom.js`.

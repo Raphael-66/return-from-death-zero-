@@ -729,6 +729,45 @@ body{background:radial-gradient(120% 70% at 50% -10%,#18204a 0%,var(--ink) 55%) 
 .m2 .ctB{stroke:#c9b98a;stroke-width:1.2;fill:none}.m2 .ctBk{stroke:#c9b98a;stroke-width:4}
 .m2 .rd0{stroke:#0b0f1f;stroke-width:4.5;opacity:.6}
 .m2 .rd1{stroke:#e2d2a4;stroke-width:1.5;stroke-dasharray:4 3.5;opacity:.8}
+/* ===== Atualização 28: atlas colorido ===== */
+.wmap.wbig.m2{width:auto;height:auto;max-width:none}
+.mapwrap.m2{background:#2f74a6;touch-action:pan-x pan-y}
+.m2 .bathy{stroke:#bfe4f5}
+.m2 .coastL{stroke:#3d5a6e;stroke-width:1.6;stroke-opacity:.9}
+.m2 .ptW{stroke:#cfeaf7;opacity:.4}
+.m2 .bForest{fill:#5f9a55;stroke:#3f6f3a;stroke-width:1;stroke-opacity:.6}
+.m2 .ptT{fill:#2f6b34;stroke:#1f4a24;stroke-width:.5}
+.m2 .ptK{stroke:#5a3f22;stroke-width:1}
+.m2 .bSand{fill:#ecd49a;stroke:#c9a35e;stroke-width:.8;stroke-opacity:.6}
+.m2 .ptD{stroke:#b88a45;opacity:.75}
+.m2 .bSnow{fill:#f1f4f2;opacity:.85}
+.m2 .ptS{stroke:#9fb8c8;stroke-width:.7}.m2 .ptS2{fill:#9fb8c8}
+.m2 .lake3{fill:#5aa5d6;stroke:#2f6ea3;stroke-width:1.2;stroke-opacity:.9}
+.m2 .rv{stroke:#3f8ccc}
+.m2 .rvB{stroke:#e9f4f9;stroke-opacity:.55}
+.m2 .bdG{stroke:#fff6dc;stroke-width:6;stroke-opacity:.5}
+.m2 .bdL{stroke:#8a2f3f;stroke-width:1.5;stroke-opacity:.85}
+.m2 .pkL{fill:#cbb68c}.m2 .pkR{fill:#8f7652}.m2 .pkO{stroke:#5b4630;stroke-width:1}
+.m2 .pkH{stroke:#5b4630;opacity:.55}.m2 .pkS{fill:#ffffff;opacity:.95}
+.m2 .flugel3 circle{fill:#3f7f3a;stroke:#1f4a24}.m2 .flugel3 path{fill:#6b4a2a}
+.m2 .labN{fill:#4a3420;fill-opacity:.7;stroke:#f4efe0;stroke-opacity:.7}
+.m2 .labR{fill:#4a3420;fill-opacity:.8;stroke:#f4efe0;stroke-opacity:.6}
+.m2 .labM{fill:#5b4630;fill-opacity:.85;stroke:#f4efe0;stroke-opacity:.6}
+.m2 .labW{fill:#e9f6fc;fill-opacity:.95}
+.m2 .labRv{fill:#1f5f99;fill-opacity:.95;paint-order:stroke;stroke:#f4efe0;stroke-width:2.5px;stroke-opacity:.7}
+.m2 .grid{stroke:#4a3420;stroke-opacity:.12}
+.m2 .gridL{fill:#f4efe0;fill-opacity:.85}
+.m2 .frm1{stroke:#3b2a17;stroke-opacity:.8;stroke-width:2}.m2 .frm2{stroke:#f4efe0;stroke-opacity:.6}
+.m2 .frmC{fill:#e6bb68;opacity:1}
+.m2 .rz1{fill:#f4efe0;fill-opacity:.85;stroke:#5b4630}.m2 .rz2{stroke:#5b4630}
+.m2 .rzA{fill:#5b4630}.m2 .rzB{fill:#9a8058}.m2 .rzD{fill:#e7dcc0}.m2 .rzN{fill:#b0263c}.m2 .rzN2{fill:#7a1b2b}.m2 .rzT{fill:#7a1b2b;font-weight:700}
+.m2 .ct1{fill:#f4efe0;fill-opacity:.94;stroke:#5b4630}.m2 .ct2{stroke:#5b4630}
+.m2 .ctT{fill:#4a3420}.m2 .ctS{fill:#5b4630;fill-opacity:1}.m2 .ctB,.m2 .ctBk{stroke:#4a3420}
+.m2 .rd0{stroke:#fff8e6;stroke-width:4;opacity:.75}
+.m2 .rd1{stroke:#6b4b2a;stroke-width:1.6;stroke-dasharray:4 3;opacity:.9}
+.m2 .rd0.lock{opacity:.3}.m2 .rd1.lock{opacity:.3}
+.m2 .wnode.lock .wc{fill:#e7e4d8;stroke:#a99f86}.m2 .wnode.lock .wic{fill:#8a7f66}.m2 .wlk{fill:#5b4630;font-weight:700}
+.m2 .front{stroke:#c0233f}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9085,7 +9124,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 27 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 28 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10054,6 +10093,61 @@ function atlasArt(){
 mapArt=function(){var k=arcReach()+":"+MAPW2;if(ART3.k!==k){ART3.k=k;ART3.s=atlasArt()}return ART3.s};
 /* o mapa abre um pouco mais afastado, para ver a geografia */
 if(MAPZ===1)MAPZ=.9;
+
+/* ===== Atualização 28: mapa em cores de cartografia e zoom que funciona ===== */
+var DEFS4='<defs>'+
+ '<radialGradient id="mgFog"><stop offset="0" stop-color="#f4f1e8" stop-opacity=".9"/><stop offset=".55" stop-color="#eef0ea" stop-opacity=".6"/><stop offset="1" stop-color="#eef0ea" stop-opacity="0"/></radialGradient>'+
+ '<radialGradient id="mgVig" cx="50%" cy="50%" r="72%"><stop offset=".7" stop-color="#3b2a17" stop-opacity="0"/><stop offset="1" stop-color="#3b2a17" stop-opacity=".28"/></radialGradient>'+
+ '<radialGradient id="mgHere"><stop offset="0" stop-color="#ffd36b" stop-opacity=".55"/><stop offset="1" stop-color="#ffd36b" stop-opacity="0"/></radialGradient>'+
+ '<linearGradient id="gSea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f86b8"/><stop offset="1" stop-color="#245d8f"/></linearGradient>'+
+ '<linearGradient id="gLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9dfb6"/><stop offset=".45" stop-color="#c8d79e"/><stop offset="1" stop-color="#bccf90"/></linearGradient>'+
+ '<radialGradient id="gHigh"><stop offset="0" stop-color="#c2a776" stop-opacity=".75"/><stop offset="1" stop-color="#c2a776" stop-opacity="0"/></radialGradient>'+
+ '<radialGradient id="gLow"><stop offset="0" stop-color="#7fb36a" stop-opacity=".6"/><stop offset="1" stop-color="#7fb36a" stop-opacity="0"/></radialGradient>'+
+ '<radialGradient id="gSand"><stop offset="0" stop-color="#ead08a" stop-opacity=".9"/><stop offset="1" stop-color="#ead08a" stop-opacity="0"/></radialGradient>'+
+ '<pattern id="pTree" width="13" height="12" patternUnits="userSpaceOnUse"><circle cx="4" cy="4.5" r="3" class="ptT"/><path d="M4 7.4v2" class="ptK"/><circle cx="10.5" cy="9.5" r="2.6" class="ptT"/><path d="M10.5 12v.8" class="ptK"/></pattern>'+
+ '<pattern id="pDune" width="24" height="14" patternUnits="userSpaceOnUse"><path d="M2 10q5-6 10 0M14 5q4-4 8 0" class="ptD"/></pattern>'+
+ '<pattern id="pSnow" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M3 3h1.6M3.8 2.2v1.6" class="ptS"/><circle cx="9" cy="9" r=".7" class="ptS2"/></pattern>'+
+ '<pattern id="pWave" width="30" height="16" patternUnits="userSpaceOnUse"><path d="M2 8q3.5-2.6 7 0t7 0" class="ptW"/></pattern>'+
+ '</defs>';
+var _aa28=atlasArt;
+atlasArt=function(){
+  var s=_aa28().replace(/<defs>[\s\S]*?<\/defs>/,DEFS4);
+  /* cor de base sob as texturas: floresta verde, deserto cor de areia, neve branca */
+  s=s.replace(/<path d="([^"]+)" fill="url\(#pTree\)" class="forest"\/>/g,'<path d="$1" class="bForest"/><path d="$1" fill="url(#pTree)"/>');
+  s=s.replace(/<path d="([^"]+)" fill="url\(#pDune\)" opacity="([.\d]+)"\/>/g,function(m,d,o){return '<path d="'+d+'" class="bSand" style="opacity:'+(+o>.7?1:.75)+'"/><path d="'+d+'" fill="url(#pDune)"/>'});
+  s=s.replace(/<path d="([^"]+)" fill="url\(#pSnow\)" opacity="[.\d]+"\/>/g,'<path d="$1" class="bSnow"/><path d="$1" fill="url(#pSnow)"/>');
+  var woods='';[[318,618,34,20,61],[392,470,26,15,62],[690,505,30,16,63],[430,965,46,22,64],[240,1010,30,16,65],[560,710,22,13,66],[372,330,28,16,67],[800,470,24,14,68],[620,1000,34,18,69],[300,880,26,15,70]].forEach(function(b){
+    if(nearNode(b[0],b[1],34))return;var d=blob(b[0],b[1],b[2],b[3],b[4],9);woods+='<path d="'+d+'" class="bForest"/><path d="'+d+'" fill="url(#pTree)"/>'});
+  s=s.replace('<g class="relief3">',woods+'<g class="relief3">');
+  return s;
+};
+ART3.k=null;
+/* zoom: os botões mudam de verdade o tamanho, e dá para usar dois dedos */
+MAPZ=.6;
+function mapZoom(z,cx,cy){
+  var w=document.querySelector("#hub .mapwrap"),sv=w&&w.querySelector("svg");if(!sv)return;
+  var min=Math.max(.36,(w.clientWidth-2)/MAPW2);z=Math.max(min,Math.min(2.2,z));
+  var r=sv.getBoundingClientRect(),wr=w.getBoundingClientRect();
+  if(cx==null){cx=wr.left+w.clientWidth/2;cy=wr.top+w.clientHeight/2}
+  var fx=(cx-r.left)/r.width,fy=(cy-r.top)/r.height;
+  MAPZ=z;sv.setAttribute("width",Math.round(MAPW2*z));sv.setAttribute("height",Math.round(MAPH2*z));
+  w.scrollLeft=fx*MAPW2*z-(cx-wr.left);w.scrollTop=fy*MAPH2*z-(cy-wr.top);
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest&&e.target.closest("#hMapCard [data-mz]");if(!b)return;
+  var k=b.getAttribute("data-mz");if(k==="me")return;
+  e.stopImmediatePropagation();e.preventDefault();mapZoom(MAPZ*(k==="in"?1.3:1/1.3));
+},true);
+(function(){
+  var pts={},d0=0,z0=1,mid=null;
+  function dist(){var p=Object.keys(pts).map(function(k){return pts[k]});return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)}
+  function center(){var p=Object.keys(pts).map(function(k){return pts[k]});return {x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2}}
+  document.addEventListener("pointerdown",function(e){if(!e.target.closest||!e.target.closest("#hub .mapwrap")||e.pointerType==="mouse")return;pts[e.pointerId]={x:e.clientX,y:e.clientY};if(Object.keys(pts).length===2){d0=dist();z0=MAPZ;mid=center()}},true);
+  document.addEventListener("pointermove",function(e){if(!pts[e.pointerId])return;pts[e.pointerId]={x:e.clientX,y:e.clientY};if(Object.keys(pts).length===2&&d0>0){e.preventDefault();mapZoom(z0*dist()/d0,mid.x,mid.y)}},{capture:true,passive:false});
+  function up(e){delete pts[e.pointerId];if(Object.keys(pts).length<2)d0=0}
+  document.addEventListener("pointerup",up,true);document.addEventListener("pointercancel",up,true);
+  document.addEventListener("wheel",function(e){var w=e.target.closest&&e.target.closest("#hub .mapwrap");if(!w||!e.ctrlKey)return;e.preventDefault();mapZoom(MAPZ*(e.deltaY<0?1.12:1/1.12),e.clientX,e.clientY)},{passive:false});
+})();
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */
