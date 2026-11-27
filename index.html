@@ -898,6 +898,22 @@ h1{font-size:clamp(34px,10vw,50px)}
 .rprof .hts .ht{width:19px;height:18px}
 .rpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px 12px}
 .rpgrid span{display:flex;flex-direction:column;font-size:13.5px}.rpgrid b{font-size:11.5px;color:var(--mute);font-weight:600}
+/* ===== Atualização 35: níveis e amizades ===== */
+.rgh{margin:10px 0 6px}
+.hgap{display:inline-block;width:5px}
+.ht.t1 .fl path{fill:#ff4fa0;stroke:#b8236e}
+.ht.t2 .fl path{fill:#ffcf6b;stroke:#b8862a}
+.ht.t3 .fl path{fill:#7fe3e0;stroke:#2f9d9a}
+.ht.t1 .e path{stroke:#7a3a63}.ht.t2 .e path{stroke:#7a6233}.ht.t3 .e path{stroke:#2f6b6a}
+.ht.lock .e path{fill:#211a33;stroke:#3a3157;stroke-dasharray:2 2}
+.hts.big .ht{width:18px;height:17px}
+.rrow.fr{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 10%,#1a1529),#1a1529 55%)}
+.rrow.fr .rpic{width:46px;height:46px;font-size:21px}
+.rlad{display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.rl{display:flex;flex-direction:column;gap:1px;padding:7px 10px;border-radius:10px;border:1px dashed #3a3157;opacity:.6}
+.rl b{font-size:13.5px}.rl small{font-weight:400;color:var(--mute);margin-left:4px}.rl span{font-size:12.5px;color:var(--mute)}
+.rl.on{opacity:1;border-style:solid}
+.rl.t0.on{border-color:#ff6b8a}.rl.t1.on{border-color:#ff4fa0}.rl.t2.on{border-color:#ffcf6b}.rl.t3.on{border-color:#7fe3e0}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9254,7 +9270,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 34 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 35 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10702,6 +10718,96 @@ MGROUP.forEach(function(g){if(g[0]==="Pessoas")g[1]=g[1].filter(function(x){retu
 /* atalhos antigos levam à página nova */
 var _rh34=renderHub;
 renderHub=function(){_rh34();try{var m=$("#lvMore");if(m){m.textContent="Ver relacionamentos";m.onclick=function(){RLUI.sel=null;openMenu("Romance")}}}catch(e){}};
+
+/* ===== Atualização 35: níveis de namoro, noivado e casamento + amizades ===== */
+/* amizades: pessoas que não são de interesse romântico (sem declarar-se, sem vida a dois) */
+var FRIENDS={
+ rom:{n:"Velho Rom",w:"Rom",arc:1,tag:"Gigante do depósito, avô de coração",likes:["comida","familia","humor"],dis:["magia","livros"],c:"#c9a27a",bd:[1,18],sched:["bairro"]},
+ felt:{n:"Felt",w:"Felt",arc:1,tag:"Rápida, esperta e sem paciência",likes:["dinheiro","humor","comida"],dis:["livros","silencio"],c:"#f2c75c",bd:[2,13]},
+ otto:{n:"Otto",w:"Otto",arc:3,tag:"Mercador que fala demais",likes:["dinheiro","futuro","humor"],dis:["combate","silencio"],c:"#7fd1a0",bd:[1,4]},
+ wilhelm:{n:"Wilhelm",w:"Wilhelm",arc:3,tag:"Espadachim de cortesia antiga",likes:["combate","flores","silencio"],dis:["humor","dinheiro"],c:"#c8ccd8",bd:[3,8]},
+ julius:{n:"Julius",w:"Julius",arc:3,tag:"Cavaleiro de maneiras perfeitas",likes:["estrelas","musica","livros"],dis:["dinheiro","humor"],c:"#a98cff",bd:[0,12]},
+ garfiel:{n:"Garfiel",w:"Garfiel",arc:4,tag:"Caninos afiados, coração mole",likes:["combate","comida","familia"],dis:["livros","silencio"],c:"#ffb347",bd:[0,15]},
+ frederica:{n:"Frederica",w:"Frederica",arc:4,tag:"Governanta firme e gentil",likes:["familia","flores","silencio"],dis:["combate","dinheiro"],c:"#e8c07a",bd:[2,5]}
+};
+var FR_ORDER=Object.keys(FRIENDS);
+FR_ORDER.forEach(function(id){var f=FRIENDS[id];if(!REL_C[id])REL_C[id]={n:f.n,w:f.w,rom:false,fr:true,arc:f.arc,tag:f.tag,likes:f.likes,dis:f.dis,c:f.c};
+  if(!BDAY[id])BDAY[id]=f.bd;if(f.sched&&!SCHED[id])SCHED[id]=f.sched;if(!NPCS[id])NPCS[id]=[f.n,f.arc,f.tag]});
+function isFr(id){return !!(REL_C[id]&&REL_C[id].fr)}
+
+/* corações: 14 no total, em faixas */
+var TIERS=[["amizade",8,null,"Amizade"],["namoro",10,"namoro","Namoro"],["noivado",12,"noivado","Noivado"],["casado",14,"casado","Casamento"]];
+function relLevel(id){if(PF.rel.partner!==id)return 0;var s=rsOf(id).s;return s==="casado"?3:s==="noivado"?2:s==="namoro"?1:0}
+heartsOf=function(id){
+  var c=relOf(id),C=REL_C[id],raw=Math.floor(c.rp/10.5*2)/2;
+  if(!C.rom)return {v:Math.min(10,raw),max:10,open:10};
+  var open=[8,10,12,14][relLevel(id)];
+  return {v:Math.min(raw,open),max:14,open:open};
+};
+heartsHTML=function(id,big){
+  var o=heartsOf(id),h='<span class="hts'+(big?" big":"")+'" aria-label="'+o.v+' de '+o.open+' corações">';
+  for(var i=1;i<=o.max;i++){
+    var tier=i<=8?"t0":i<=10?"t1":i<=12?"t2":"t3",cls=i>o.open?"lock":o.v>=i?"full":o.v>=i-.5?"half":"";
+    if(o.max>10&&(i===9||i===11||i===13))h+='<i class="hgap"></i>';
+    h+='<svg class="ht '+tier+' '+cls+'" viewBox="0 0 24 24" aria-hidden="true"><g class="e">'+HEART+'</g><g class="fl">'+HEART+'</g></svg>';
+  }
+  return h+'</span>';
+};
+/* lista: românticos e amizades */
+var _pr35=paneRel;
+paneRel=function(p){
+  _pr35(p);
+  try{
+    var list=p.querySelector(".rlist");if(!list)return;
+    /* separa: quem pode ser par e amizades */
+    var rows=[].slice.call(list.querySelectorAll(".rrow"));
+    var romRows=rows.filter(function(r){var id=r.getAttribute("data-rel");return !id||!isFr(id)});
+    list.innerHTML="";romRows.forEach(function(r){list.appendChild(r)});
+    list.insertAdjacentHTML("beforebegin",'<p class="sec rgh">Coração</p>');
+    var free=S&&S.mode==="free",h='<p class="sec rgh">Amizades</p><div class="rlist">';
+    FR_ORDER.slice().sort(function(a,b){var ra=charOk(a)&&arcReach()>=REL_C[a].arc,rb=charOk(b)&&arcReach()>=REL_C[b].arc;if(ra!==rb)return ra?-1:1;return relOf(b).rp-relOf(a).rp}).forEach(function(id){
+      var C=REL_C[id];if(!(charOk(id)&&arcReach()>=C.arc)){h+='<div class="rrow locked"><span class="rpic">?</span><span class="rmain"><b>???</b><span class="rsub">Alguém que você ainda não conheceu</span></span></div>';return}
+      var c=relOf(id),talk=free&&c.last===S.day,gift=free&&c.lastg===S.day,pl=free?placeOf(id,S.day,Math.min(S.t,2)):null;
+      h+='<button class="rrow fr" data-rel="'+id+'" style="--c:'+C.c+'"><span class="rpic">'+esc(C.n.replace("Velho ","").charAt(0))+'</span><span class="rmain"><b>'+esc(C.n)+'</b><span class="rsub">'+esc(STG[stageOf(c.rp)][0])+' · amizade</span>'+heartsHTML(id)+
+       '<span class="rmeta"><span class="rck'+(talk?" on":"")+'" title="Conversou hoje">💬</span><span class="rck'+(gift?" on":"")+'" title="Presente hoje">🎁</span><span>🎂 '+esc(bdLabel(id))+'</span>'+(pl&&PLBY[pl]?'<span>📍 '+esc(PLBY[pl].s||PLBY[pl].n)+'</span>':'')+'</span></span></button>'});
+    h+='</div>';
+    list.insertAdjacentHTML("afterend",h);
+    var note=[].slice.call(p.querySelectorAll("p.fine")).pop();
+    if(note)note.textContent="💬 conversou hoje · 🎁 presente hoje · ★ capítulos da história · 📍 onde a pessoa está agora. Quem pode ser seu par tem 14 corações: 8 de amizade, e os de namoro, noivado e casamento só se abrem quando vocês chegam lá.";
+  }catch(e){}
+};
+/* perfil: escada de níveis para o romance; amizades sem declaração nem vida a dois */
+var _prm35=paneRomance;
+paneRomance=function(p){
+  _prm35(p);
+  if(!S||S.mode!=="free"||!RLUI.sel||!REL_C[RLUI.sel])return;
+  var id=RLUI.sel,C=REL_C[id],prof=p.querySelector(".rprof");
+  if(prof){var hs=prof.querySelector(".hts");if(hs)hs.outerHTML=heartsHTML(id,true)}
+  if(isFr(id)){
+    /* tira tudo que é de par romântico */
+    var secs=[].slice.call(p.querySelectorAll("p.sec"));
+    secs.forEach(function(s){if(/Par romântico|Laço de contrato|Vida a dois/.test(s.textContent)){var n=s.nextElementSibling;s.remove();while(n&&!(n.matches&&n.matches("p.sec"))){var nx=n.nextElementSibling;if(n.tagName!=="BUTTON"||n.getAttribute("data-a")==="decl")n.remove();n=nx}}});
+    [].forEach.call(p.querySelectorAll('[data-a="decl"]'),function(b){b.remove()});
+    [].forEach.call(p.querySelectorAll("p.sec"),function(sx){if(/^Encontros$/i.test(sx.textContent.trim()))sx.textContent="Convivência";if(/^Memórias vividas/i.test(sx.textContent.trim())){var n=sx.nextElementSibling;sx.remove();if(n&&!(n.matches&&n.matches("p.sec,button")))n.remove()}});
+    var top=p.querySelector("h2+p");if(top)top.textContent="Amizade. Converse, dê presentes e descubra do que "+C.n+" gosta. Chegando a 10 corações, a amizade fica para a vida toda.";
+    return;
+  }
+  if(!C.rom||!prof)return;
+  var lv=relLevel(id),par=PF.rel.partner===id,rows=[
+    ["Amizade","♥ 1–8","Conversar, presentear e viver a história pessoal.",true],
+    ["Namoro","♥ 9–10","Encontros a dois e os bônus do par.",lv>=1],
+    ["Noivado","♥ 11–12","Preparar o casamento juntos.",lv>=2],
+    ["Casamento","♥ 13–14","Morar juntos, filhos e a carta de Dueto nas batalhas.",lv>=3]];
+  var h='<div class="rlad">'+rows.map(function(r,i){return '<div class="rl'+(r[3]?" on":"")+' t'+i+'"><b>'+r[0]+' <small>'+r[1]+'</small></b><span>'+(r[3]?r[2]:(i===1&&!par?"Abre quando "+esc(C.n)+" for o seu par e vocês começarem a namorar.":"Ainda trancado. "+r[2]))+'</span></div>'}).join("")+'</div>';
+  prof.insertAdjacentHTML("beforeend",h);
+};
+/* amizades contam na perfeição, junto com os vínculos */
+var _pc35=perfCats;
+perfCats=function(){var c=_pc35();try{var n=0;FR_ORDER.forEach(function(k){n+=Math.min(105,(PF.rel&&PF.rel.c&&PF.rel.c[k]&&PF.rel.c[k].rp)||0)});c.push({k:"ami",n:"Amizades (até 10 corações)",got:Math.round(n),tot:105*FR_ORDER.length,w:5})}catch(e){}return c};
+/* menu da pessoa (no hub): amizades sem opções românticas */
+var _pm35=personMenu;
+personMenu=function(id){_pm35(id);if(!isFr(id))return;
+  [].forEach.call(document.querySelectorAll('#overlay [data-m]'),function(b){var m=b.getAttribute("data-m");if(/^(date|decl|namoro|noivado|wed|mis)$|^prep:|^x:/.test(m))b.remove()})};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

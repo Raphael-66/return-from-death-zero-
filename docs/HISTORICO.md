@@ -203,3 +203,18 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - No topo, "hoje": aniversários, convites e capítulos de história prontos.
 - Tocar abre o **perfil**: corações, aniversário, onde está, progresso e próximo capítulo da história, rotina do dia, mais as ações de antes (conversar, presentear, declarar-se, vida a dois).
 - Atalhos antigos (`openMenu("Vínculos")`, `openMenu("Histórias")` e o botão do cartão do hub) levam à página nova. Teste: `tests/v34_relacionamentos.js` (o `v32_historias.js` foi ajustado).
+
+## Atualização 35 — níveis de namoro, noivado e casamento + amizades
+- **14 corações para quem pode ser par**, em faixas que só se abrem no nível certo (`relLevel`, que lê `rsOf(id).s` do par):
+  - amizade: corações 1–8, em rosa, abertos para todos;
+  - namoro: corações 9–10, em magenta;
+  - noivado: corações 11–12, em dourado;
+  - casamento: corações 13–14, em cristal.
+- Corações trancados aparecem tracejados. Pessoas sem romance (Beatrice e as amizades) vão até 10.
+- No perfil de quem pode ser par, uma **escada de níveis** mostra o que cada um libera e quais ainda estão trancados.
+- **Amizades** (`FRIENDS`): Velho Rom, Felt, Otto, Wilhelm, Julius, Garfiel e Frederica entram em Relacionamentos, cada uma liberada no seu arco.
+  - Cada amizade tem gostos, aniversário, local, conversa, presentes e ações a dois de convivência.
+  - Amizades não têm declaração, vida a dois nem propostas, e os botões românticos somem também do menu da pessoa no hub.
+  - Por dentro, elas entram em `REL_C` com `fr:true`, e Rom ganhou agenda no Bairro Pobre.
+- A lista se divide em "Coração" e "Amizades". As amizades contam no medidor de perfeição.
+- Teste: `tests/v35_niveis_amizades.js`.
