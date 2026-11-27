@@ -916,6 +916,34 @@ h1{font-size:clamp(34px,10vw,50px)}
 .rl.t0.on{border-color:#ff6b8a}.rl.t1.on{border-color:#ff4fa0}.rl.t2.on{border-color:#ffcf6b}.rl.t3.on{border-color:#7fe3e0}
 /* ===== Atualização 37: dicas de escolha ===== */
 .chh{font-size:11.5px;margin-left:6px;color:var(--mute);font-weight:600}.chh.good{color:#7fd1a0}.chh.bad{color:#ff8fa3}.chh.risk{color:#ffcf70}
+/* ===== Atualização 38: rádio e créditos ===== */
+.radio38{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-top:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:rgba(10,8,20,.35)}
+.radio38 .rdTg{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--ink3);color:var(--mute);font-size:18px;display:grid;place-items:center;cursor:pointer}
+.radio38.on .rdTg{color:#062625;background:var(--goldgrad);border-color:transparent}
+.radio38 .rdTx b{display:block;font-size:13.5px}.radio38 .rdTx span{font-size:12.5px;color:var(--mute)}
+.radio38.on .rdIco{display:inline-block;animation:rdBob 2.4s ease-in-out infinite}
+@keyframes rdBob{50%{transform:translateY(-2px) rotate(-6deg)}}
+.eplist{display:flex;flex-direction:column;gap:8px}
+.item.ep38{grid-template-columns:auto 1fr auto}
+.ep38 .epn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:15px;color:var(--crc);border:1px solid var(--crc);background:rgba(255,255,255,.03)}
+#credits{position:fixed;inset:0;z-index:60;background:radial-gradient(90% 60% at 50% 110%,color-mix(in srgb,var(--crc) 22%,transparent),transparent 70%),#0b0916;color:var(--paper);overflow:hidden;animation:crIn .7s ease both}
+#credits.out{animation:crOut .5s ease both}
+@keyframes crIn{from{opacity:0}}@keyframes crOut{to{opacity:0}}
+#credits .crsky{position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 12% 20%,#fff8,transparent),radial-gradient(1px 1px at 70% 35%,#fff6,transparent),radial-gradient(1.5px 1.5px at 40% 70%,#fff5,transparent),radial-gradient(1px 1px at 85% 80%,#fff7,transparent),radial-gradient(1px 1px at 25% 55%,#fff4,transparent);background-size:220px 260px;animation:crSnow 24s linear infinite;opacity:.8}
+@keyframes crSnow{to{background-position:0 520px}}
+#credits .crroll{position:absolute;inset:0;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
+#credits .crcol{position:absolute;left:0;right:0;top:100%;max-width:420px;margin:0 auto;padding:0 28px;text-align:center;animation:crRoll var(--crd,60s) linear .8s forwards}
+@keyframes crRoll{to{transform:translateY(calc(-100% - 100vh))}}
+#credits h2{font-family:var(--display);font-size:34px;margin:4px 0 6px;color:var(--crc)}
+#credits .crk{margin:56px 0 6px;font-size:12.5px;letter-spacing:.06em;color:var(--mute)}
+#credits .crcol>.crk:first-child{margin-top:0}
+#credits .crb{margin:2px 0;font-family:var(--display);font-size:21px}
+#credits .crs,#credits .crm{margin:4px 0;font-size:14px;line-height:1.5;color:#cfc6e4}
+#credits .crend{margin:90px 0 0;font-family:var(--display);font-size:22px;color:var(--crc)}
+#credits .crskip{position:absolute;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:2}
+html.calm #credits .crcol{position:static;animation:none;padding-top:60px;padding-bottom:90px}
+html.calm #credits .crroll{overflow:auto;-webkit-mask-image:none;mask-image:none}
+html.calm #credits .crsky{animation:none}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9273,7 +9301,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 37 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 38 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10940,6 +10968,224 @@ var _gp37=gPrice;gPrice=function(g){var v=_gp37(g),l=tr("r2");return l?Math.max(
 var _sp37=sellP;sellP=function(g,c){var v=_sp37(g,c),l=tr("r2");return l?Math.max(1,Math.round(v*(1+.05*l))):v};
 /* Renome: negócios produzem mais */
 var _bp37=bzProd;bzProd=function(b,o){var v=_bp37(b,o),l=tr("r3");return l?Math.max(1,Math.round(v*(1+.08*l))):v};
+
+
+/* ===== Atualização 38: encerramentos originais, créditos e rádio do Modo Livre =====
+   Quatro músicas próprias, compostas para o jogo e tocadas pelo sintetizador do aparelho.
+   Nada aqui copia música existente: acordes, melodias e arranjos são originais. */
+function nm38(s){var m=/^([A-G])([#b]?)(\d)$/.exec(s);if(!m)return 0;var b={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]];return 12*(+m[3]+1)+b+(m[2]==="#"?1:m[2]==="b"?-1:0)}
+function ch38(s){var m=/^([A-G])([#b]?)(m?)$/.exec(s),b={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]==="#"?1:m[2]==="b"?-1:0);return {r:b,q:m[3]?[0,3,7]:[0,4,7]}}
+/* cada seção: acordes (um por compasso), melodia em "Nota:batidas" (r = pausa), intensidade 0–2 */
+var ENDS=[
+ {id:"e1",n:"Tempo que volta",arcs:"Arcos 1 e 2",bpm:74,sty:"piano",mood:"Balada de piano, melancólica e serena.",col:"#8fb8ff",
+  sec:[
+   {c:"Am F C E",i:0,m:"E5:.5 A5:.5 C6:1 B5:.5 A5:.5 E5:1 | F5:.5 A5:.5 C6:1 A5:2 | G5:.5 C6:.5 E6:1 D6:.5 C6:.5 G5:1 | G#5:2 B5:2"},
+   {c:"Am F C G Am F E E",i:1,m:"A4:1 C5:1 E5:1.5 D5:.5 | C5:1.5 A4:.5 C5:1 D5:1 | E5:1.5 D5:.5 C5:1 G4:1 | B4:2 D5:1 r:1 | A4:1 C5:1 E5:1 A5:1 | F5:1.5 E5:.5 C5:1 A4:1 | G#4:1 B4:1 D5:1.5 C5:.5 | B4:3 r:1"},
+   {c:"F G Em Am F G C E",i:2,m:"A5:1.5 G5:.5 F5:1 E5:1 | D5:1.5 E5:.5 G5:2 | G5:1 B5:1 A5:1 G5:1 | E5:3 r:1 | A5:1.5 G5:.5 F5:1 A5:1 | B5:1.5 A5:.5 G5:1 D5:1 | E5:1 G5:1 C6:1.5 B5:.5 | G#5:3 r:1"},
+   {c:"F G Em Am Dm E Am Am",i:2,m:"A5:2 G5:1 F5:1 | G5:1.5 F5:.5 E5:1 D5:1 | E5:1 G5:1 B5:1.5 A5:.5 | A5:2 E5:1 C5:1 | D5:1 F5:1 A5:1.5 G5:.5 | B4:1 E5:1 G#5:1.5 B5:.5 | A5:4 | r:4"},
+   {c:"Am F E Am",i:0,m:"E5:.5 A5:.5 C6:1 B5:.5 A5:.5 E5:1 | F5:.5 A5:.5 C6:1 A5:2 | G#5:2 B5:2 | A5:4"}]},
+ {id:"e2",n:"Promessa de gelo",arcs:"Arcos 3 e 4",bpm:84,sty:"box",mood:"Caixinha de música, calorosa e esperançosa.",col:"#bfe8ff",
+  sec:[
+   {c:"D G D A",i:0,m:"A4:.5 D5:.5 F#5:1 E5:.5 D5:.5 A4:1 | B4:.5 D5:.5 G5:1 F#5:1 D5:1 | A4:.5 D5:.5 F#5:1 A5:1 F#5:1 | E5:2 C#5:2"},
+   {c:"D A Bm G D A G A",i:1,m:"F#5:1 E5:.5 D5:.5 A4:2 | C#5:1 D5:.5 E5:.5 E5:2 | F#5:1 E5:.5 D5:.5 B4:1 D5:1 | D5:3 r:1 | F#5:1 A5:1 F#5:1 D5:1 | E5:1 C#5:1 E5:1 A5:1 | B5:1.5 A5:.5 G5:1 D5:1 | E5:3 r:1"},
+   {c:"G A F#m Bm G A D D",i:2,m:"D6:1.5 B5:.5 A5:1 G5:1 | A5:1.5 G5:.5 E5:2 | F#5:1 A5:1 C#6:1.5 B5:.5 | B5:2 F#5:2 | G5:1 B5:1 D6:1.5 B5:.5 | C#6:1 B5:1 A5:1 E5:1 | D5:1 F#5:1 A5:1 D6:1 | D6:3 r:1"},
+   {c:"G A D D",i:0,m:"B4:.5 D5:.5 G5:1 F#5:1 D5:1 | E5:2 C#5:2 | A4:.5 D5:.5 F#5:1 A5:2 | D6:4"}]},
+ {id:"e3",n:"Cidade de cristal",arcs:"Arcos 5 e 6",bpm:92,sty:"arp",mood:"Arpejos brilhantes, agridoce e em movimento.",col:"#c9a7ff",
+  sec:[
+   {c:"Em C G D",i:0,m:"r:4 | r:4 | r:2 B5:1 D6:1 | F#5:4"},
+   {c:"Em C G D Em C Am B",i:1,m:"B4:1 E5:1 G5:1 F#5:1 | E5:2 G5:1 E5:1 | D5:1.5 B4:.5 D5:1 G5:1 | F#5:3 r:1 | B4:1 E5:1 G5:1 B5:1 | C6:1.5 B5:.5 G5:1 E5:1 | E5:1 A5:1 C6:1 A5:1 | D#5:1.5 F#5:.5 B5:2"},
+   {c:"C D Bm Em C D G B",i:2,m:"G5:1.5 E5:.5 G5:1 C6:1 | A5:1.5 F#5:.5 A5:1 D6:1 | D6:1 B5:1 F#5:1.5 A5:.5 | G5:2 E5:2 | G5:1.5 E5:.5 G5:1 C6:1 | D6:1.5 C6:.5 A5:1 F#5:1 | G5:1 B5:1 D6:2 | D#6:3 r:1"},
+   {c:"C D Bm Em Am B Em Em",i:2,m:"E6:1.5 D6:.5 C6:1 G5:1 | D6:1.5 C6:.5 A5:1 F#5:1 | F#5:1 B5:1 D6:1 B5:1 | B5:2 G5:2 | C6:1 A5:1 E5:1 A5:1 | B5:1.5 A5:.5 F#5:1 D#5:1 | E5:4 | r:4"},
+   {c:"Em C Am B Em",i:0,m:"r:4 | r:4 | r:4 | D#5:2 F#5:2 | E5:4"}]},
+ {id:"e4",n:"Além da neve",arcs:"Arcos 7 e 8",bpm:96,sty:"epic",mood:"Sinos, cordas e tambor suave. O encerramento mais grandioso.",col:"#ffb38a",
+  sec:[
+   {c:"F#m D A C#",i:0,m:"C#6:2 A5:2 | D6:2 F#5:2 | E6:2 C#6:2 | G#5:4"},
+   {c:"F#m D A E F#m D Bm C#",i:1,m:"C#5:1 F#5:1 A5:1.5 G#5:.5 | F#5:2 E5:1 D5:1 | C#5:1.5 E5:.5 A5:2 | G#5:1.5 F#5:.5 E5:2 | C#5:1 F#5:1 A5:1 C#6:1 | D6:1.5 C#6:.5 A5:1 F#5:1 | D5:1 F#5:1 B5:1.5 A5:.5 | G#5:3 r:1"},
+   {c:"D E C#m F#m D E A C#",i:2,m:"A5:1.5 F#5:.5 A5:1 D6:1 | B5:1.5 G#5:.5 B5:1 E6:1 | C#6:1.5 B5:.5 G#5:1 E5:1 | F#5:2 A5:1 C#6:1 | D6:1.5 C#6:.5 A5:1 F#5:1 | E5:1 G#5:1 B5:1 E6:1 | C#6:1.5 B5:.5 A5:2 | F5:1 G#5:1 C#6:2"},
+   {c:"D E C#m F#m Bm C# F#m F#m",i:2,m:"D6:1 E6:1 F#6:2 | E6:1.5 D6:.5 B5:2 | C#6:1 B5:1 G#5:1 E5:1 | A5:2 F#5:2 | D6:1 C#6:1 B5:1 F#5:1 | F5:1.5 G#5:.5 C#6:2 | F#5:4 | r:4"},
+   {c:"D C# F#m",i:0,m:"D6:2 F#5:2 | G#5:4 | F#5:4"}]}
+];
+/* monta a lista de notas de uma música (em batidas) */
+function endBuild(E){
+  if(E.ev)return E;var ev=[],b=0;
+  E.sec.forEach(function(S1){
+    var chs=S1.c.split(" "),bars=S1.m.split("|");
+    chs.forEach(function(cn,k){
+      var C=ch38(cn),R=48+C.r;if(R>53)R-=12;var tri=C.q.map(function(x){return R+12+x}),I=S1.i,st=E.sty,lm=0;var RB=R-12>=36?R-12:R;
+      /* melodia */
+      String(bars[k]||"r:4").trim().split(/\s+/).forEach(function(tok){var p=tok.split(":"),d=+p[1]||1;if(p[0]!=="r")ev.push({b:b+lm,d:d,m:nm38(p[0]),k:"lead"});lm+=d});
+      /* harmonia */
+      ev.push({b:b,d:4,m:tri,k:"pad",i:I});
+      if(st==="piano"){
+        var pat=[R,R+7,R+12,R+12+C.q[1],R+19,R+12+C.q[1],R+12,R+7];
+        pat.forEach(function(m,j){if(I===0&&j%2)return;ev.push({b:b+j*.5,d:1.2,m:m,k:"lh"})});
+        if(I>0)ev.push({b:b,d:4,m:RB,k:"bass"});
+      }else if(st==="box"){
+        ev.push({b:b,d:2,m:RB,k:"bass"});ev.push({b:b+2,d:2,m:RB+7,k:"bass"});
+        if(I>0)[0,1,2,3].forEach(function(j){ev.push({b:b+j,d:.9,m:tri[[0,1,2,1][j]]+12,k:"arp"})});
+      }else if(st==="arp"){
+        var up=[R+12,R+12+C.q[1],R+19,R+24,R+24+C.q[1],R+24,R+19,R+12+C.q[1]];
+        up.forEach(function(m,j){ev.push({b:b+j*.5,d:.6,m:m,k:"arp"})});
+        if(I>0){ev.push({b:b,d:1.5,m:RB,k:"bass"});ev.push({b:b+1.5,d:2.5,m:RB,k:"bass"})}
+        if(I===2)[0,1,2,3].forEach(function(j){ev.push({b:b+j+.5,k:"hat"})});
+      }else{
+        if(I>0)[0,1,2,3,4,5,6,7].forEach(function(j){ev.push({b:b+j*.5,d:.45,m:RB+(j%2?12:0),k:"bass"})});
+        else ev.push({b:b,d:4,m:RB,k:"bass"});
+        if(I>0){ev.push({b:b,k:"kick"});ev.push({b:b+2,k:"kick"});if(I===2)ev.push({b:b+2.5,k:"kick"})}
+        if(I===2)[0,1,2,3,4,5,6,7].forEach(function(j){if(j%2)ev.push({b:b+j*.5,k:"hat"})});
+        if(I!==1)ev.push({b:b,d:3,m:tri[0]+24,k:"bell"});
+      }
+      b+=4;
+    });
+  });
+  ev.sort(function(x,y){return x.b-y.b});E.ev=ev;E.beats=b;return E;
+}
+function endLen(i){var E=endBuild(ENDS[i]);return E.beats*60/E.bpm+3}
+/* sintetizador próprio do encerramento: tudo passa por um ganho que some ao parar */
+var EP={on:false,i:-1,src:null,t0:0,idx:0,timer:null,bus:null,wet:null,cb:null};
+function epVoice(f,t,d,o){
+  var os=AC.createOscillator(),g=AC.createGain(),a=o.a||.01,v=o.v||.05;
+  os.type=o.w||"sine";os.frequency.setValueAtTime(f,t);if(o.det)os.detune.setValueAtTime(o.det,t);
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+a);
+  if(o.sus){g.gain.setValueAtTime(v,t+Math.max(a,d-.5));g.gain.exponentialRampToValueAtTime(.0001,t+d+.6)}
+  else g.gain.exponentialRampToValueAtTime(.0001,t+Math.max(a+.03,d));
+  os.connect(g);g.connect(EP.bus);
+  if(o.rv){var s=AC.createGain();s.gain.value=o.rv;g.connect(s);s.connect(EP.wet)}
+  os.start(t);os.stop(t+d+.8);
+}
+function epKick(t){var os=AC.createOscillator(),g=AC.createGain();os.frequency.setValueAtTime(110,t);os.frequency.exponentialRampToValueAtTime(42,t+.18);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.22,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+.32);os.connect(g);g.connect(EP.bus);os.start(t);os.stop(t+.4)}
+function epPlay(e,t,spb){
+  var E=ENDS[EP.i],st=E.sty,d=(e.d||1)*spb,mf1=function(m){return mf(m)};
+  if(e.k==="lead"){
+    if(st==="box"){epVoice(mf1(e.m+12),t,Math.max(d,1.4),{w:"sine",v:.05,a:.004,rv:.5});epVoice(mf1(e.m+24),t,.5,{w:"sine",v:.012,a:.003})}
+    else if(st==="epic"){epVoice(mf1(e.m),t,d+.15,{w:"triangle",v:.05,a:.06,rv:.55,sus:true});epVoice(mf1(e.m),t,d+.15,{w:"sawtooth",v:.008,a:.09,det:7,sus:true});epVoice(mf1(e.m-12),t,d,{w:"sine",v:.02,a:.06,sus:true})}
+    else if(st==="arp"){epVoice(mf1(e.m),t,Math.max(d,.9)+.3,{w:"triangle",v:.055,a:.012,rv:.5});epVoice(mf1(e.m+12),t,.6,{w:"sine",v:.012,a:.006})}
+    else{epVoice(mf1(e.m),t,Math.max(d,1.2)+.5,{w:"triangle",v:.06,a:.006,rv:.45});epVoice(mf1(e.m+12),t,.9,{w:"sine",v:.016,a:.004})}
+  }else if(e.k==="pad"){
+    var pv=[0,.012,.02][e.i]||.014,pw=st==="epic"?"sawtooth":"sine";if(st==="epic")pv*=.55;if(st==="piano"&&e.i===0)return;
+    e.m.forEach(function(m,j){epVoice(mf1(m),t+j*.03,d,{w:pw,v:pv,a:st==="epic"?.8:1.1,rv:.6,det:(j-1)*6,sus:true})});
+  }else if(e.k==="lh")epVoice(mf1(e.m),t,d,{w:"triangle",v:.028,a:.006,rv:.35});
+  else if(e.k==="bass")epVoice(mf1(e.m),t,d,{w:st==="epic"?"triangle":"sine",v:st==="epic"?.036:.03,a:.02,sus:st!=="epic"});
+  else if(e.k==="arp")epVoice(mf1(e.m),t,st==="box"?1.1:.55,{w:st==="box"?"sine":"triangle",v:st==="box"?.022:.024,a:.004,rv:.4});
+  else if(e.k==="bell"){var f=mf1(e.m);epVoice(f,t,d+1,{w:"sine",v:.03,a:.004,rv:.8});epVoice(f*2.76,t,1.2,{w:"sine",v:.008,a:.003,rv:.6});epVoice(f*5.4,t,.5,{w:"sine",v:.003,a:.002})}
+  else if(e.k==="kick")epKick(t);
+  else if(e.k==="hat")tick(t,.018,EP.bus);
+}
+function epVol(){var v=musVol()*1.4;return EP.src==="radio"?v*.9:Math.max(v,.25)}
+function epTick(){
+  if(!EP.on||!AC)return;var E=ENDS[EP.i],spb=60/E.bpm,now=AC.currentTime;
+  while(EP.idx<E.ev.length&&EP.t0+E.ev[EP.idx].b*spb<now+.4){var e=E.ev[EP.idx++],t=EP.t0+e.b*spb;if(t>now-.05)try{epPlay(e,Math.max(t,now),spb)}catch(x){}}
+  if(EP.idx>=E.ev.length&&now>EP.t0+E.beats*spb+2.6)epStop(true);
+}
+function epStart(i,src,cb){
+  var A=aud();if(!A)return false;epStop(false);
+  var E=endBuild(ENDS[i]);EP.i=i;EP.src=src||"manual";EP.cb=cb||null;EP.idx=0;EP.on=true;
+  var lp=AC.createBiquadFilter();lp.type="lowpass";lp.frequency.value=3600;lp.connect(A.comp);
+  EP.bus=AC.createGain();EP.bus.gain.value=0;EP.bus.connect(lp);
+  EP.wet=AC.createGain();EP.wet.gain.value=1;EP.wet.connect(A.rev);
+  var now=AC.currentTime;EP.bus.gain.setTargetAtTime(epVol(),now,.25);EP.t0=now+.9;
+  if(!EP.timer)EP.timer=setInterval(epTick,90);
+  try{musTick()}catch(x){}
+  epUI();return true;
+}
+function epStop(ended){
+  if(!EP.on)return;EP.on=false;var b=EP.bus,w=EP.wet,cb=EP.cb;EP.cb=null;
+  try{var n=AC.currentTime;b.gain.cancelScheduledValues(n);b.gain.setTargetAtTime(0,n,ended?.6:.18);w.gain.setTargetAtTime(0,n,ended?.6:.18);setTimeout(function(){try{b.disconnect();w.disconnect()}catch(x){}},3000)}catch(x){}
+  var was=EP.src;EP.src=null;if(was==="radio")RADIO.gapTo=Date.now()+(ended?RADIO.gap:4000);
+  epUI();if(cb)try{cb(!!ended)}catch(x){}
+}
+/* enquanto um encerramento toca, a trilha ambiente se cala */
+var _mm38=musMood;
+musMood=function(){var m=_mm38();RADIO.ctx=m;return EP.on?null:m};
+
+/* ---------- Rádio do Modo Livre: os encerramentos em ordem aleatória ---------- */
+var RADIO={gap:25000,gapTo:0,last:-1,ctx:null,bag:[]};
+function radioOn(){return SET.radio!==false}
+function radioWhere(){return S&&S.mode==="free"&&(RADIO.ctx==="day"||RADIO.ctx==="night")&&musOn()&&!document.hidden}
+function radioNext(){
+  if(!RADIO.bag.length){RADIO.bag=[0,1,2,3].sort(function(){return Math.random()-.5});if(RADIO.bag[0]===RADIO.last)RADIO.bag.push(RADIO.bag.shift())}
+  var i=RADIO.bag.shift();RADIO.last=i;return i;
+}
+function radioTick(){
+  try{_mm38&&(RADIO.ctx=_mm38())}catch(x){}
+  if(EP.on&&EP.src==="radio"){if(!radioOn()||!radioWhere())epStop(false);return}
+  if(EP.on||!radioOn()||!radioWhere())return;
+  if(!AC||!AUD)return;
+  if(!RADIO.gapTo){RADIO.gapTo=Date.now()+6000;return}
+  if(Date.now()>=RADIO.gapTo)epStart(radioNext(),"radio");
+}
+setInterval(radioTick,1000);
+function radioHTML(){
+  var on=radioOn(),cur=EP.on&&EP.src==="radio"?ENDS[EP.i]:null;
+  return '<div class="radio38'+(on?" on":"")+'" id="hRadio"><button class="rdTg" id="rdTg" aria-pressed="'+on+'" aria-label="'+(on?"Desligar o rádio":"Ligar o rádio")+'"><span class="rdIco" aria-hidden="true">♪</span></button>'+
+   '<div class="rdTx"><b>Rádio</b><span id="rdNow">'+(!on?"Desligado. Toque para ouvir os encerramentos.":cur?esc(cur.n):(!musOn()?"Ligue a música em Ajustes.":"Entre uma faixa e outra"))+'</span></div>'+
+   (on?'<button class="btn small" id="rdSkip" aria-label="Próxima faixa">Próxima</button>':'')+'</div>';
+}
+function radioBind(){
+  var t=$("#rdTg");if(t)t.onclick=function(e){e.stopPropagation();SET.radio=!radioOn();gset("rpm_set",SET);if(!SET.radio&&EP.src==="radio")epStop(false);if(SET.radio){musStart();RADIO.gapTo=Date.now()+1500}sfx("ok");epUI()};
+  var s=$("#rdSkip");if(s)s.onclick=function(e){e.stopPropagation();musStart();if(!musOn()){toast("Ligue a música em Ajustes.");return}if(EP.on&&EP.src==="radio")epStop(false);epStart(radioNext(),"radio")};
+}
+function epUI(){
+  var r=$("#hRadio");if(r){r.outerHTML=radioHTML();radioBind()}
+  [].forEach.call(document.querySelectorAll("[data-ep]"),function(b){var i=+b.getAttribute("data-ep"),p=EP.on&&EP.i===i&&EP.src!=="radio";b.textContent=p?"Parar":"Tocar";b.classList.toggle("primary",p)});
+}
+var _rh38=renderHub;
+renderHub=function(){_rh38();try{if(!S||S.mode!=="free")return;var q=$("#hub .quick");var day=q?q.parentNode:$("#hub > .hubcard");if(!day||$("#hRadio"))return;day.insertAdjacentHTML("beforeend",radioHTML());radioBind()}catch(e){}};
+
+/* ---------- Tela de créditos ---------- */
+function endOfArc(n){n=+n||1;return n<=2?0:n<=4?1:n<=6?2:3}
+function crClose(){var c=$("#credits");if(!c)return;c.setAttribute("data-live","0");c.classList.add("out");setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c)},500);if(EP.on&&EP.src==="credits")epStop(false)}
+function creditsShow(i,info){
+  var E=endBuild(ENDS[i]),old=$("#credits");if(old)old.parentNode.removeChild(old);
+  info=info||{};var dur=endLen(i);
+  var roman=["I","II","III","IV"][i],lines=[];
+  lines.push('<p class="crk">Encerramento '+roman+'</p><h2>'+esc(E.n)+'</h2><p class="crm">'+esc(E.mood)+'</p>');
+  if(info.arc)lines.push('<p class="crk">Fim do Arco '+info.arc+'</p><p class="crb">'+esc(info.arcName||"")+'</p>');
+  if(info.deaths!=null)lines.push('<p class="crk">Retornos neste arco</p><p class="crb">'+info.deaths+'</p>');
+  if(info.bonds&&info.bonds.length)lines.push('<p class="crk">Laços que seguraram a mão de Subaru</p>'+info.bonds.map(function(n){return '<p class="crb">'+esc(n)+'</p>'}).join(""));
+  lines.push('<p class="crk">Música</p><p class="crb">'+esc(E.n)+'</p><p class="crs">Composição original, tocada pelo sintetizador do aparelho</p>');
+  lines.push('<p class="crk">Feito com carinho</p><p class="crs">Jogo de fã, não oficial e sem fins lucrativos, inspirado em Re:Zero. Os personagens pertencem aos seus criadores.</p>');
+  lines.push('<p class="crend">Obrigado por voltar mais uma vez.</p>');
+  var c=document.createElement("div");c.id="credits";c.setAttribute("role","dialog");c.setAttribute("aria-label","Créditos: "+E.n);c.setAttribute("data-live","1");
+  c.style.setProperty("--crc",E.col);c.style.setProperty("--crd",Math.max(30,dur-6)+"s");
+  c.innerHTML='<div class="crsky" aria-hidden="true"></div><div class="crroll"><div class="crcol">'+lines.join("")+'</div></div><button class="btn small crskip" id="crSkip">Pular</button>';
+  document.body.appendChild(c);
+  $("#crSkip").onclick=function(e){e.stopPropagation();crClose()};
+  musStart();epStart(i,"credits",function(ended){if(ended)setTimeout(crClose,1200)});
+  return c;
+}
+/* botão no fim de cada arco do Modo Retornos */
+var _ra38=rgArcEnd;
+rgArcEnd=function(){
+  var n=RG?RG.arc:1,an="";try{an=arcOf().name}catch(e){}
+  var r=_ra38.apply(this,arguments);
+  try{
+    var b=$("#bArc");if(b&&!$("#bEnd")&&!(RG&&RG.infinite)){
+      var i=endOfArc(n),d=null;try{d=GS().d}catch(e){}
+      var bonds=[];try{bonds=Object.keys(S.aff||{}).filter(function(k){return NAMES[k]&&S.aff[k]>0}).sort(function(x,y){return S.aff[y]-S.aff[x]}).slice(0,3).map(function(k){return NAMES[k]})}catch(e){}
+      b.insertAdjacentHTML("beforebegin",'<button class="btn" id="bEnd">♪ Ver o encerramento · '+esc(ENDS[i].n)+'</button>');
+      $("#bEnd").onclick=function(e){e.stopPropagation();creditsShow(i,{arc:n,arcName:an,deaths:d,bonds:bonds})};
+    }
+  }catch(e){}
+  return r;
+};
+/* ---------- Ajustes: tocador dos encerramentos e rádio ---------- */
+var _ps38=paneSet;
+paneSet=function(p){
+  _ps38(p);
+  try{
+    var h='<p class="sec">Encerramentos</p><p class="fine" style="margin:0 0 8px">Quatro músicas originais, uma para cada fase da história. No Modo Livre, o rádio toca todas em ordem aleatória.</p><div class="eplist">'+
+     ENDS.map(function(E,i){var p1=EP.on&&EP.i===i&&EP.src!=="radio",s=Math.round(endLen(i));
+       return '<div class="item ep38" style="--crc:'+E.col+'"><span class="epn" aria-hidden="true">'+["I","II","III","IV"][i]+'</span><div><b>'+esc(E.n)+'</b><span>'+esc(E.arcs)+' · '+Math.floor(s/60)+':'+("0"+s%60).slice(-2)+'. '+esc(E.mood)+'</span></div><button class="btn small'+(p1?" primary":"")+'" data-ep="'+i+'">'+(p1?"Parar":"Tocar")+'</button></div>'}).join("")+
+     '<div class="item'+(radioOn()?" got":"")+'"><div><b>Rádio do Modo Livre</b><span>Toca os encerramentos em ordem aleatória enquanto você explora, com a trilha ambiente nos intervalos.</span></div><button class="btn small" id="rdSet">'+(radioOn()?"Ligado":"Desligado")+'</button></div>'+
+     '<div class="item"><div><b>Créditos</b><span>Veja a tela de encerramento com a música do arco em que você está.</span></div><button class="btn small" id="crSee">Ver</button></div></div>';
+    var anchor=$("#calmTg");var box=anchor&&anchor.closest(".item")&&anchor.closest(".item").parentNode;
+    if(box)box.insertAdjacentHTML("afterend",h);else p.insertAdjacentHTML("beforeend",h);
+    [].forEach.call(p.querySelectorAll("[data-ep]"),function(b){b.onclick=function(e){e.stopPropagation();var i=+b.getAttribute("data-ep");musStart();if(EP.on&&EP.i===i&&EP.src!=="radio")epStop(false);else epStart(i,"manual");epUI()}});
+    $("#rdSet").onclick=function(e){e.stopPropagation();SET.radio=!radioOn();gset("rpm_set",SET);if(!SET.radio&&EP.src==="radio")epStop(false);sfx("ok");paneSet(p)};
+    $("#crSee").onclick=function(e){e.stopPropagation();var a=(RG&&RG.arc)||(META&&META.maxArc)||1;creditsShow(endOfArc(a),{})};
+  }catch(e){if(window.console)console.error(e)}
+};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

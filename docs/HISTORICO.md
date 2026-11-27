@@ -241,3 +241,16 @@ Decisão do dono: no Modo Retornos, os indicadores se equilibram **só pelas car
 - **Corpo**: Guarda alta (+3 de escudo/nível no começo da luta) e Instinto de sobrevivência (uma vez por luta, o golpe fatal deixa você com 1 de vida). Golpe que dói e Vitalidade foram mantidas.
 - **Retorno**: ficaram Aprender com a dor, Olhar da bruxa, Passe livre e Memória da morte.
 - Teste: `tests/v37_arvore.js`.
+
+## Atualização 38 — encerramentos originais e rádio
+Pedido do dono: músicas no clima dos encerramentos do anime. As faixas oficiais têm direitos autorais, então foram compostas **músicas próprias**: acordes, melodias e arranjos originais, tocados pelo sintetizador do aparelho (funciona offline e não pesa no download).
+- `ENDS`: 4 encerramentos, cada um com acordes por compasso, melodia em `Nota:batidas` e intensidade por seção (introdução, verso, refrão, final):
+  - I "Tempo que volta" (Arcos 1–2), Lá menor, 74 bpm, piano;
+  - II "Promessa de gelo" (Arcos 3–4), Ré maior, 84 bpm, caixinha de música;
+  - III "Cidade de cristal" (Arcos 5–6), Mi menor, 92 bpm, arpejos;
+  - IV "Além da neve" (Arcos 7–8), Fá# menor, 96 bpm, sinos, cordas e tambor.
+- `endBuild` monta a lista de notas; `EP`, `epStart`/`epStop`/`epTick` tocam com antecedência (lookahead) num ganho próprio que some ao parar. Enquanto um encerramento toca, `musMood` devolve `null` e a trilha ambiente se cala.
+- **Créditos** (`creditsShow`, camada `#credits`): no fim de cada arco do Retornos aparece "♪ Ver o encerramento", com arco, retornos, laços principais e a música. "Menos movimento" deixa os créditos parados, com rolagem manual.
+- **Rádio do Modo Livre** (`RADIO`, `SET.radio`, ligado por padrão): toca os 4 encerramentos em ordem aleatória (sem repetir até passar por todos) enquanto você está no hub, com a trilha ambiente nos intervalos de 25 s. Para sozinho em batalhas e na pesca. Controle no cartão do dia (ligar, desligar, próxima).
+- Ajustes: tocador dos 4 encerramentos, chave do rádio e botão para ver os créditos.
+- Testes: `tests/v38_encerramentos.js` (partituras somam 4 batidas por compasso, créditos, tocador) e `tests/v38_radio.js`.
