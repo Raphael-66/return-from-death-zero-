@@ -861,6 +861,18 @@ h1{font-size:clamp(34px,10vw,50px)}
 .m2 .nightov{pointer-events:none;fill:#0d1540;opacity:0}
 .m2.night .nightov{opacity:.42}.m2.dusk .nightov{fill:#6b2a52;opacity:.18}
 .m2 .lamp{fill:#ffd36b;opacity:.95;filter:drop-shadow(0 0 3px #ffb84d)}
+/* ===== Atualização 33: calendário ===== */
+#hub > .hubcard h2 .cwd{font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--cristal);vertical-align:3px;margin-right:2px}
+#hub > .hubcard h2 .cyr{font-family:var(--body);font-size:12.5px;color:var(--mute);vertical-align:3px;margin-left:4px}
+.calg{background:var(--ink2);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}
+.calh{font-family:var(--display);font-size:18px;margin:0 0 6px 2px}
+.calw,.cald{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.calw span{font-size:11px;color:var(--mute);text-align:center}
+.cday{position:relative;aspect-ratio:1;border-radius:8px;background:var(--ink3);border:1px solid var(--line);display:grid;place-items:center;font-size:13px}
+.cday b{font-weight:600}.cday i{position:absolute;right:3px;bottom:1px;font-style:normal;font-size:10px;color:var(--cristal)}
+.cday.past{opacity:.45}.cday.today{border-color:var(--cristal);background:rgba(127,227,224,.14);box-shadow:0 0 0 1px var(--cristal) inset}
+.cday.fest i{color:#ffd36b}.cday.bday i{color:#ff9bab}
+.ce{aspect-ratio:1}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9209,7 +9221,7 @@ function titlePolish(){
   if(b){var rg=r&&r.rg,an=rg&&ARCS[Math.min(rg.arc,8)]?ARCS[Math.min(rg.arc,8)].name:"";
     b.innerHTML='<span class="mcard"><span class="mic">↺</span><span class="mtx"><b>Modo Retornos<span class="mtag">principal</span></b><em>'+(rg?"Arco "+Math.min(rg.arc,8)+" · "+esc(an)+" · retorno "+rg.ret:"A história em cartas de deslizar, do Arco 1 ao 8")+'</em></span><span class="mgo">'+(rg?"Continuar ›":"Começar ›")+'</span></span>'}
   if(f){var sn="";try{if(fs)sn=SEAS[seasIdx(fs.day)].n}catch(e){}
-    f.innerHTML='<span class="mcard"><span class="mic">☾</span><span class="mtx"><b>Modo Livre</b><em>'+(fs?"Dia "+fs.day+(sn?" · "+sn:"")+" · sanidade "+fs.san:"Vida, romance e aventuras. Tudo aqui fortalece os Retornos")+'</em></span><span class="mgo">'+(fs?"Continuar ›":"Começar ›")+'</span></span>'}
+    f.innerHTML='<span class="mcard"><span class="mic">☾</span><span class="mtx"><b>Modo Livre</b><em>'+(fs?(seasonDay(fs.day)+" de "+(sn||"")+", Ano "+(Math.floor((fs.day-1)/84)+1))+" · sanidade "+fs.san:"Vida, romance e aventuras. Tudo aqui fortalece os Retornos")+'</em></span><span class="mgo">'+(fs?"Continuar ›":"Começar ›")+'</span></span>'}
   var t=$("#title");if(!t)return;
   if(!t.querySelector(".motes")){var m=document.createElement("div");m.className="motes";m.setAttribute("aria-hidden","true");
     for(var i=0;i<16;i++){var s=document.createElement("i");s.style.left=(Math.random()*100).toFixed(1)+"%";s.style.animationDuration=(9+Math.random()*12).toFixed(1)+"s";s.style.animationDelay=(-Math.random()*20).toFixed(1)+"s";m.appendChild(s)}t.appendChild(m)}
@@ -9217,7 +9229,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 32 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 33 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10552,6 +10564,45 @@ mapSVG=function(lf){
     s=s.replace(/(<g class="wnode)/,g+"$1")}
   return s;
 };
+
+/* ===== Atualização 33: calendário por estação (como no Stardew Valley) =====
+   4 estações de 21 dias = 1 ano de 84 dias. "Dia 23" vira "2 de Verão, Ano 1". */
+var WD=["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"],WDS=["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+function yearOf(d){return Math.floor((d-1)/84)+1}
+function calLong(d){return seasonDay(d)+" de "+SEAS[seasIdx(d)].n+", Ano "+yearOf(d)}
+function calShort(d){return seasonDay(d)+" de "+SEAS[seasIdx(d)].n}
+function calWeek(d){return WD[(d-1)%7]}
+/* troca "Dia N" por data da estação em tudo que aparece no Modo Livre */
+function calText(root){
+  if(!root)return;var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,list=[];
+  while((n=w.nextNode()))if(/\bDia \d{1,5}\b/.test(n.nodeValue)&&!(n.parentNode&&/^(TEXTAREA|INPUT|SCRIPT|STYLE)$/.test(n.parentNode.tagName)))list.push(n);
+  list.forEach(function(n){n.nodeValue=n.nodeValue.replace(/\bDia (\d{1,5})\b/g,function(m,d){return calLong(+d)})});
+}
+var CALQ=false;
+function calRun(){CALQ=false;try{if(S&&S.mode==="rg")return;["hub","overlay","title"].forEach(function(id){var e=document.getElementById(id);if(e&&!e.hidden)calText(e)})}catch(e){}}
+if(window.MutationObserver)new MutationObserver(function(){if(CALQ)return;CALQ=true;Promise.resolve().then(calRun)}).observe(document.body,{childList:true,subtree:true,characterData:true});
+/* cartão do dia: dia da semana e data em destaque */
+var _rh33=renderHub;
+renderHub=function(){
+  _rh33();
+  try{if(!S||S.mode!=="free")return;var h2=document.querySelector("#hub > .hubcard h2");if(!h2)return;
+    h2.innerHTML='<span class="cwd">'+calWeek(S.day)+'</span> '+esc(calShort(S.day))+' <span class="cyr">Ano '+yearOf(S.day)+'</span>';
+  }catch(e){}
+};
+/* linha da estação no mapa: sem repetir "dia x de 21" */
+MAPTOP.forEach(function(f,i){if(String(f).indexOf("próximo festival em")>=0)MAPTOP[i]=function(lf){
+  if(!S||S.mode!=="free")return "";var s=seasonOf(),fe=festToday();
+  return '<p class="fine" style="margin:0 0 6px"><b style="color:var(--gold)">'+s.ic+' '+s.n+'</b> · '+(21-seasonDay(S.day))+' dia'+(21-seasonDay(S.day)===1?"":"s")+' até '+SEAS[(seasIdx(S.day)+1)%4].n+' · '+(fe?'<b>Hoje: '+esc(fe.n)+'!</b>':'próximo festival em '+daysToFest()+' dia'+(daysToFest()===1?"":"s"))+'</p>'}});
+/* calendário da aba Mundo: grade da estação, como no Stardew */
+WSEC.forEach(function(w){if(w.id!=="cal")return;var r0=w.render;w.render=function(b){r0(b);
+  var si=seasIdx(S.day),y=yearOf(S.day),base=(y-1)*84+si*21,s=SEAS[si];
+  var bd={};Object.keys(BDAY).forEach(function(k){if(BDAY[k][0]===si&&(k==="subaru"||charOk(k)))bd[BDAY[k][1]]=bdName(k)});
+  var g='<div class="calg"><div class="calh">'+s.ic+' '+esc(s.n)+', Ano '+y+'</div><div class="calw">'+WDS.map(function(x){return '<span>'+x+'</span>'}).join("")+'</div><div class="cald">';
+  var off=(base)%7;for(var i=0;i<off;i++)g+='<span class="ce"></span>';
+  for(var d=1;d<=21;d++){var abs=base+d,cls=abs===S.day?" today":abs<S.day?" past":"",tag=d===10?"✦":bd[d]?"♥":"";
+    g+='<span class="cday'+cls+(d===10?" fest":"")+(bd[d]?" bday":"")+'" title="'+esc(d===10?FEST[si].n:bd[d]?"Aniversário de "+bd[d]:"")+'"><b>'+d+'</b>'+(tag?'<i>'+tag+'</i>':'')+'</span>'}
+  g+='</div><p class="fine" style="margin:6px 0 0">✦ festival · ♥ aniversário</p></div>';
+  b.insertAdjacentHTML("afterbegin",g)}});
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

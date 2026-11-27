@@ -184,3 +184,11 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
   - primavera com flores, verão verde, outono com florestas cor de ferrugem e inverno com neve e lagos congelados;
   - entardecer em tom rosado e noite azulada com luzes acesas nas cidades.
 - Conquistas: "Uma história começa", "Até o fim", "Conhecer de verdade", "Encontro marcado". Teste: `tests/v32_historias.js`.
+
+## Atualização 33 — calendário por estação
+- As datas do Modo Livre agora são como no Stardew Valley: "2 de Verão, Ano 1" (4 estações de 21 dias = ano de 84 dias; festivais e aniversários continuam iguais).
+- O cartão do dia mostra o dia da semana ("Terça"), a data e o ano. Na tela inicial, o Modo Livre mostra a data da estação.
+- Todo texto "Dia N" do Modo Livre (cartas, diário, relatórios, quadro de pedidos, sala de guerra) é convertido automaticamente (`calText`, por `MutationObserver`). O jogo continua contando `S.day` por dentro, então nenhum save muda.
+- Linha da estação no mapa: dias até a próxima estação e próximo festival.
+- Aba Mundo › Calendário: grade da estação por semana (Seg–Dom), com hoje destacado, festival ✦ e aniversários ♥.
+- Funções: `calLong(d)`, `calShort(d)`, `calWeek(d)`, `yearOf(d)`. Teste: `tests/v33_calendario.js`.
