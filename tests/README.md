@@ -20,6 +20,7 @@ node tests/harness.js tests/v17.js   # grupo de batalha, caçada lendária, alia
 node tests/harness.js tests/v23_premium.js   # correio, aniversários, perfeição, linha do tempo, spoilers, música
 node tests/harness.js tests/v38_encerramentos.js   # encerramentos originais, créditos, tocador em Ajustes
 node tests/harness.js tests/v38_radio.js   # rádio aleatório do Modo Livre
+node tests/harness.js tests/v38_comercio.js   # revender na mesma cidade não dá lucro
 ```
 
 Saída esperada no fim: `no page errors`. Linhas `FAIL` indicam passo de teste quebrado.

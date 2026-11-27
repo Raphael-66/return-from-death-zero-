@@ -9301,7 +9301,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 38 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 38.1 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -11186,6 +11186,25 @@ paneSet=function(p){
     $("#crSee").onclick=function(e){e.stopPropagation();var a=(RG&&RG.arc)||(META&&META.maxArc)||1;creditsShow(endOfArc(a),{})};
   }catch(e){if(window.console)console.error(e)}
 };
+
+
+/* ===== Correção 38.1: comprar e revender na mesma cidade não dá lucro =====
+   A Lábia de mercador (+5% por nível nas vendas) deixava a venda acima da compra no mesmo
+   mercado. Agora o bônus só vale longe da cidade onde a mercadoria foi comprada, e a venda
+   nunca passa do preço de compra do mesmo lugar. */
+function trSrc(){var t=TRD();return t.src||(t.src={})}
+var _tb381=trBuy;
+trBuy=function(gid,n){var got=_tb381(gid,n);if(got){var s=trSrc();(s[gid]=s[gid]||{})[L().loc]=1;save()}return got};
+var _ts381=trSell;
+trSell=function(gid,n){var k=_ts381(gid,n);try{var t=TRD();if(!t.cargo[gid]&&t.src)delete t.src[gid]}catch(e){}return k};
+var _sp381=sellP;
+sellP=function(g,c){
+  var base=_sp37(g,c),v=_sp381(g,c);
+  try{if(S&&S.mode==="free"&&TGBY[g]){var s=trSrc()[g];if(s&&s[c])v=base;v=Math.min(v,buyP(g,c)-1)}}catch(e){}
+  return Math.max(1,v);
+};
+var _tm381=tradeMenu;
+tradeMenu=function(){_tm381();try{if(tr("r2")){var f=$("#overlay .fine");if(f&&!$("#trNote"))f.insertAdjacentHTML("afterend",'<p class="fine" id="trNote" style="margin:0">Lábia de mercador: vendas +'+(5*tr("r2"))+'% longe da cidade onde você comprou. Revender no mesmo lugar não tem bônus.</p>')}}catch(e){}};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

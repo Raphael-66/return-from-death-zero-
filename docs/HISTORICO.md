@@ -254,3 +254,10 @@ Pedido do dono: músicas no clima dos encerramentos do anime. As faixas oficiais
 - **Rádio do Modo Livre** (`RADIO`, `SET.radio`, ligado por padrão): toca os 4 encerramentos em ordem aleatória (sem repetir até passar por todos) enquanto você está no hub, com a trilha ambiente nos intervalos de 25 s. Para sozinho em batalhas e na pesca. Controle no cartão do dia (ligar, desligar, próxima).
 - Ajustes: tocador dos 4 encerramentos, chave do rádio e botão para ver os créditos.
 - Testes: `tests/v38_encerramentos.js` (partituras somam 4 batidas por compasso, créditos, tocador) e `tests/v38_radio.js`.
+
+## Correção 38.1 — comprar e revender na mesma cidade dava lucro
+O dono notou (em vídeo) que dava para comprar e vender a mesma mercadoria no mesmo mercado e lucrar sem viajar.
+- Causa: a Lábia de mercador (Atualização 37, +5% por nível nas vendas) deixava a venda acima da compra. Com o nível 3, "venda" ficava maior que "compra" na mesma tela, e como comprar sobe o preço do dia, revender logo em seguida também dava lucro.
+- Correção: `PF.trd.src` guarda onde cada mercadoria foi comprada. O bônus da Lábia não vale na cidade de compra, e a venda nunca passa do preço de compra do mesmo lugar (`sellP` ≤ `buyP` − 1). A tela de Comércio mostra um aviso quando a habilidade está ativa.
+- O bônus continua valendo nas outras cidades, que é o comércio de verdade.
+- Teste: `tests/v38_comercio.js` (1.170 combinações de compra e revenda em todas as cidades, nenhuma com lucro).
