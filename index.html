@@ -8481,14 +8481,15 @@ pickFish=function(){
   var x=Math.random()*tot;for(var i=0;i<pool.length;i++){x-=pool[i][1];if(x<=0)return pool[i][0]}
   return pool[0][0];
 };
-/* no Modo Livre o limite é o relógio: cada lançamento gasta 30 min */
+/* no Modo Livre o limite é o relógio: cada lançamento gasta 10 min (FISHH) */
+var FISHH=1/6;
 var _fc20=fishChk;fishChk=function(){if(S&&S.mode==="free"){S.fcast=99;return}_fc20()};
 function fishSvg(col){return '<svg viewBox="0 0 40 24" width="34" height="20" aria-hidden="true"><path d="M4 12 Q14 1 27 6 L38 1 L35 12 L38 23 L27 18 Q14 23 4 12Z" fill="'+col+'" stroke="#0a0d1a" stroke-width="1.5"/><circle cx="11" cy="10" r="2" fill="#0a0d1a"/></svg>'}
 /* lançamento com força (barra que vai e volta) */
 fIdle=function(msg){
   fishChk();FS.st="idle";cancelAnimationFrame(FS.raf);
   var sp=spotOf(),left=S.fcast,free=S.mode==="free";
-  if(!fStage(sceneHTML()+'<p class="fmsg">'+esc(msg||sp.d)+'</p><button class="btn primary" id="fGo"'+(left<=0?" disabled":"")+'>'+(left>0?(free?"Preparar o lançamento · 30 min":"Preparar o lançamento ("+left+")"):"Sem fôlego por agora")+'</button>'+(left<=0?'<p class="rgnote">As tentativas voltam quando você retornar pela morte ou avançar de arco.</p>':'')))return;
+  if(!fStage(sceneHTML()+'<p class="fmsg">'+esc(msg||sp.d)+'</p><button class="btn primary" id="fGo"'+(left<=0?" disabled":"")+'>'+(left>0?(free?"Preparar o lançamento · 10 min":"Preparar o lançamento ("+left+")"):"Sem fôlego por agora")+'</button>'+(left<=0?'<p class="rgnote">As tentativas voltam quando você retornar pela morte ou avançar de arco.</p>':'')))return;
   var g=$("#fGo");if(g)g.onclick=fPower;
   fInv();
 };
@@ -8500,7 +8501,7 @@ function fPower(){
   $("#fThrow").onpointerdown=function(){if(FS.st!=="power")return;cancelAnimationFrame(FS.raf);fCast2()};
 }
 function fCast2(){
-  S.fcast--;if(S.mode==="free"){advanceTime(0.5);var fh=$("#fHead");if(fh)fh.innerHTML="¤ "+S.coin+" · "+RODS[S.rod||0][0]+" · "+fmtH(S.h)}save();
+  S.fcast--;if(S.mode==="free"){advanceTime(FISHH);var fh=$("#fHead");if(fh)fh.innerHTML="¤ "+S.coin+" · "+RODS[S.rod||0][0]+" · "+fmtH(S.h)}save();
   FS.fish=pickFish();FS.st="wait";var pw=FS.power||0.5;
   fStage(sceneHTML("wait")+'<p class="fmsg" id="fMsg">'+(pw>0.9?"Lançamento perfeito! ":pw>0.6?"Bom lançamento. ":"")+'A linha desce… espere o sinal.</p><button class="btn" id="fHook">Fisgar</button>');
   $("#fHook").onpointerdown=function(){
@@ -8571,7 +8572,7 @@ fResult=function(f,o){
   var all=FISH.filter(function(x){return !x.junk}).length,seen=Object.keys(META.dex||{}).length;if(seen>=30)unlock("pesca30");if(seen>=all)unlock("pescaall");
   save();
   if(extra.length){var card=document.querySelector("#fstage .fcard");if(card)card.insertAdjacentHTML("beforeend",'<p style="color:#ffd28a">'+esc(extra.join(" · "))+'</p>')}
-  var g=$("#fGo");if(g){g.textContent=S.mode==="free"?"Lançar de novo · 30 min":g.textContent;g.onclick=fPower}
+  var g=$("#fGo");if(g){g.textContent=S.mode==="free"?"Lançar de novo · 10 min":g.textContent;g.onclick=fPower}
 };
 ACH.pperf=["Mão firme","Faça uma captura perfeita na pesca."];
 ACH.pbau=["Tesouro no anzol","Pesque um baú de tesouro."];
@@ -8611,7 +8612,7 @@ paneFish=function(p){
   if(sp)fIdle();else fInv();
 };
 /* botão "Pescar" no lugar */
-PAX.push(function(lf){var sp=spotAt(lf.loc);if(!sp||sp.arc>arcReach())return "";return '<button class="act" data-ac="fish"><b>Pescar: '+esc(sp.n)+'</b><span>'+FISH.filter(function(f){return !f.junk&&f.s.indexOf(sp.id)>=0&&fishNowOk(f)}).length+' espécies ativas agora · 30 min por lançamento</span></button>'});
+PAX.push(function(lf){var sp=spotAt(lf.loc);if(!sp||sp.arc>arcReach())return "";return '<button class="act" data-ac="fish"><b>Pescar: '+esc(sp.n)+'</b><span>'+FISH.filter(function(f){return !f.junk&&f.s.indexOf(sp.id)>=0&&fishNowOk(f)}).length+' espécies ativas agora · 10 min por lançamento</span></button>'});
 PAH.push(function(a){if(a==="fish"){openMenu("Pesca");return true}return false});
 ACAT.splice(1,0,["pesca","Pesca",/^fish$/]);
 /* o botão antigo "Pescar no lago" também abre a pesca do lugar */
@@ -9270,7 +9271,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 35 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 36 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10808,6 +10809,19 @@ perfCats=function(){var c=_pc35();try{var n=0;FR_ORDER.forEach(function(k){n+=Ma
 var _pm35=personMenu;
 personMenu=function(id){_pm35(id);if(!isFr(id))return;
   [].forEach.call(document.querySelectorAll('#overlay [data-m]'),function(b){var m=b.getAttribute("data-m");if(/^(date|decl|namoro|noivado|wed|mis)$|^prep:|^x:/.test(m))b.remove()})};
+
+/* ===== Atualização 36: pesca de 10 min e cansaço proporcional ao tempo =====
+   O cansaço da madrugada agora é contado pelo tempo exato (com sobra guardada em S.fq),
+   então ações curtas não arredondam para cima a cada vez. */
+var _at36=advanceTime;
+advanceTime=function(hrs){
+  if(!S||S.mode!=="free"){_at36(hrs);return}
+  clockify(S);hrs=hrs==null?2:hrs;var h0=S.h,h1=Math.min(31,h0+hrs),cost=S.fq||0,x=h0;
+  while(x<h1-1e-9){var nx=Math.min(h1,Math.floor(x*2+1e-9)/2+.5),r=x>=24?1.25:x>=22?.5:0;cost+=r*(nx-x)*2;x=nx}
+  S.h=h1;var whole=Math.floor(cost+1e-9);S.fq=Math.max(0,cost-whole);
+  if(whole){S.san=clamp(S.san-whole,0,100);toast("Cansaço: −"+whole+" de sanidade ("+fmtH(S.h)+")")}
+  save();
+};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

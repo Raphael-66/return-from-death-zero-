@@ -218,3 +218,8 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
   - Por dentro, elas entram em `REL_C` com `fr:true`, e Rom ganhou agenda no Bairro Pobre.
 - A lista se divide em "Coração" e "Amizades". As amizades contam no medidor de perfeição.
 - Teste: `tests/v35_niveis_amizades.js`.
+
+## Atualização 36 — pesca mais ágil
+- Cada lançamento de pesca no Modo Livre agora gasta **10 minutos** (`FISHH`), e não mais 30.
+- O cansaço da madrugada (depois das 22h e das 24h) passou a ser contado pelo tempo exato, guardando a sobra em `S.fq`. Antes, cada ação arredondava para cima, e ações curtas cansariam demais. Doze lançamentos entre 22h e 24h custam o mesmo que uma ação de 2h nesse horário.
+- Teste: `tests/v36_pesca_tempo.js`.
