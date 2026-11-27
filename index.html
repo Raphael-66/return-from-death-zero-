@@ -873,6 +873,31 @@ h1{font-size:clamp(34px,10vw,50px)}
 .cday.past{opacity:.45}.cday.today{border-color:var(--cristal);background:rgba(127,227,224,.14);box-shadow:0 0 0 1px var(--cristal) inset}
 .cday.fest i{color:#ffd36b}.cday.bday i{color:#ff9bab}
 .ce{aspect-ratio:1}
+/* ===== Atualização 34: Relacionamentos ===== */
+.rtoday{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px}
+.rtg{font-size:13.5px;padding:7px 10px;border-radius:10px;background:var(--ink2);border:1px solid var(--line)}
+.rtg.rtg-bd{border-color:#ff9bab;color:#ffd9df}.rtg.rtg-iv{border-color:#ff7fb0}.rtg.rtg-st{border-color:var(--cristal)}
+.rlist{display:flex;flex-direction:column;gap:8px}
+.rrow{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:linear-gradient(90deg,color-mix(in srgb,var(--c,#3a3157) 13%,#1a1529),#1a1529 55%);border:1px solid var(--line);border-left:4px solid var(--c,var(--line));border-radius:14px;padding:10px 12px;color:var(--paper)}
+.rrow:active{transform:scale(.985)}
+.rrow .rpic{width:52px;height:52px;font-size:24px}
+.rrow.locked{opacity:.5;border-left-color:var(--line)}.rrow.locked .rpic{background:#2a2241;color:var(--mute);box-shadow:none}
+.rmain{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.rmain b{font-size:16px}.rpar{font-style:normal;color:#ff7fb0}
+.rsub{font-size:12.5px;color:var(--mute)}
+.rmeta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:#b9afd3;margin-top:2px}
+.rck{opacity:.28;filter:grayscale(1)}.rck.on{opacity:1;filter:none}
+.hts{display:flex;gap:2px;margin-top:1px}
+.ht{width:15px;height:14px}
+.ht .e path{fill:none;stroke:#5a4f78;stroke-width:2}
+.ht .fl path{fill:#ff6b8a;stroke:#c23a5d;stroke-width:1.2}
+.ht .fl{clip-path:inset(0 100% 0 0)}
+.ht.full .fl{clip-path:none}.ht.half .fl{clip-path:inset(0 50% 0 0)}
+.ht.lock .e path{fill:#2a2241;stroke:#3a3157}
+.rprof{background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:12px;padding:10px 12px;margin:8px 0 4px;display:flex;flex-direction:column;gap:6px}
+.rprof .hts .ht{width:19px;height:18px}
+.rpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px 12px}
+.rpgrid span{display:flex;flex-direction:column;font-size:13.5px}.rpgrid b{font-size:11.5px;color:var(--mute);font-weight:600}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -9229,7 +9254,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 33 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 34 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -10603,6 +10628,80 @@ WSEC.forEach(function(w){if(w.id!=="cal")return;var r0=w.render;w.render=functio
     g+='<span class="cday'+cls+(d===10?" fest":"")+(bd[d]?" bday":"")+'" title="'+esc(d===10?FEST[si].n:bd[d]?"Aniversário de "+bd[d]:"")+'"><b>'+d+'</b>'+(tag?'<i>'+tag+'</i>':'')+'</span>'}
   g+='</div><p class="fine" style="margin:6px 0 0">✦ festival · ♥ aniversário</p></div>';
   b.insertAdjacentHTML("afterbegin",g)}});
+
+/* ===== Atualização 34: página de Relacionamentos no estilo Stardew Valley =====
+   Junta Vínculos, Romance e Histórias numa página só (no Modo Livre). */
+var HEART='<path d="M12 20.6s-7.3-4.5-9.5-9.2C.9 7.9 3.1 4.4 6.6 4.4c2.1 0 3.6 1.2 4.6 2.7h1.6c1-1.5 2.5-2.7 4.6-2.7 3.5 0 5.7 3.5 4.1 7-2.2 4.7-9.5 9.2-9.5 9.2Z"/>';
+function heartsOf(id){
+  var c=relOf(id),C=REL_C[id],v=Math.min(10,Math.floor(c.rp/10.5*2)/2),lock=false;
+  if(C.rom){var r=rsOf(id);if(["namoro","noivado","casado"].indexOf(r.s)<0||PF.rel.partner!==id){lock=true;v=Math.min(v,8)}}
+  return {v:v,lock:lock};
+}
+function heartsHTML(id){
+  var o=heartsOf(id),h='<span class="hts" aria-label="'+o.v+' de 10 corações">';
+  for(var i=1;i<=10;i++){var cls=o.v>=i?"full":o.v>=i-.5?"half":"";if(o.lock&&i>8)cls="lock";
+    h+='<svg class="ht '+cls+'" viewBox="0 0 24 24" aria-hidden="true"><g class="e">'+HEART+'</g><g class="fl">'+HEART+'</g></svg>'}
+  return h+'</span>';
+}
+function bdLabel(id){var b=BDAY[id];return b?b[1]+" de "+SEAS[b[0]].n:"—"}
+function relOrderNow(){
+  var ids=REL_ORDER.filter(function(id){return REL_C[id]});
+  return ids.sort(function(a,b){var ra=relReach(a)&&charOk(a),rb=relReach(b)&&charOk(b);if(ra!==rb)return ra?-1:1;return relOf(b).rp-relOf(a).rp});
+}
+function paneRel(p){
+  var free=S&&S.mode==="free",par=PF.rel.partner,h='<h2>Relacionamentos</h2>';
+  /* hoje: aniversários, convite e histórias prontas */
+  var today=[];
+  try{bdOn(S.day).forEach(function(k){if(REL_C[k])today.push('<span class="rtg rtg-bd">🎂 Aniversário de '+esc(REL_C[k].n)+'</span>')})}catch(e){}
+  try{var iv=INV();if(iv&&iv.day===S.day&&!iv.done)today.push('<span class="rtg rtg-iv">♥ Convite de '+esc(REL_C[iv.id].n)+': '+esc(iv.t)+', '+iv.h[0]+'h–'+iv.h[1]+'h</span>')}catch(e){}
+  try{Object.keys(STORY).forEach(function(id){var r=storyReady(id);if(r&&r.ok)today.push('<span class="rtg rtg-st">★ '+esc(REL_C[id].n)+': '+esc(r.ch.t)+' · '+esc(PLBY[r.ch.at].s||PLBY[r.ch.at].n)+' '+r.ch.h[0]+'h–'+(r.ch.h[1]%24)+'h</span>')})}catch(e){}
+  if(today.length)h+='<div class="rtoday">'+today.join("")+'</div>';
+  h+='<div class="rlist">';
+  relOrderNow().forEach(function(id){
+    var C=REL_C[id],ok=relReach(id)&&charOk(id);
+    if(!ok){h+='<div class="rrow locked"><span class="rpic">?</span><span class="rmain"><b>???</b><span class="rsub">Alguém que você ainda não conheceu</span></span></div>';return}
+    var c=relOf(id),talk=free&&c.last===S.day,gift=free&&c.lastg===S.day,pl=free?placeOf(id,S.day,Math.min(S.t,2)):null,s=PF.story&&PF.story[id],sc=STORY[id]?STORY[id].ch.length:0;
+    h+='<button class="rrow" data-rel="'+id+'" style="--c:'+C.c+'"><span class="rpic">'+esc(C.n.charAt(0))+'</span><span class="rmain"><b>'+esc(C.n)+(par===id?' <i class="rpar">♥</i>':'')+'</b><span class="rsub">'+esc(statusText(id))+'</span>'+heartsHTML(id)+
+     '<span class="rmeta"><span class="rck'+(talk?" on":"")+'" title="Conversou hoje">💬</span><span class="rck'+(gift?" on":"")+'" title="Presente hoje">🎁</span><span>🎂 '+esc(bdLabel(id))+'</span>'+(sc?'<span>★ '+((s&&s.c)||0)+'/'+sc+'</span>':'')+(pl&&PLBY[pl]?'<span>📍 '+esc(PLBY[pl].s||PLBY[pl].n)+'</span>':'')+'</span></span></button>';
+  });
+  h+='</div>';
+  var bf=relBuff(),ks=Object.keys(bf);
+  h+='<p class="sec">Bônus do par</p><p class="fine" style="margin:0">'+(ks.length?ks.map(function(k){return stTxt(k,bf[k])}).join(" · "):"Escolha um par e evolua a relação para receber bônus nos dois modos.")+'</p>';
+  h+='<p class="fine" style="margin:10px 0 0">💬 conversou hoje · 🎁 presente hoje · ★ capítulos da história · 📍 onde a pessoa está agora. Os corações 9 e 10 de quem pode ser seu par só se abrem quando vocês começam a namorar.</p>';
+  p.innerHTML=h;
+  p.onclick=function(e){var b=e.target.closest?e.target.closest("button[data-rel]"):null;if(!b)return;RLUI.sel=b.getAttribute("data-rel");RLUI.conf=null;RLUI.gift=false;paneRomance(p);var ov=$("#overlay");if(ov)ov.scrollTop=0};
+}
+var _pr34=paneRomance;
+paneRomance=function(p){
+  if(S&&S.mode==="free"&&!RLUI.sel){paneRel(p);return}
+  _pr34(p);
+  if(!S||S.mode!=="free"||!RLUI.sel||!REL_C[RLUI.sel])return;
+  /* perfil: corações, aniversário, onde está, agenda e história */
+  var id=RLUI.sel,C=REL_C[id],head=p.querySelector(".relhead");if(!head)return;
+  var s=PF.story&&PF.story[id],d=STORY[id],r=d?storyReady(id):null,rt=ROUT&&ROUT[id];
+  var h='<div class="rprof" style="--c:'+C.c+'">'+heartsHTML(id)+'<div class="rpgrid"><span><b>Aniversário</b>'+esc(bdLabel(id))+'</span><span><b>Agora</b>'+esc((function(){var pl=placeOf(id,S.day,Math.min(S.t,2));return pl&&PLBY[pl]?PLBY[pl].n:"longe"})())+'</span>'+
+   (d?'<span><b>História</b>'+(s&&s.done?"Concluída":((s&&s.c)||0)+" de "+d.ch.length+" capítulos")+'</span>':'')+'</div>';
+  if(d&&r&&!s.done)h+='<p class="fine" style="margin:4px 0 0">Próximo capítulo: <b>'+esc(r.ch.t)+'</b> · '+esc(PLBY[r.ch.at]?PLBY[r.ch.at].n:"")+', das '+r.ch.h[0]+'h às '+(r.ch.h[1]%24)+'h'+(r.ok?" · pronto!":" · falta "+esc(r.why.join(", ")))+'</p>';
+  if(rt)h+='<p class="fine" style="margin:4px 0 0">Rotina: '+esc(rt.map(function(x){var pl=PLBY[x[2]];return (pl&&pl.arc<=arcReach()?(pl.s||pl.n):"?")+" "+x[0]+"–"+(x[1]%24)+"h"}).join(" · "))+'</p>';
+  h+='</div>';
+  head.insertAdjacentHTML("afterend",h);
+  var back=p.querySelector('[data-a="back"]');if(back)back.textContent="← Relacionamentos";
+};
+/* abas: no Modo Livre, Vínculos, Romance e Histórias viram uma só, "Relacionamentos" */
+var _om34=openMenu;
+openMenu=function(tab){
+  var free=S&&S.mode==="free";
+  if(free&&(tab==="Vínculos"||tab==="Histórias")){tab="Romance";RLUI.sel=null}
+  _om34(tab);
+  if(!free)return;
+  var tabs=document.querySelector("#overlay .tabs");if(!tabs)return;
+  ["Vínculos","Histórias"].forEach(function(t){var b=tabs.querySelector('[data-t="'+t+'"]');if(b)b.remove()});
+  var rb=tabs.querySelector('[data-t="Romance"]');if(rb)rb.textContent="Relacionamentos";
+};
+MGROUP.forEach(function(g){if(g[0]==="Pessoas")g[1]=g[1].filter(function(x){return x!=="Histórias"})});
+/* atalhos antigos levam à página nova */
+var _rh34=renderHub;
+renderHub=function(){_rh34();try{var m=$("#lvMore");if(m){m.textContent="Ver relacionamentos";m.onclick=function(){RLUI.sel=null;openMenu("Romance")}}}catch(e){}};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

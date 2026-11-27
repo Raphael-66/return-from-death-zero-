@@ -12,7 +12,7 @@ module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const sh=async n=
  await st('caps 2-4',`(function(){var out=[];[["floresta",7],["vila",16],["floresta",20]].forEach(function(x){S.day++;L().loc=x[0];S.h=x[1];document.querySelector('#overlay').hidden=true;var ids=storyHere();out.push(ids.join(','));if(ids.indexOf("emilia")<0)return;storyPlay("emilia");var b=document.querySelector('[data-so="0"]')||document.querySelector('[data-sf]');b.click();});return [out.join('|'),SY("emilia").done,SY("emilia").fk]})()`);
  await sh('b2_final');
  await st('perk',`(function(){document.querySelector('#overlay').hidden=true;return eq("neg")})()`);
- await st('aba historias',`(function(){openMenu("Histórias");return [document.querySelector('#pane h2').textContent,document.querySelectorAll('#pane .item.story').length,document.querySelector('[data-t="Histórias"]').getAttribute('aria-selected')]})()`);
+ await st('aba historias',`(function(){openMenu("Histórias");return [document.querySelector('#pane h2').textContent,document.querySelectorAll('#pane .rrow').length,'(aba Histórias agora fica dentro de Relacionamentos)']})()`);
  await sh('b3_aba');
  await st('rotina',`(function(){document.querySelector('#overlay').hidden=true;S.h=7;var a=placeOf("emilia",S.day,0);S.h=13;var b=placeOf("rem",S.day,1);S.h=23;var c=placeOf("ram",S.day,2);return [a,b,c]})()`);
  await st('convite',`(function(){var n=0;for(var i=0;i<20&&!(PF.inv&&PF.inv.day===S.day);i++){PF.inv=null;invMorning();n++}var iv=PF.inv;L().loc=iv.at;PF.lastLoc=iv.at;S.h=iv.h[0];renderHub();var b=document.querySelector('[data-ac="inv:go"]');if(!b)return 'sem botao '+JSON.stringify(iv);placeAction("inv:go");return [iv.id,iv.t,iv.done,document.querySelector('#overlay').innerText.slice(0,120)]})()`);

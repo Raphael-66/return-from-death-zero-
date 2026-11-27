@@ -192,3 +192,14 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - Linha da estação no mapa: dias até a próxima estação e próximo festival.
 - Aba Mundo › Calendário: grade da estação por semana (Seg–Dom), com hoje destacado, festival ✦ e aniversários ♥.
 - Funções: `calLong(d)`, `calShort(d)`, `calWeek(d)`, `yearOf(d)`. Teste: `tests/v33_calendario.js`.
+
+## Atualização 34 — Relacionamentos no estilo Stardew Valley
+- No Modo Livre, as abas **Vínculos**, **Romance** e **Histórias** viraram uma só: **Relacionamentos** (grupo Pessoas: Relacionamentos e Família). No Modo Retornos, as abas próprias continuam como estavam.
+- Cada pessoa aparece numa linha com:
+  - retrato em medalhão, nome e estado da relação;
+  - **10 corações** (meio coração incluído); para quem pode ser par, os corações 9 e 10 ficam trancados até começarem a namorar, como no Stardew;
+  - 💬 conversou hoje, 🎁 presente hoje, 🎂 aniversário, ★ capítulos da história, 📍 onde a pessoa está agora.
+- A lista é ordenada por relação, e quem ainda não apareceu na história fica como "???".
+- No topo, "hoje": aniversários, convites e capítulos de história prontos.
+- Tocar abre o **perfil**: corações, aniversário, onde está, progresso e próximo capítulo da história, rotina do dia, mais as ações de antes (conversar, presentear, declarar-se, vida a dois).
+- Atalhos antigos (`openMenu("Vínculos")`, `openMenu("Histórias")` e o botão do cartão do hub) levam à página nova. Teste: `tests/v34_relacionamentos.js` (o `v32_historias.js` foi ajustado).
