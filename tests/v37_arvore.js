@@ -1,0 +1,23 @@
+// Atualização 37: árvore refeita (sem efeitos nos indicadores do Retornos), Mente=conhecimento, Laços=relacionamentos, Renome=economia.
+module.exports=async p=>{const ev=s=>p.evaluate(s2=>__T(s2),s);const sh=async n=>{await p.waitForTimeout(450);await p.screenshot({path:'/tmp/shots/'+n+'.png'})};const o=[];
+ const st=async(n,c)=>{try{o.push(n+': '+JSON.stringify(await ev(c)).slice(0,330))}catch(e){o.push('FAIL '+n+': '+e.message.slice(0,300))}};
+ await ev(`SET.tips=false;META.maxArc=3`);
+ await st('arvore',`BR.map(function(b){return b.n+': '+b.nodes.map(function(n){return n.id}).join(',')}).join(' | ')`);
+ await st('sem indicadores',`TREE_OUT.filter(function(id){return ND[id]}).length+' restantes; tr(a1)='+tr("a1")`);
+ await st('refund simulado',`(function(){PF.treeV=0;PF.tree={a1:3,c2:2,a4:1,f3:1};var p0=PF.pts||0;PF.treeV=0;var back=0;TREE_OUT.forEach(function(id){var r=PF.tree[id]||0;if(r){back+=r*(["a4","a6","b6","c4","c6","e5","e7"].indexOf(id)>=0?2:1);delete PF.tree[id]}});PF.pts=p0+back;PF.treeV=37;return [back,JSON.stringify(PF.tree)]})()`);
+ await ev(`document.querySelector('#bFree').click()`);
+ await st('compra',`(function(){document.querySelector('#overlay').hidden=true;PF.pts=40;["mk1","mk1","mk2","mk2","mk3","mk3","mk3","a3","mk4","k1","k1","b3","b4","k2","l1","l1","l2","l2","l3","c3","l4","r1","r2","r2","r3","r3"].forEach(pfBuy);return JSON.stringify(PF.tree)})()`);
+ await st('sorte',`eq("luck")`);
+ await st('viagem',`[travelH("capital","liphas"),travelH("capital","vale")]`);
+ await st('batalha',`(function(){startHunt({enemy:"Teste",arch:"bruto",lv:5},1);var it=document.querySelector('#battle .intent').textContent;return [B.pblk,it]})()`);
+ await st('instinto',`(function(){B.php=1;B.pblk=0;B.hand=[];endTurn();return [B.done,B.php,B.surv,B.log.slice(-60)]})()`);
+ await st('segunda queda',`(function(){B.php=1;B.pblk=0;endTurn();return [B.done]})()`);
+ await st('conversa',`(function(){document.querySelector('#overlay').hidden=true;B=null;var r0=relOf("emilia").rp;TALK37=true;relAdd("emilia",5);TALK37=false;return relOf("emilia").rp-r0})()`);
+ await st('presente gosta',`(function(){var r0=relOf("rem").rp;GIFTCLK=Date.now();relAdd("rem",5);return relOf("rem").rp-r0})()`);
+ await st('reputacao',`(function(){var r0=L().rep;applyLF({rep:2});return L().rep-r0})()`);
+ await st('venda',`(function(){var g=GOODS.la1;return gPrice(g)})()`);
+ await st('dica evento',`(function(){L().pend=false;lifeEvent();return [].map.call(document.querySelectorAll('#overlay [data-c]'),function(b){return b.innerText}).join(' / ')})()`);
+ await sh('f0_evento');
+ await st('perfil',`(function(){document.querySelector('#overlay').hidden=true;PF.treeBack=5;openMenu("Perfil");return document.querySelector('#pane').innerText.slice(0,200)})()`);
+ await sh('f1_perfil');
+ console.log(o.join('\n'));};

@@ -914,6 +914,8 @@ h1{font-size:clamp(34px,10vw,50px)}
 .rl b{font-size:13.5px}.rl small{font-weight:400;color:var(--mute);margin-left:4px}.rl span{font-size:12.5px;color:var(--mute)}
 .rl.on{opacity:1;border-style:solid}
 .rl.t0.on{border-color:#ff6b8a}.rl.t1.on{border-color:#ff4fa0}.rl.t2.on{border-color:#ffcf6b}.rl.t3.on{border-color:#7fe3e0}
+/* ===== Atualização 37: dicas de escolha ===== */
+.chh{font-size:11.5px;margin-left:6px;color:var(--mute);font-weight:600}.chh.good{color:#7fd1a0}.chh.bad{color:#ff8fa3}.chh.risk{color:#ffcf70}
 html.calm *,html.calm *::before,html.calm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 html.calm .motes{display:none}
 @media (prefers-reduced-motion:reduce){.motes{display:none}.sig .r1,.sig .r2{animation:none}}
@@ -5080,7 +5082,7 @@ function lifeEvent(){
   var pn=par&&REL_C[par]?REL_C[par].n:"";
   function sub(s){return String(s).replace(/\bP\b/g,pn)}
   var h='<p class="sec" style="margin:0">'+esc(ev.tag)+'</p><h2 style="margin:0">'+esc(sub(ev.t))+'</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(sub(ev.x))+'</p>';
-  ev.ch.forEach(function(c,i){h+='<button class="btn" data-c="'+i+'"'+((c.need&&S.coin<c.need)?" disabled":"")+'>'+esc(c.l)+'</button>'});
+  ev.ch.forEach(function(c,i){h+='<button class="btn" data-c="'+i+'"'+((c.need&&S.coin<c.need)?" disabled":"")+'>'+esc(c.l)+(typeof chHint==="function"?chHint(c):"")+'</button>'});
   var o=ovl(h);
   o.onclick=function(e){
     var b=e.target.closest?e.target.closest("button[data-c]"):null;if(!b||b.disabled)return;
@@ -9271,7 +9273,7 @@ function titlePolish(){
   if(!pc){pc=document.createElement("button");pc.id="bPerf";pc.className="perfchip";pc.type="button";pc.onclick=function(){openMenu("Conquistas")};
     var ex=$("#bExtra");if(ex&&ex.parentNode)ex.parentNode.parentNode.insertBefore(pc,ex.parentNode)}
   pc.innerHTML=ringSVG(p,22,3)+'<span>Perfeição '+Math.floor(p)+'%</span>';
-  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 36 · funciona offline";t.appendChild(v)}
+  if(!$("#verLine")){var v=document.createElement("p");v.id="verLine";v.className="verline";v.textContent="Atualização 37 · funciona offline";t.appendChild(v)}
   perfCheck(p);
 }
 
@@ -9515,7 +9517,7 @@ function pevShow(loc){
   var list=(PEV[loc]||[]).filter(function(e){return textArc(e.t+" "+e.x)<=arcReach()});if(!list.length)return;
   var ev=rnd(list),pl=PLBY[loc];
   var h='<p class="sec" style="margin:0">'+esc(pl.n)+'</p><h2 style="margin:0">'+esc(ev.t)+'</h2><p style="margin:0;font-size:17px;line-height:1.55">'+esc(ev.x)+'</p>';
-  ev.ch.forEach(function(c,i){h+='<button class="btn" data-c="'+i+'"'+((c.need&&S.coin<c.need)?" disabled":"")+'>'+esc(c.l)+'</button>'});
+  ev.ch.forEach(function(c,i){h+='<button class="btn" data-c="'+i+'"'+((c.need&&S.coin<c.need)?" disabled":"")+'>'+esc(c.l)+(typeof chHint==="function"?chHint(c):"")+'</button>'});
   var o=ovl(h);
   o.onclick=function(e){
     var b=e.target.closest?e.target.closest("button[data-c]"):null;if(!b||b.disabled)return;
@@ -10822,6 +10824,122 @@ advanceTime=function(hrs){
   if(whole){S.san=clamp(S.san-whole,0,100);toast("Cansaço: −"+whole+" de sanidade ("+fmtH(S.h)+")")}
   save();
 };
+
+/* ===== Atualização 37: árvore de habilidades refeita =====
+   Nenhuma habilidade mexe mais nos indicadores do Modo Retornos (eles se equilibram só pelas cartas).
+   Mente = conhecimento · Laços = relacionamentos · Renome = economia · Corpo e Retorno sem efeitos de indicador. */
+var TREE_OUT=["a1","a2","a4","a5","a6","b1","b2","b5","b6","c1","c2","c4","c5","c6","d1","d2","d5","e1","e5","e7"];
+(function(){
+  var nb={
+   a:{d:"Saber é metade da luta.",nodes:[
+    T("mk1","Leitura do inimigo",2,1,"",null,1,function(r){return r?"Na batalha, você vê os próximos "+(r+1)+" ataques do inimigo":""}),
+    "a3",
+    T("mk2","Faro de explorador",3,4,"Sorte +{v}% (exploração, espólios e achados)","mk1"),
+    T("mk3","Atalhos conhecidos",3,10,"Viagens {v}% mais rápidas no Modo Livre","mk2"),
+    T("mk4","Olhar atento",1,1,"Nos eventos do Modo Livre, cada escolha mostra se tende a ser boa, ruim ou arriscada","a3",2)]},
+   b:{d:"Aguentar mais um golpe.",nodes:[
+    T("k1","Guarda alta",3,3,"Começa cada batalha com +{v} de escudo"),
+    "b3","b4",
+    T("k2","Instinto de sobrevivência",1,1,"Uma vez por batalha, um golpe que derrubaria você deixa com 1 de vida","b4",2)]},
+   c:{d:"Ninguém vive sozinho.",nodes:[
+    T("l1","Sorriso honesto",3,1,"Conversas rendem +{v} de relação"),
+    T("l2","Palavras certas",3,2,"Presentes de que a pessoa gosta rendem +{v} de relação","l1"),
+    "c3",
+    T("l3","Memória afetiva",1,1,"Presente de aniversário vale ×4, e não ×3","l2"),
+    T("l4","Promessa eterna",1,1,"Faltar a convites não magoa ninguém, e cada convite rende +5 de relação","c3",2)]},
+   d:{d:"Ser alguém que o mundo escuta, e que paga bem.",nodes:[
+    T("r1","Boa fama",3,1,"+{v} de reputação sempre que você ganhar reputação"),
+    "d3",
+    T("r2","Lábia de mercador",3,5,"Mercadorias e espólios vendem {v}% mais caro","r1"),
+    T("r3","Patrão respeitado",3,8,"Seus negócios produzem {v}% a mais","r2"),
+    "d4","d6"]}
+  };
+  var req={a3:"mk1",b3:"k1",b4:"k1",c3:"l1",d3:"r1",d4:"r2",d6:"d3",e2:null,e3:"e2",e4:"e3",e6:"e2"};
+  BR.forEach(function(b){
+    var keep={};b.nodes.forEach(function(n){keep[n.id]=n});
+    if(nb[b.id]){b.d=nb[b.id].d;b.nodes=nb[b.id].nodes.map(function(x){return typeof x==="string"?keep[x]:x}).filter(Boolean)}
+    else b.nodes=b.nodes.filter(function(n){return TREE_OUT.indexOf(n.id)<0});
+    b.nodes.forEach(function(n){if(req.hasOwnProperty(n.id))n.req=req[n.id]});
+  });
+  ND={};BR.forEach(function(b){b.nodes.forEach(function(n){n.br=b.id;ND[n.id]=n})});
+  var c=BR.filter(function(b){return b.id==="c"})[0];if(c)c.n="Laços";
+  var d=BR.filter(function(b){return b.id==="d"})[0];if(d)d.n="Renome";
+  var a=BR.filter(function(b){return b.id==="a"})[0];if(a)a.n="Mente";
+})();
+/* pontos das habilidades removidas voltam (uma vez) */
+(function(){
+  if(PF.treeV>=37)return;var back=0;
+  TREE_OUT.forEach(function(id){var r=PF.tree[id]||0;if(r){back+=r*(id==="a4"||id==="a6"||id==="b6"||id==="c4"||id==="c6"||id==="e5"||id==="e7"?2:1);delete PF.tree[id]}});
+  PF.pts=(PF.pts||0)+back;PF.treeV=37;PF.treeBack=back;pfSave();
+})();
+var _pp37=paneProfile;
+paneProfile=function(p){_pp37(p);if(PF.treeBack){p.insertAdjacentHTML("afterbegin",'<div class="sperk" style="margin-bottom:8px"><b>Árvore refeita</b><span>As habilidades que mexiam nos indicadores do Modo Retornos saíram. '+PF.treeBack+' ponto'+(PF.treeBack>1?"s voltaram":" voltou")+' para você distribuir.</span></div>');PF.treeBack=0;pfSave()}};
+
+/* ---------- efeitos ---------- */
+/* Mente: sorte */
+var _eq37=eq;eq=function(k){var v=_eq37(k);if(k==="luck")v+=4*tr("mk2");return v};
+/* Mente: viagens mais rápidas */
+var _th37=travelH;
+travelH=function(a,b){var h=_th37(a,b),l=tr("mk3");if(!l||h<1||!S||S.mode!=="free")return h;return Math.max(.5,Math.round(h*(1-.1*l)*2)/2)};
+/* Mente: próximos ataques */
+var _rb37=renderBattle;
+renderBattle=function(){
+  _rb37();
+  try{var l=tr("mk1");if(!l||!B||B.done)return;var it=document.querySelector("#battle .intent");if(!it)return;
+    var a=phase2()?B.cfg.i2:B.cfg.intents,out=[];
+    for(var i=0;i<=l;i++){var v=a[(B.turn-1+i)%a.length];v=SET.diff==="dificil"?Math.round(v*1.3):v;if(i===0&&B.weak)v=Math.ceil(v/2);out.push(v)}
+    it.textContent="Próximos ataques: "+out.join(" → ")+(B.weak?" (enfraquecido)":"");
+  }catch(e){}
+};
+/* Mente: tendência das escolhas nos eventos */
+function chHint(c){
+  if(!tr("mk4")||!c||!c.ok)return "";
+  if(c.p!==undefined&&c.p<1)return ' <small class="chh risk">≈ arriscado</small>';
+  var f=c.ok[1]||{},sc=0;["c","rep","san","xp","jx"].forEach(function(k){if(f[k])sc+=f[k]>0?1:-1});if(f.rp)sc+=f.rp[1]>0?1:-1;if(f.debt)sc+=f.debt>0?-1:1;
+  return sc>0?' <small class="chh good">↑ tende a ser bom</small>':sc<0?' <small class="chh bad">↓ tende a ser ruim</small>':' <small class="chh">· neutro</small>';
+}
+/* Corpo: escudo no começo da luta */
+var _sb37=startBattle;
+startBattle=function(cfg){_sb37(cfg);try{var l=tr("k1");if(l&&B&&!B.done){B.pblk=(B.pblk||0)+3*l;renderBattle()}}catch(e){}};
+/* Corpo: sobreviver a um golpe fatal (só no ataque do inimigo) */
+var ENDT37=false;
+var _et37=endTurn;endTurn=function(){ENDT37=true;try{_et37()}finally{ENDT37=false}};
+var _eb37=endBattle;
+endBattle=function(win){
+  if(!win&&ENDT37&&B&&!B.done&&B.php<=0&&S.san>0&&tr("k2")&&!B.surv){
+    B.surv=1;B.php=1;B.log+=" Instinto de sobrevivência: você fica de pé com 1 de vida!";vib([30,30,60]);
+    B.turn++;if(B.cfg.hold&&B.turn>B.cfg.hold){_eb37(true);return}
+    B.en=enMax();draw(handSize());renderBattle();return;
+  }
+  _eb37(win);
+};
+/* Laços: conversas */
+var TALK37=false;
+var _mg37=playMG;
+playMG=function(type,o,cb){if(type==="topics"&&o&&o.who){var c2=cb;cb=function(q){TALK37=true;try{c2(q)}finally{TALK37=false}}}return _mg37(type,o,cb)};
+/* Laços e convites */
+var INV37=0;
+document.addEventListener("click",function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-ac="inv:go"]');if(b)INV37=Date.now()},true);
+var _ra37=relAdd;
+relAdd=function(id,n){
+  if(n>0&&S&&S.mode==="free"){
+    if(TALK37)n+=tr("l1");
+    if(Date.now()-GIFTCLK<400&&n>=5){n+=2*tr("l2");
+      try{if(tr("l3")&&bdOn(S.day).indexOf(id)>=0&&!(PF.bdg&&PF.bdg[id+":"+bdYear()]))n=Math.round(n*4/3)}catch(e){}}
+    if(Date.now()-INV37<400&&tr("l4"))n+=5;
+  }
+  return _ra37(id,n);
+};
+var _im37=invMorning;
+invMorning=function(){try{var iv=PF.inv;if(tr("l4")&&iv&&iv.day<S.day&&!iv.done)PF.inv=null}catch(e){}return _im37()};
+/* Renome: reputação */
+var _al37=applyLF;
+applyLF=function(fx){if(fx&&fx.rep>0)fx.rep+=tr("r1");return _al37(fx)};
+/* Renome: vender mais caro */
+var _gp37=gPrice;gPrice=function(g){var v=_gp37(g),l=tr("r2");return l?Math.max(1,Math.round(v*(1+.05*l))):v};
+var _sp37=sellP;sellP=function(g,c){var v=_sp37(g,c),l=tr("r2");return l?Math.max(1,Math.round(v*(1+.05*l))):v};
+/* Renome: negócios produzem mais */
+var _bp37=bzProd;bzProd=function(b,o){var v=_bp37(b,o),l=tr("r3");return l?Math.max(1,Math.round(v*(1+.08*l))):v};
 
 /* tela inicial: Modo Retornos (principal) e Modo Livre, ligados entre si.
    O antigo modo história em slots só aparece para quem ainda tem save nele. */

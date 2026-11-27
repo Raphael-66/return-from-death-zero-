@@ -223,3 +223,21 @@ Decisões do dono: só no Modo Livre; guerra = mapa de territórios + batalhas d
 - Cada lançamento de pesca no Modo Livre agora gasta **10 minutos** (`FISHH`), e não mais 30.
 - O cansaço da madrugada (depois das 22h e das 24h) passou a ser contado pelo tempo exato, guardando a sobra em `S.fq`. Antes, cada ação arredondava para cima, e ações curtas cansariam demais. Doze lançamentos entre 22h e 24h custam o mesmo que uma ação de 2h nesse horário.
 - Teste: `tests/v36_pesca_tempo.js`.
+
+## Atualização 37 — árvore de habilidades refeita
+Decisão do dono: no Modo Retornos, os indicadores se equilibram **só pelas cartas**. Nenhuma habilidade da árvore mexe mais neles. Relíquias, preparos, equipamentos e Determinação ficaram como estavam.
+- **Saíram** (`TREE_OUT`, 20 habilidades):
+  - começar com indicador +X: a1, b1, c1, d1;
+  - efeitos ruins menores: a2, b2;
+  - ganhos extras: c2, d2, c6;
+  - indicador subindo no fim do arco: a5, b5, c5, d5;
+  - anular perdas: a6, b6;
+  - evitar mortes por indicador: a4, c4, e5;
+  - Determinação: e1, e7.
+  Os pontos gastos nelas voltaram (`PF.treeV=37`), com um aviso no Perfil.
+- **Mente → conhecimento**: Leitura do inimigo (vê os próximos 2–3 ataques), Faro de explorador (sorte +4%/nível), Atalhos conhecidos (viagens −10%/nível no Livre), Olhar atento (eventos mostram se a escolha tende a ser boa, ruim ou arriscada) e Nervos de aço (mantida).
+- **Laços → relacionamentos**: Sorriso honesto (conversas +1/nível), Palavras certas (presentes de que a pessoa gosta +2/nível), Devoção mútua (mantida), Memória afetiva (aniversário ×4), Promessa eterna (faltar a convites não magoa, e cada convite dá +5).
+- **Renome → economia**: Boa fama (+1 de reputação/nível), Rede de contatos (mantida), Lábia de mercador (vendas +5%/nível, inclusive no comércio entre cidades), Patrão respeitado (negócios produzem +8%/nível), Nome na capital e Butim (mantidas).
+- **Corpo**: Guarda alta (+3 de escudo/nível no começo da luta) e Instinto de sobrevivência (uma vez por luta, o golpe fatal deixa você com 1 de vida). Golpe que dói e Vitalidade foram mantidas.
+- **Retorno**: ficaram Aprender com a dor, Olhar da bruxa, Passe livre e Memória da morte.
+- Teste: `tests/v37_arvore.js`.
